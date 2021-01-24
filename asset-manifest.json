@@ -1,14 +1,20 @@
 {
   "files": {
-    "main.js": "/campus-coloring/static/js/main.6578f667.chunk.js",
-    "main.js.map": "/campus-coloring/static/js/main.6578f667.chunk.js.map",
+    "main.css": "/campus-coloring/static/css/main.8c8b27cf.chunk.css",
+    "main.js": "/campus-coloring/static/js/main.75635920.chunk.js",
+    "main.js.map": "/campus-coloring/static/js/main.75635920.chunk.js.map",
     "runtime-main.js": "/campus-coloring/static/js/runtime-main.1f261cb5.js",
     "runtime-main.js.map": "/campus-coloring/static/js/runtime-main.1f261cb5.js.map",
+    "static/js/2.3d65cc13.chunk.js": "/campus-coloring/static/js/2.3d65cc13.chunk.js",
+    "static/js/2.3d65cc13.chunk.js.map": "/campus-coloring/static/js/2.3d65cc13.chunk.js.map",
     "index.html": "/campus-coloring/index.html",
-    "static/js/main.6578f667.chunk.js.LICENSE.txt": "/campus-coloring/static/js/main.6578f667.chunk.js.LICENSE.txt"
+    "static/css/main.8c8b27cf.chunk.css.map": "/campus-coloring/static/css/main.8c8b27cf.chunk.css.map",
+    "static/js/2.3d65cc13.chunk.js.LICENSE.txt": "/campus-coloring/static/js/2.3d65cc13.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.1f261cb5.js",
-    "static/js/main.6578f667.chunk.js"
+    "static/js/2.3d65cc13.chunk.js",
+    "static/css/main.8c8b27cf.chunk.css",
+    "static/js/main.75635920.chunk.js"
   ]
 }
