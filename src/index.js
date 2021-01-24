@@ -1,14 +1,8 @@
 import React from "react";
-// import ReactDOM from "react-dom";
-// import { AFrameRenderer, Marker } from "react-web-ar";
-// import { Entity } from "aframe-react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import Entity from "./Entity";
 
-class ReactArApp extends React.Component {
-  componentDidMount() {}
-
-  render() {
-    return <div></div>;
-  }
-}
-export default ReactArApp;
-// ReactDOM.render(<ReactArApp />, document.getElementById("root"));
+ReactDOM.render(<Entity />, document.getElementById("a-nft"));
+setTimeout(ReactDOM.render(<App />, document.getElementById("root")), 1500);
