@@ -1,22 +1,14 @@
 {
   "files": {
-    "main.css": "/campus-coloring/static/css/main.6dea0f05.chunk.css",
-    "main.js": "/campus-coloring/static/js/main.ffb9615b.chunk.js",
-    "main.js.map": "/campus-coloring/static/js/main.ffb9615b.chunk.js.map",
-    "runtime-main.js": "/campus-coloring/static/js/runtime-main.5b6d392f.js",
-    "runtime-main.js.map": "/campus-coloring/static/js/runtime-main.5b6d392f.js.map",
-    "static/js/2.63a55093.chunk.js": "/campus-coloring/static/js/2.63a55093.chunk.js",
-    "static/js/2.63a55093.chunk.js.map": "/campus-coloring/static/js/2.63a55093.chunk.js.map",
-    "static/js/3.df5a281b.chunk.js": "/campus-coloring/static/js/3.df5a281b.chunk.js",
-    "static/js/3.df5a281b.chunk.js.map": "/campus-coloring/static/js/3.df5a281b.chunk.js.map",
+    "main.js": "/campus-coloring/static/js/main.6578f667.chunk.js",
+    "main.js.map": "/campus-coloring/static/js/main.6578f667.chunk.js.map",
+    "runtime-main.js": "/campus-coloring/static/js/runtime-main.1f261cb5.js",
+    "runtime-main.js.map": "/campus-coloring/static/js/runtime-main.1f261cb5.js.map",
     "index.html": "/campus-coloring/index.html",
-    "static/css/main.6dea0f05.chunk.css.map": "/campus-coloring/static/css/main.6dea0f05.chunk.css.map",
-    "static/js/2.63a55093.chunk.js.LICENSE.txt": "/campus-coloring/static/js/2.63a55093.chunk.js.LICENSE.txt"
+    "static/js/main.6578f667.chunk.js.LICENSE.txt": "/campus-coloring/static/js/main.6578f667.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.5b6d392f.js",
-    "static/js/2.63a55093.chunk.js",
-    "static/css/main.6dea0f05.chunk.css",
-    "static/js/main.ffb9615b.chunk.js"
+    "static/js/runtime-main.1f261cb5.js",
+    "static/js/main.6578f667.chunk.js"
   ]
 }
