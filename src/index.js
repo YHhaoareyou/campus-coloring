@@ -4,7 +4,7 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { AFrameRenderer, Marker } from "react-web-ar";
 
-class ReactArApp extends Component {
+class ReactArApp extends React.Component {
   render() {
     return (
       <AFrameRenderer
