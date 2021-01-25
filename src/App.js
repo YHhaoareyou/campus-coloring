@@ -1,5 +1,6 @@
 import "./App.css";
 import styled from "styled-components";
+import firebase from "firebase/app";
 
 const Layout = styled("div")`
   position: absolute;
@@ -10,9 +11,27 @@ const Layout = styled("div")`
   font-size: 5em;
 `;
 
-function App({ isCanvasOpen }) {
+function App({ isCanvasOpen, auth }) {
+  const signIn = () => {
+    try {
+      auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider())
+    } catch (e) {
+      alert(e)
+    }
+  }
+
+  const signOut = () => {
+    try {
+      auth.signOut()
+    } catch (e) {
+      alert(e)
+    }
+  }
+
   return <Layout>
     {isCanvasOpen && <canvas style={{background: "#fff"}}>ゆびゆび！</canvas>}
+    <button onClick={signIn}>Sign in</button>
+    <button onClick={signOut}>Sign out</button>
   </Layout>;
 }
 
