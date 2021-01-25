@@ -25,15 +25,16 @@ const auth = firebaseApp.auth();
 
 class Root extends React.Component {
   state = {
-    isCanvasOpen: false
+    isCanvasOpen: false,
+    user: "loading"
   };
 
   componentDidMount () {
-    auth.onAuthStateChanged(function (user) {
+    auth.onAuthStateChanged((user) => {
       if (user) {
-        alert("signed in")
+        this.setState({ user })
       } else {
-        alert("signed out")
+        this.setState({ user: null })
       }
     });
 
@@ -59,7 +60,7 @@ class Root extends React.Component {
     return (
       <div style={{width: "100%", height: "100%"}}>
         <Scene openCanvas={this.openCanvas} />
-        <App isCanvasOpen={this.state.isCanvasOpen} auth={auth} />
+        <App isCanvasOpen={this.state.isCanvasOpen} auth={auth} user={this.state.user} />
       </div>
     );
   }
