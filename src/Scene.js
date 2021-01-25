@@ -9,6 +9,7 @@ class Scene extends React.Component {
 
   componentDidMount() {
     setTimeout(() => this.setState({ isImgLoaded: true }), 15000);
+    setTimeout(this.props.openCanvas, 15000);
   }
 
   render() {
