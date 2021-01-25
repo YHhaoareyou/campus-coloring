@@ -40,6 +40,7 @@ class Nft extends React.Component {
   render() {
     return (
       <a-nft
+        markerhandler
         type="nft"
         url="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/trex-image/trex"
         smooth="true"
@@ -47,6 +48,7 @@ class Nft extends React.Component {
         smoothTolerance=".01"
         smoothThreshold="5"
         id="a-nft"
+        data-location={this.props.location}
       >
         {entities.map((e, i) => (
           <a-entity

@@ -5,8 +5,6 @@ import App from "./App";
 import Scene from "./Scene";
 import firebase from "firebase/app";
 import "firebase/auth";
-import "firebase/database";
-import "firebase/storage";
 
 const firebaseApp = firebase.initializeApp({
   apiKey: "AIzaSyAA4zXM0wRBrL1l65NHg_8mQcjg75ew9RQ",
@@ -20,8 +18,8 @@ const firebaseApp = firebase.initializeApp({
 });
 
 const auth = firebaseApp.auth();
-// const database = firebaseApp.database();
-// const storage = firebaseApp.storage();
+const database = firebaseApp.database();
+const storage = firebaseApp.storage();
 
 class Root extends React.Component {
   state = {
@@ -59,7 +57,7 @@ class Root extends React.Component {
   render() {
     return (
       <div style={{width: "100%", height: "100%"}}>
-        <Scene openCanvas={this.openCanvas} />
+        <Scene openCanvas={this.openCanvas} db={database} storage={storage} />
         <App isCanvasOpen={this.state.isCanvasOpen} auth={auth} user={this.state.user} />
       </div>
     );
