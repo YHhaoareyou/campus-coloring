@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/campus-coloring/static/css/main.8c8b27cf.chunk.css",
-    "main.js": "/campus-coloring/static/js/main.ca5e065e.chunk.js",
-    "main.js.map": "/campus-coloring/static/js/main.ca5e065e.chunk.js.map",
+    "main.js": "/campus-coloring/static/js/main.cc7e4a6f.chunk.js",
+    "main.js.map": "/campus-coloring/static/js/main.cc7e4a6f.chunk.js.map",
     "runtime-main.js": "/campus-coloring/static/js/runtime-main.1f261cb5.js",
     "runtime-main.js.map": "/campus-coloring/static/js/runtime-main.1f261cb5.js.map",
     "static/css/2.d223def2.chunk.css": "/campus-coloring/static/css/2.d223def2.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.d223def2.chunk.css",
     "static/js/2.f3463955.chunk.js",
     "static/css/main.8c8b27cf.chunk.css",
-    "static/js/main.ca5e065e.chunk.js"
+    "static/js/main.cc7e4a6f.chunk.js"
   ]
 }
