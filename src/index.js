@@ -14,7 +14,7 @@ const firebaseApp = firebase.initializeApp({
   storageBucket: "campus-coloring.appspot.com",
   messagingSenderId: "45926036058",
   appId: "1:45926036058:web:a9271137ac86762843de63",
-  measurementId: "G-WPPW3TX4QG"
+  measurementId: "G-WPPW3TX4QG",
 });
 
 const auth = firebaseApp.auth();
@@ -24,15 +24,15 @@ const storage = firebaseApp.storage();
 class Root extends React.Component {
   state = {
     isCanvasOpen: false,
-    user: "loading"
+    user: "loading",
   };
 
-  componentDidMount () {
+  componentDidMount() {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        this.setState({ user })
+        this.setState({ user });
       } else {
-        this.setState({ user: null })
+        this.setState({ user: null });
       }
     });
 
@@ -56,9 +56,13 @@ class Root extends React.Component {
 
   render() {
     return (
-      <div style={{width: "100%", height: "100%"}}>
+      <div style={{ width: "100%", height: "100%" }}>
         <Scene openCanvas={this.openCanvas} db={database} storage={storage} />
-        <App isCanvasOpen={this.state.isCanvasOpen} auth={auth} user={this.state.user} />
+        <App
+          isCanvasOpen={this.state.isCanvasOpen}
+          auth={auth}
+          user={this.state.user}
+        />
       </div>
     );
   }

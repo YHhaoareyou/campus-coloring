@@ -6,23 +6,24 @@ import "firebase/storage";
 
 class Scene extends React.Component {
   state = {
+    isImgLoaded: true,
     locationNames: [],
     currentLocation: "",
     currentImages: [],
-    imageUrlsById: {},
   };
 
   async componentDidMount() {
     const { db } = this.props;
-    const dbData = await db.ref().once("value");
-    const imageUrlsById = dbData.val().image_urls;
-    const locationData = dbData.val().locations;
-    this.setState({
-      imageUrlsById: imageUrlsById,
-      locationNames: Object.keys(locationData),
-    });
+    const locationsSnap = await db.ref().once("value");
+    const locationData = locationsSnap.val();
+    console.log(locationData);
+    this.setState({ locationNames: Object.keys(locationData) });
 
-    const setImages = (images) => this.setState({ currentImages: images });
+    const setImages = (images) => {
+      this.setState({ currentImages: images }, () =>
+        console.log(this.state.currentImages)
+      );
+    };
     const setLocation = (loc) => this.setState({ currentLocation: loc });
 
     if (!window.AFRAME.components.markerhandler) {
@@ -30,24 +31,24 @@ class Scene extends React.Component {
         init: function () {
           this.el.sceneEl.addEventListener("markerFound", (e) => {
             const currentLocation = e.target.dataset.location;
-            console.log(currentLocation);
             setLocation(currentLocation);
-            db.ref("locations")
-              .child(currentLocation)
-              .once("value", (snap) => {
-                var currentImages = [];
-                const images = snap.val();
-                for (var id in images) {
-                  currentImages.push({ ...images[id], id: id });
-                }
-                setImages(currentImages);
-              });
+            db.ref(currentLocation).once("value", (snap) => {
+              var currentImages = [];
+              const images = snap.val();
+              for (var id in images) {
+                console.log(id);
+                currentImages.push({ ...images[id], id: id });
+              }
+              setImages(currentImages);
+            });
           });
 
           this.el.sceneEl.addEventListener("markerLost", (e) => setImages([]));
         },
       });
     }
+
+    // setTimeout(() => this.setState({ isImgLoaded: true }), 5000);
   }
 
   componentWillUnmount() {
@@ -56,13 +57,11 @@ class Scene extends React.Component {
 
   render() {
     const {
+      isImgLoaded,
       locationNames,
       currentLocation,
       currentImages,
-      imageUrlsById,
     } = this.state;
-    const isImagesLoaded = Object.keys(imageUrlsById).length > 0;
-    const isLocationsLoaded = locationNames.length > 0;
     return (
       <a-scene
         id="a-scene"
@@ -71,28 +70,46 @@ class Scene extends React.Component {
         embedded
         arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
       >
-        {isImagesLoaded && (
-          <a-assets>
+        <a-assets>
+          {isImgLoaded && (
             <img id="hiroMarker" src={hiroMarker} alt="hiroMarker" />
-            {Object.keys(imageUrlsById).map((id) => (
-              <img key={id} id={id} src={imageUrlsById[id]} alt={id} />
+          )}
+          {currentImages &&
+            currentImages.map((img) => (
+              <img key={img.id} id={img.id} src={img.url} alt={img.name} />
             ))}
-          </a-assets>
-        )}
-
-        {isImagesLoaded &&
-          isLocationsLoaded &&
-          locationNames.map((name) => (
+        </a-assets>
+        {locationNames &&
+          locationNames.map((name, i) => (
             <Nft
-              key={name}
               location={name}
               images={
                 currentLocation === name && currentImages.length > 0
                   ? currentImages
                   : []
               }
+              key={i}
             />
           ))}
+        <a-nft
+          markerhandler
+          type="nft"
+          url="trex1/trex1"
+          smooth="true"
+          smoothCount="10"
+          smoothTolerance=".01"
+          smoothThreshold="5"
+          id="a-nft"
+          data-location="trex1"
+        >
+          <a-image
+            src="#hiroMarker"
+            width="300"
+            height="300"
+            position="300 1 0"
+            rotation="-90 0 0"
+          ></a-image>
+        </a-nft>
         <a-entity camera></a-entity>
       </a-scene>
     );

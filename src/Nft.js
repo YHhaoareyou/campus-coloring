@@ -1,51 +1,29 @@
 import React from "react";
 
-const entities = [
-  {
-    gltfModel:
-      "https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf",
-    scale: "3 3 3",
-    position: "150 100 -100",
-    rotation: "-90 0 0",
-  },
-  {
-    gltfModel:
-      "https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf",
-    scale: "2 2 2",
-    position: "100 100 0",
-    rotation: "-90 0 0",
-  },
-];
-
 class Nft extends React.Component {
   constructor(props) {
     super(props);
     this.entityRef = React.createRef();
   }
 
-  state = {
-    isImgLoaded: true,
-  };
-
   componentDidMount() {
-    // setTimeout(() => this.setState({ isImgLoaded: true }), 10000);
-    setTimeout(
-      () =>
-        this.entityRef.current &&
-        this.entityRef.current.setAttribute("scale", { x: 5, y: 5, z: 5 }),
-      15000
-    );
+    // setTimeout(
+    //   () =>
+    //     this.entityRef.current &&
+    //     this.entityRef.current.setAttribute("scale", { x: 2, y: 2, z: 2 }),
+    //   15000
+    // );
   }
-  // url="/descriptors/takeuchi"
-  // url="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/trex-image/trex"
-  // https://firebasestorage.googleapis.com/v0/b/campus-coloring.appspot.com/o/descriptors%2Ftakeuchi
 
   render() {
     return (
       <a-nft
         markerhandler
         type="nft"
-        url="https://yhhaoareyou.github.io/campus-coloring/descriptors/takeuchi"
+        url={
+          "https://yhhaoareyou.github.io/campus-coloring/descriptors/" +
+          this.props.location
+        }
         smooth="true"
         smoothCount="10"
         smoothTolerance=".01"
@@ -53,25 +31,15 @@ class Nft extends React.Component {
         id="a-nft"
         data-location={this.props.location}
       >
-        {/*entities.map((e, i) => (
-          <a-entity
-            key={i}
-            gltf-model={e.gltfModel}
-            scale={e.scale}
-            position={e.position}
-            rotation={e.rotation}
-          ></a-entity>
-        ))*/}
-        {this.state.isImgLoaded && (
+        {this.props.images.map((img) => (
           <a-image
-            src="#hiroMarker"
-            width="200"
-            height="200"
-            position="100 0 0"
+            src={"#" + img.id}
+            width="500"
+            height="500"
+            position="150 0 0"
             rotation="-90 0 0"
-            ref={this.entityRef}
           ></a-image>
-        )}
+        ))}
       </a-nft>
     );
   }
