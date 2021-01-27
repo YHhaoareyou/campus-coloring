@@ -6,7 +6,7 @@ import "firebase/storage";
 
 class Scene extends React.Component {
   state = {
-    isImgLoaded: false,
+    isImgLoaded: true,
     locationNames: [],
     currentImages: [],
   };
@@ -41,7 +41,7 @@ class Scene extends React.Component {
       });
     }
 
-    setTimeout(() => this.setState({ isImgLoaded: true }), 5000);
+    // setTimeout(() => this.setState({ isImgLoaded: true }), 5000);
   }
 
   componentWillUnmount() {

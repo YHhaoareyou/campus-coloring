@@ -24,11 +24,11 @@ class Nft extends React.Component {
   }
 
   state = {
-    isImgLoaded: false,
+    isImgLoaded: true,
   };
 
   componentDidMount() {
-    setTimeout(() => this.setState({ isImgLoaded: true }), 10000);
+    // setTimeout(() => this.setState({ isImgLoaded: true }), 10000);
     setTimeout(
       () =>
         this.entityRef.current &&
@@ -38,13 +38,14 @@ class Nft extends React.Component {
   }
   // url="/descriptors/takeuchi"
   // url="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/trex-image/trex"
+  // https://firebasestorage.googleapis.com/v0/b/campus-coloring.appspot.com/o/descriptors%2Ftakeuchi
 
   render() {
     return (
       <a-nft
         markerhandler
         type="nft"
-        url="https://firebasestorage.googleapis.com/v0/b/campus-coloring.appspot.com/o/descriptors%2Ftakeuchi"
+        url="https://yhhaoareyou.github.io/campus-coloring/descriptors/takeuchi"
         smooth="true"
         smoothCount="10"
         smoothTolerance=".01"
