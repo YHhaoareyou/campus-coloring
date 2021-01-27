@@ -28,21 +28,23 @@ class Nft extends React.Component {
   };
 
   componentDidMount() {
-    setTimeout(() => this.setState({ isImgLoaded: true }), 20000);
+    setTimeout(() => this.setState({ isImgLoaded: true }), 10000);
     setTimeout(
       () =>
         this.entityRef.current &&
         this.entityRef.current.setAttribute("scale", { x: 5, y: 5, z: 5 }),
-      20000
+      15000
     );
   }
+  // url="/descriptors/takeuchi"
+  // url="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/trex-image/trex"
 
   render() {
     return (
       <a-nft
         markerhandler
         type="nft"
-        url="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/trex-image/trex"
+        url="https://firebasestorage.googleapis.com/v0/b/campus-coloring.appspot.com/o/descriptors%2Ftakeuchi"
         smooth="true"
         smoothCount="10"
         smoothTolerance=".01"
@@ -50,7 +52,7 @@ class Nft extends React.Component {
         id="a-nft"
         data-location={this.props.location}
       >
-        {entities.map((e, i) => (
+        {/*entities.map((e, i) => (
           <a-entity
             key={i}
             gltf-model={e.gltfModel}
@@ -58,14 +60,7 @@ class Nft extends React.Component {
             position={e.position}
             rotation={e.rotation}
           ></a-entity>
-        ))}
-        <a-entity
-          gltf-model="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf"
-          scale="1 1 1"
-          position="200 100 50"
-          rotation="-90 0 0"
-          ref={this.entityRef}
-        ></a-entity>
+        ))*/}
         {this.state.isImgLoaded && (
           <a-image
             src="#hiroMarker"
@@ -73,6 +68,7 @@ class Nft extends React.Component {
             height="200"
             position="100 0 0"
             rotation="-90 0 0"
+            ref={this.entityRef}
           ></a-image>
         )}
       </a-nft>

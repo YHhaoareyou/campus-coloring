@@ -7,36 +7,41 @@ import "firebase/storage";
 class Scene extends React.Component {
   state = {
     isImgLoaded: false,
-    locationNames: []
+    locationNames: [],
+    currentImages: [],
   };
 
   async componentDidMount() {
     const { db } = this.props;
-    const locationsSnap = await db.ref().once('value');
-    const locationNames = Object.keys(locationsSnap.val());
-    this.setState({ locationNames });
+    const locationsSnap = await db.ref().once("value");
+    const locationData = locationsSnap.val();
+    console.log(locationData);
+    this.setState({ locationNames: Object.keys(locationData) });
+
+    const setImages = (images) => {
+      this.setState({ currentImages: images });
+    };
 
     if (!window.AFRAME.components.markerhandler) {
       window.AFRAME.registerComponent("markerhandler", {
         init: function () {
-          this.el.sceneEl.addEventListener("markerFound", async (e) => {
-            const snap = await db.ref(e.target.dataset.location).once("value")
-            
-            for (var key in snap.val()) {
-              console.log(key)
-            }
+          this.el.sceneEl.addEventListener("markerFound", (e) => {
+            db.ref(e.target.dataset.location).once("value", (snap) => {
+              var currentImages = [];
+              const images = snap.val();
+              for (var id in images) {
+                currentImages.push({ ...images[id], id: id });
+              }
+              setImages(currentImages);
+            });
           });
-  
-          this.el.sceneEl.addEventListener("markerLost", (e) => {
-            
-          });
+
+          this.el.sceneEl.addEventListener("markerLost", (e) => setImages([]));
         },
       });
     }
-    
-    console.log(window.AFRAME.components.markerhandler);
-    
-    setTimeout(() => this.setState({ isImgLoaded: true }), 15000);
+
+    setTimeout(() => this.setState({ isImgLoaded: true }), 5000);
   }
 
   componentWillUnmount() {
@@ -44,7 +49,7 @@ class Scene extends React.Component {
   }
 
   render() {
-    const { locationNames } = this.state;
+    const { isImgLoaded, locationNames, currentImages } = this.state;
     return (
       <a-scene
         id="a-scene"
@@ -54,13 +59,16 @@ class Scene extends React.Component {
         arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
       >
         <a-assets>
-          {this.state.isImgLoaded && (
+          {isImgLoaded && (
             <img id="hiroMarker" src={hiroMarker} alt="hiroMarker" />
           )}
+          {currentImages &&
+            currentImages.map((img) => (
+              <img key={img.id} id={img.id} src={img.url} alt={img.name} />
+            ))}
         </a-assets>
-        {
-          locationNames && locationNames.map((name, i) => <Nft location={name} key={i} />)
-        }
+        {locationNames &&
+          locationNames.map((name, i) => <Nft location={name} key={i} />)}
         <a-entity camera></a-entity>
       </a-scene>
     );
