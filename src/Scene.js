@@ -26,7 +26,10 @@ class Scene extends React.Component {
       this.setState({ currentImages: images });
       this.props.setImagesInfo(images);
     };
-    const setLocation = (loc) => this.setState({ currentLocation: loc });
+    const setLocation = (loc) => {
+      this.setState({ currentLocation: loc });
+      this.props.setLocation(loc);
+    };
 
     if (!window.AFRAME.components.markerhandler) {
       window.AFRAME.registerComponent("markerhandler", {
@@ -93,6 +96,7 @@ class Scene extends React.Component {
                   ? currentImages
                   : []
               }
+              displayImageIndex={this.props.displayImageIndex}
             />
           ))}
         <a-entity camera></a-entity>

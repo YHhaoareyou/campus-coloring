@@ -9,20 +9,20 @@ const ImageSwitchWrapper = styled(Grid)`
   height: 5%;
 `;
 
-const ImageSwitch = ({ switchToPrev, switchToNext }) => {
+const ImageSwitch = ({ switchToPrev, switchToNext }) => (
   <ImageSwitchWrapper>
     <Grid.Column width={1}>
-      <Button onClick={this.switchToPrev}>
+      <Button onClick={switchToPrev}>
         <Icon name="angle left" />
       </Button>
     </Grid.Column>
     <Grid.Column width={14}></Grid.Column>
     <Grid.Column width={1}>
-      <Button onClick={this.switchToNext}>
+      <Button onClick={switchToNext}>
         <Icon name="angle right" />
       </Button>
     </Grid.Column>
-  </ImageSwitchWrapper>;
-};
+  </ImageSwitchWrapper>
+);
 
 export default ImageSwitch;

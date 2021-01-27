@@ -4,6 +4,7 @@ import "semantic-ui-css/semantic.min.css";
 import { Button } from "semantic-ui-react";
 import styled from "styled-components";
 import firebase from "firebase/app";
+import { ReactPainter } from "react-painter";
 import ImageSwitch from "./ImageSwitch";
 import Footer from "./Footer";
 
@@ -24,12 +25,6 @@ const InnerLayout = styled("div")`
 const Topbar = styled("div")`
   width: 100%;
   text-align: center;
-`;
-
-const Canvas = styled("canvas")`
-  background: #fff;
-  width: 100%;
-  height: 80%;
 `;
 
 class App extends React.Component {
@@ -73,29 +68,79 @@ class App extends React.Component {
   };
 
   switchToPrevImage = () => {
-    const { imagesInfo } = this.props;
+    const { imagesInfo, setDisplayImageIndex } = this.props;
     const { currentImg } = this.state;
+    const prevIndex =
+      imagesInfo.indexOf(currentImg) === 0
+        ? imagesInfo.length - 1
+        : imagesInfo.indexOf(currentImg) - 1;
     this.setState({
-      currentImg:
-        imagesInfo.indexOf(currentImg) === 0
-          ? imagesInfo[imagesInfo.length - 1]
-          : imagesInfo[imagesInfo.indexOf(currentImg) - 1],
+      currentImg: imagesInfo[prevIndex],
     });
+    setDisplayImageIndex(prevIndex);
   };
 
   switchToNextImage = () => {
-    const { imagesInfo } = this.props;
+    const { imagesInfo, setDisplayImageIndex } = this.props;
     const { currentImg } = this.state;
+    const nextIndex =
+      imagesInfo.indexOf(currentImg) + 1 === imagesInfo.length
+        ? 0
+        : imagesInfo.indexOf(currentImg) + 1;
     this.setState({
-      currentImg:
-        imagesInfo.indexOf(currentImg) + 1 === imagesInfo.length
-          ? imagesInfo[0]
-          : imagesInfo[imagesInfo.indexOf(currentImg) + 1],
+      currentImg: imagesInfo[nextIndex],
     });
+    setDisplayImageIndex(nextIndex);
+  };
+
+  resetCanvas = () => {
+    this.setState({ isCanvasOpen: false }, () =>
+      this.setState({ isCanvasOpen: true })
+    );
+  };
+
+  saveCanvas = (blob) => {
+    const { db, storage, currentLocation, user } = this.props;
+    var imageName;
+    do {
+      imageName = prompt("Please name your painting");
+    } while (!imageName);
+    var description = prompt("Please write something about this painting");
+    var image = new Image();
+    image.src = blob;
+    const uploadTimestamp = Date.now();
+    storage
+      .ref()
+      .child("images/" + imageName)
+      .put(blob)
+      .then((snapshot) => {
+        return snapshot.ref.getDownloadURL();
+      })
+      .then((imageUrl) => {
+        db.ref("image_urls")
+          .child(uploadTimestamp)
+          .set(imageUrl)
+          .then((snap) => {
+            db.ref("locations")
+              .child(currentLocation + "/" + uploadTimestamp)
+              .set({
+                name: imageName,
+                description: description,
+                timestamp: uploadTimestamp,
+                user: user ? user.uid : "",
+              })
+              .then(function (snap) {
+                alert("Uploaded! Refresh the page to see your materpiece!");
+              })
+              .catch((error) => {
+                alert(error);
+              });
+          });
+      });
   };
 
   render() {
-    const { user } = this.props;
+    const { user, currentLocation } = this.props;
     const { isCanvasOpen, currentImg } = this.state;
     return (
       <Layout>
@@ -115,20 +160,71 @@ class App extends React.Component {
             )}
           </Topbar>
 
-          {isCanvasOpen && <Canvas>ゆびゆび！</Canvas>}
+          {isCanvasOpen && (
+            <ReactPainter
+              width={window.innerWidth}
+              height={window.innerHeight * 0.8}
+              onSave={this.saveCanvas}
+              render={({ canvas, triggerSave, setColor, setLineWidth }) => {
+                return (
+                  <div style={{ zIndex: "1000" }}>
+                    <h2 style={{ margin: "0px" }}>
+                      {currentLocation || "none"}
+                    </h2>
+                    <div
+                      style={{
+                        backgroundColor: "rgba(0, 0, 0, 0)",
+                        border: "5px solid #666",
+                      }}
+                    >
+                      {canvas}
+                    </div>
+                    <div style={{ padding: "1rem", background: "#ccc" }}>
+                      <div>
+                        Color{" "}
+                        <input
+                          type="color"
+                          onChange={(e) => setColor(e.target.value)}
+                          style={{ width: "30%" }}
+                        />{" "}
+                        Width{" "}
+                        <input
+                          type="number"
+                          placeholder="5"
+                          min="1"
+                          max="20"
+                          onChange={(e) => setLineWidth(e.target.value)}
+                          style={{ width: "30%" }}
+                        />
+                      </div>
+                      <div style={{ paddingTop: "1rem" }}>
+                        <Button
+                          color="red"
+                          icon="close"
+                          onClick={() => this.setState({ isCanvasOpen: false })}
+                        />
+                        <Button color="orange" onClick={this.resetCanvas}>
+                          Reset
+                        </Button>
+                        <Button color="green" onClick={triggerSave}>
+                          Save!!
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }}
+            />
+          )}
 
-          {currentImg && (
+          {currentImg && !isCanvasOpen && (
             <ImageSwitch
               switchToPrev={this.switchToPrevImage}
               switchToNext={this.switchToNextImage}
             />
           )}
 
-          <Footer
-            image={{ name: "", description: "" }}
-            openCanvas={() => this.setState({ isCanvasOpen: true })}
-          />
-          {currentImg && (
+          {currentImg && !isCanvasOpen && (
             <Footer
               image={currentImg}
               openCanvas={() => this.setState({ isCanvasOpen: true })}

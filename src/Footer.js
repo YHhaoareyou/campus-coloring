@@ -11,30 +11,38 @@ const FooterWrapper = styled(Grid)`
 
 const Footer = ({ image, openCanvas }) => (
   <FooterWrapper>
-    <Grid.Column width={8}>
+    <Grid.Column width={8} style={{ padding: "1rem" }}>
       <Segment>
         <h4>{image.name}</h4>
         <p>{image.description}</p>
       </Segment>
     </Grid.Column>
-    <Grid.Column width={2}>
-      <Button as="div" labelPosition="right">
-        <Button color="red">
-          <Icon name="heart" />
-        </Button>
-        <Label as="a" basic color="red" pointing="left">
+    <Grid.Column width={2} style={{ padding: "1rem 0px" }}>
+      <Button
+        color="red"
+        style={{ marginTop: "1.5rem", padding: "0.8rem 0.3rem 0.6rem 1rem" }}
+      >
+        <Icon name="heart" />
+        <Label style={{ top: "1rem" }} floating>
           1
         </Label>
       </Button>
     </Grid.Column>
-    <Grid.Column width={3}>
-      <Button color="orange" onClick={openCanvas} disabled>
-        Add your painting on this one
+    <Grid.Column width={6} style={{ padding: "1rem" }}>
+      <Button
+        color="green"
+        onClick={openCanvas}
+        style={{ padding: "1rem 0.2rem", width: "100%" }}
+      >
+        Create new
       </Button>
-    </Grid.Column>
-    <Grid.Column width={3}>
-      <Button color="green" onClick={openCanvas}>
-        Create your new painting
+      <Button
+        color="orange"
+        onClick={openCanvas}
+        disabled
+        style={{ padding: "1rem 0.2rem", width: "100%" }}
+      >
+        Paint on this
       </Button>
     </Grid.Column>
   </FooterWrapper>

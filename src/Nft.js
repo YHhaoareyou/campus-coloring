@@ -31,11 +31,11 @@ class Nft extends React.Component {
         id="a-nft"
         data-location={this.props.location}
       >
-        {this.props.images.map((img) => (
+        {this.props.images.map((img, i) => (
           <a-image
             src={"#" + img.id}
-            width="500"
-            height="500"
+            width={i === this.props.displayImageIndex ? 500 : 0}
+            height={i === this.props.displayImageIndex ? 500 : 0}
             position="150 0 0"
             rotation="-90 0 0"
             key={img.id}

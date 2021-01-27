@@ -24,7 +24,9 @@ const storage = firebaseApp.storage();
 class Root extends React.Component {
   state = {
     imagesInfo: null,
+    currentLocation: null,
     user: "loading",
+    displayImageIndex: 0,
   };
 
   componentDidMount() {
@@ -38,6 +40,8 @@ class Root extends React.Component {
   }
 
   setImagesInfo = (images) => this.setState({ imagesInfo: images });
+  setLocation = (loc) => this.setState({ currentLocation: loc });
+  setDisplayImageIndex = (index) => this.setState({ displayImageIndex: index });
 
   render() {
     return (
@@ -46,11 +50,17 @@ class Root extends React.Component {
           db={database}
           storage={storage}
           setImagesInfo={this.setImagesInfo}
+          setLocation={this.setLocation}
+          displayImageIndex={this.state.displayImageIndex}
         />
         <App
           imagesInfo={this.state.imagesInfo}
+          currentLocation={this.state.currentLocation}
           auth={auth}
           user={this.state.user}
+          db={database}
+          storage={storage}
+          setDisplayImageIndex={this.setDisplayImageIndex}
         />
       </div>
     );
