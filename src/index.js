@@ -35,21 +35,6 @@ class Root extends React.Component {
         this.setState({ user: null });
       }
     });
-
-    // auth
-    //   .getRedirectResult()
-    //   .then((result) => {
-    //     // The signed-in user info.
-    //     var user = result.user;
-    //     if (user) {
-    //       alert(user)
-    //     } else {
-    //       alert("not signed in")
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   }
 
   openCanvas = () => this.setState({ isCanvasOpen: true });
