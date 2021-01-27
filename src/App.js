@@ -100,12 +100,18 @@ class App extends React.Component {
   };
 
   saveCanvas = (blob) => {
-    const { db, storage, currentLocation, user } = this.props;
-    var imageName;
+    const { db, storage, currentLocation } = this.props;
+    var imageName, description, username, isPublic;
     do {
-      imageName = prompt("Please name your painting");
+      username = prompt("What's your name? Any nickname is fine!");
+    } while (!username);
+    do {
+      imageName = prompt("Please name your painting:");
     } while (!imageName);
-    var description = prompt("Please write something about this painting");
+    description = prompt("Please write something about this painting:");
+    isPublic = window.confirm(
+      "Do you allow other users create paintings basing on this one?"
+    );
     var image = new Image();
     image.src = blob;
     const uploadTimestamp = Date.now();
@@ -127,7 +133,8 @@ class App extends React.Component {
                 name: imageName,
                 description: description,
                 timestamp: uploadTimestamp,
-                user: user ? user.uid : "",
+                user: username,
+                is_public: isPublic,
               })
               .then(function (snap) {
                 alert("Uploaded! Refresh the page to see your materpiece!");
