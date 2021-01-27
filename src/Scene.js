@@ -22,7 +22,10 @@ class Scene extends React.Component {
       locationNames: Object.keys(locationData),
     });
 
-    const setImages = (images) => this.setState({ currentImages: images });
+    const setImages = (images) => {
+      this.setState({ currentImages: images });
+      this.props.setImagesInfo(images);
+    };
     const setLocation = (loc) => this.setState({ currentLocation: loc });
 
     if (!window.AFRAME.components.markerhandler) {
@@ -30,7 +33,6 @@ class Scene extends React.Component {
         init: function () {
           this.el.sceneEl.addEventListener("markerFound", (e) => {
             const currentLocation = e.target.dataset.location;
-            console.log(currentLocation);
             setLocation(currentLocation);
             db.ref("locations")
               .child(currentLocation)
