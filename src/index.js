@@ -23,7 +23,6 @@ const storage = firebaseApp.storage();
 
 class Root extends React.Component {
   state = {
-    isCanvasOpen: false,
     imagesInfo: null,
     user: "loading",
   };
@@ -38,20 +37,17 @@ class Root extends React.Component {
     });
   }
 
-  openCanvas = () => this.setState({ isCanvasOpen: true });
   setImagesInfo = (images) => this.setState({ imagesInfo: images });
 
   render() {
     return (
       <div style={{ width: "100%", height: "100%" }}>
         <Scene
-          openCanvas={this.openCanvas}
           db={database}
           storage={storage}
           setImagesInfo={this.setImagesInfo}
         />
         <App
-          isCanvasOpen={this.state.isCanvasOpen}
           imagesInfo={this.state.imagesInfo}
           auth={auth}
           user={this.state.user}

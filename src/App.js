@@ -1,9 +1,11 @@
 import React from "react";
 import "./App.css";
 import "semantic-ui-css/semantic.min.css";
-import { Button, Grid, Segment, Icon, Label } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import styled from "styled-components";
 import firebase from "firebase/app";
+import ImageSwitch from "./ImageSwitch";
+import Footer from "./Footer";
 
 const Layout = styled("div")`
   position: absolute;
@@ -24,24 +26,15 @@ const Topbar = styled("div")`
   text-align: center;
 `;
 
-const ImageSwitch = styled(Grid)`
-  position: absolute;
-  left: 0;
-  top: 45%;
+const Canvas = styled("canvas")`
+  background: #fff;
   width: 100%;
-  height: 5%;
-`;
-
-const Footer = styled(Grid)`
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 15%;
+  height: 80%;
 `;
 
 class App extends React.Component {
   state = {
+    isCanvasOpen: false,
     currentImg:
       this.props.imagesInfo &&
       this.props.imagesInfo.length &&
@@ -79,9 +72,31 @@ class App extends React.Component {
     }
   };
 
-  render() {
-    const { isCanvasOpen, imagesInfo, user } = this.props;
+  switchToPrevImage = () => {
+    const { imagesInfo } = this.props;
     const { currentImg } = this.state;
+    this.setState({
+      currentImg:
+        imagesInfo.indexOf(currentImg) === 0
+          ? imagesInfo[imagesInfo.length - 1]
+          : imagesInfo[imagesInfo.indexOf(currentImg) - 1],
+    });
+  };
+
+  switchToNextImage = () => {
+    const { imagesInfo } = this.props;
+    const { currentImg } = this.state;
+    this.setState({
+      currentImg:
+        imagesInfo.indexOf(currentImg) + 1 === imagesInfo.length
+          ? imagesInfo[0]
+          : imagesInfo[imagesInfo.indexOf(currentImg) + 1],
+    });
+  };
+
+  render() {
+    const { user } = this.props;
+    const { isCanvasOpen, currentImg } = this.state;
     return (
       <Layout>
         <InnerLayout>
@@ -100,69 +115,24 @@ class App extends React.Component {
             )}
           </Topbar>
 
-          {isCanvasOpen && (
-            <canvas style={{ background: "#fff" }}>ゆびゆび！</canvas>
-          )}
+          {isCanvasOpen && <Canvas>ゆびゆび！</Canvas>}
 
           {currentImg && (
-            <ImageSwitch>
-              <Grid.Column width={1}>
-                <Button
-                  onClick={() =>
-                    this.setState({
-                      currentImg:
-                        imagesInfo.indexOf(currentImg) === 0
-                          ? imagesInfo[imagesInfo.length - 1]
-                          : imagesInfo[imagesInfo.indexOf(currentImg) - 1],
-                    })
-                  }
-                >
-                  <Icon name="angle left" />
-                </Button>
-              </Grid.Column>
-              <Grid.Column width={14}></Grid.Column>
-              <Grid.Column width={1}>
-                <Button
-                  onClick={() =>
-                    this.setState({
-                      currentImg:
-                        imagesInfo.indexOf(currentImg) + 1 === imagesInfo.length
-                          ? imagesInfo[0]
-                          : imagesInfo[imagesInfo.indexOf(currentImg) + 1],
-                    })
-                  }
-                >
-                  <Icon name="angle right" />
-                </Button>
-              </Grid.Column>
-            </ImageSwitch>
+            <ImageSwitch
+              switchToPrev={this.switchToPrevImage}
+              switchToNext={this.switchToNextImage}
+            />
           )}
 
+          <Footer
+            image={{ name: "", description: "" }}
+            openCanvas={() => this.setState({ isCanvasOpen: true })}
+          />
           {currentImg && (
-            <Footer>
-              <Grid.Column width={8}>
-                <Segment>
-                  <h4>{currentImg.name}</h4>
-                  <p>{currentImg.description}</p>
-                </Segment>
-              </Grid.Column>
-              <Grid.Column width={2}>
-                <Button as="div" labelPosition="right">
-                  <Button color="red">
-                    <Icon name="heart" />
-                  </Button>
-                  <Label as="a" basic color="red" pointing="left">
-                    1
-                  </Label>
-                </Button>
-              </Grid.Column>
-              <Grid.Column width={3}>
-                <Button color="orange">Add your painting on this one</Button>
-              </Grid.Column>
-              <Grid.Column width={3}>
-                <Button color="green">Create your new painting</Button>
-              </Grid.Column>
-            </Footer>
+            <Footer
+              image={currentImg}
+              openCanvas={() => this.setState({ isCanvasOpen: true })}
+            />
           )}
         </InnerLayout>
       </Layout>
