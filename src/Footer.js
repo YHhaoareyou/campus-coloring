@@ -1,5 +1,6 @@
-import { Button, Grid, Segment, Icon, Label } from "semantic-ui-react";
+import { Button, Grid, Segment } from "semantic-ui-react";
 import styled from "styled-components";
+import LikeButton from "./LikeButton";
 
 const FooterWrapper = styled(Grid)`
   position: absolute;
@@ -9,7 +10,7 @@ const FooterWrapper = styled(Grid)`
   height: 15%;
 `;
 
-const Footer = ({ image, openCanvas }) => (
+const Footer = ({ location, image, openCanvas, db }) => (
   <FooterWrapper>
     <Grid.Column width={8} style={{ padding: "1rem" }}>
       <Segment>
@@ -18,15 +19,7 @@ const Footer = ({ image, openCanvas }) => (
       </Segment>
     </Grid.Column>
     <Grid.Column width={2} style={{ padding: "1rem 0px" }}>
-      <Button
-        color="red"
-        style={{ marginTop: "1.5rem", padding: "0.8rem 0.3rem 0.6rem 1rem" }}
-      >
-        <Icon name="heart" />
-        <Label style={{ top: "1rem" }} floating>
-          1
-        </Label>
-      </Button>
+      <LikeButton location={location} image={image} db={db} />
     </Grid.Column>
     <Grid.Column width={6} style={{ padding: "1rem" }}>
       <Button

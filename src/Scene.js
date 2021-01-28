@@ -31,28 +31,26 @@ class Scene extends React.Component {
       this.props.setLocation(loc);
     };
 
-    if (!window.AFRAME.components.markerhandler) {
-      window.AFRAME.registerComponent("markerhandler", {
-        init: function () {
-          this.el.sceneEl.addEventListener("markerFound", (e) => {
-            const currentLocation = e.target.dataset.location;
-            setLocation(currentLocation);
-            db.ref("locations")
-              .child(currentLocation)
-              .once("value", (snap) => {
-                var currentImages = [];
-                const images = snap.val();
-                for (var id in images) {
-                  currentImages.push({ ...images[id], id: id });
-                }
-                setImages(currentImages);
-              });
-          });
+    window.AFRAME.registerComponent("markerhandler", {
+      init: function () {
+        this.el.sceneEl.addEventListener("markerFound", (e) => {
+          const currentLocation = e.target.dataset.location;
+          setLocation(currentLocation);
+          db.ref("locations")
+            .child(currentLocation)
+            .once("value", (snap) => {
+              var currentImages = [];
+              const images = snap.val();
+              for (var id in images) {
+                currentImages.push({ ...images[id], id: id });
+              }
+              setImages(currentImages);
+            });
+        });
 
-          this.el.sceneEl.addEventListener("markerLost", (e) => setImages([]));
-        },
-      });
-    }
+        this.el.sceneEl.addEventListener("markerLost", (e) => setImages([]));
+      },
+    });
   }
 
   componentWillUnmount() {
@@ -80,11 +78,16 @@ class Scene extends React.Component {
           <a-assets>
             <img id="hiroMarker" src={hiroMarker} alt="hiroMarker" />
             {Object.keys(imageUrlsById).map((id) => (
-              <img key={id} id={id} src={imageUrlsById[id]} alt={id} />
+              <img
+                key={id}
+                id={id}
+                src={imageUrlsById[id]}
+                alt={id}
+                crossOrigin="anonymous"
+              />
             ))}
           </a-assets>
         )}
-
         {isImagesLoaded &&
           isLocationsLoaded &&
           locationNames.map((name) => (
