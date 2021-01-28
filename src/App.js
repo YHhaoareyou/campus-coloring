@@ -9,7 +9,7 @@ import Canvas from "./Canvas";
 
 const Layout = styled("div")`
   position: absolute;
-  top: 0;
+  top: 5%;
   left: 0;
   width: 95%;
   height: 95%;
