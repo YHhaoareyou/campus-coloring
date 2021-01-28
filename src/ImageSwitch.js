@@ -12,15 +12,11 @@ const ImageSwitchWrapper = styled(Grid)`
 const ImageSwitch = ({ switchToPrev, switchToNext }) => (
   <ImageSwitchWrapper>
     <Grid.Column width={1}>
-      <Button onClick={switchToPrev}>
-        <Icon name="angle left" />
-      </Button>
+      <Button icon="angle left" onClick={switchToPrev} circular />
     </Grid.Column>
-    <Grid.Column width={14}></Grid.Column>
+    <Grid.Column width={13}></Grid.Column>
     <Grid.Column width={1}>
-      <Button onClick={switchToNext}>
-        <Icon name="angle right" />
-      </Button>
+      <Button icon="angle right" onClick={switchToNext} circular />
     </Grid.Column>
   </ImageSwitchWrapper>
 );

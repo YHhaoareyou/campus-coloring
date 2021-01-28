@@ -1,7 +1,6 @@
 import React from "react";
 import "./App.css";
 import "semantic-ui-css/semantic.min.css";
-import { Button } from "semantic-ui-react";
 import styled from "styled-components";
 import firebase from "firebase/app";
 import ImageSwitch from "./ImageSwitch";
@@ -95,7 +94,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { user, currentLocation, db, storage } = this.props;
+    const { currentLocation, db, storage } = this.props;
     const { isCanvasOpen, currentImg } = this.state;
     return (
       <Layout>
