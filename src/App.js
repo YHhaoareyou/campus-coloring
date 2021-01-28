@@ -121,7 +121,12 @@ class App extends React.Component {
           </Topbar>
 
           {isCanvasOpen && (
-            <Canvas location={currentLocation} db={db} storage={storage} />
+            <Canvas
+              location={currentLocation}
+              db={db}
+              storage={storage}
+              resetCanvas={this.resetCanvas}
+            />
           )}
 
           {currentImg && !isCanvasOpen && (
