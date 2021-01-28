@@ -33,7 +33,7 @@ class Nft extends React.Component {
                 ? window.innerHeight * 0.375
                 : 0
             }
-            position="20 0 -50"
+            position="22 0 -50"
             rotation="-90 0 0"
             key={img.id}
           ></a-image>
