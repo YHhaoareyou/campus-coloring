@@ -14,7 +14,7 @@ const ImageSwitch = ({ switchToPrev, switchToNext }) => (
     <Grid.Column width={1}>
       <Button icon="angle left" onClick={switchToPrev} circular />
     </Grid.Column>
-    <Grid.Column width={14}></Grid.Column>
+    <Grid.Column width={13}></Grid.Column>
     <Grid.Column width={1}>
       <Button icon="angle right" onClick={switchToNext} circular />
     </Grid.Column>

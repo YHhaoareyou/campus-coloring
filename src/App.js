@@ -9,10 +9,10 @@ import Canvas from "./Canvas";
 
 const Layout = styled("div")`
   position: absolute;
-  top: 5%;
+  top: 0;
   left: 0;
-  width: 95%;
-  height: 95%;
+  width: 100%;
+  height: 90%;
 `;
 
 const InnerLayout = styled("div")`

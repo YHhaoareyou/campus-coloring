@@ -5,7 +5,7 @@ import LikeButton from "./LikeButton";
 const FooterWrapper = styled(Grid)`
   position: absolute;
   left: 0;
-  bottom: 0;
+  bottom: 0%;
   width: 100%;
   height: 15%;
 `;

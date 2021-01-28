@@ -50,8 +50,8 @@ const Canvas = ({ db, storage, location, resetCanvas, closeCanvas }) => {
 
   return (
     <ReactPainter
-      width={window.innerHeight * 0.85}
-      height={window.innerHeight * 0.85}
+      width={window.innerWidth}
+      height={window.innerHeight * 0.75}
       onSave={saveCanvas}
       render={({ canvas, triggerSave, setColor, setLineWidth }) => {
         return (
