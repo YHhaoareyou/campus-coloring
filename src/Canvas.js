@@ -1,7 +1,7 @@
 import { Button } from "semantic-ui-react";
 import { ReactPainter } from "react-painter";
 
-const Canvas = ({ db, storage, location, resetCanvas }) => {
+const Canvas = ({ db, storage, location, resetCanvas, closeCanvas }) => {
   const saveCanvas = (blob) => {
     var imageName, description, username, isPublic;
     do {
@@ -84,11 +84,7 @@ const Canvas = ({ db, storage, location, resetCanvas }) => {
                 />
               </div>
               <div style={{ paddingTop: "1rem" }}>
-                <Button
-                  color="red"
-                  icon="close"
-                  onClick={() => this.setState({ isCanvasOpen: false })}
-                />
+                <Button color="red" icon="close" onClick={closeCanvas} />
                 <Button color="orange" onClick={resetCanvas}>
                   Reset
                 </Button>

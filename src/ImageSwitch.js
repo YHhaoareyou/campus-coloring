@@ -5,7 +5,7 @@ const ImageSwitchWrapper = styled(Grid)`
   position: absolute;
   left: 0;
   top: 45%;
-  width: 100%;
+  width: 95%;
   height: 5%;
 `;
 

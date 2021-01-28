@@ -13,18 +13,13 @@ const Layout = styled("div")`
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 95%;
 `;
 
 const InnerLayout = styled("div")`
   position: relative;
   width: 100%;
   height: 100%;
-`;
-
-const Topbar = styled("div")`
-  width: 100%;
-  text-align: center;
 `;
 
 class App extends React.Component {
@@ -105,27 +100,13 @@ class App extends React.Component {
     return (
       <Layout>
         <InnerLayout>
-          <Topbar>
-            {user && user !== "loading" && (
-              <span>{user.displayName}, welcome! </span>
-            )}
-            {user ? (
-              user === "loading" ? (
-                <h2>Loading...</h2>
-              ) : (
-                <Button onClick={this.signOut}>Sign out</Button>
-              )
-            ) : (
-              <Button onClick={this.signIn}>Sign in</Button>
-            )}
-          </Topbar>
-
           {isCanvasOpen && (
             <Canvas
               location={currentLocation}
               db={db}
               storage={storage}
               resetCanvas={this.resetCanvas}
+              closeCanvas={() => this.setState({ isCanvasOpen: false })}
             />
           )}
 
