@@ -1,4 +1,4 @@
-import { Button, Grid, Icon } from "semantic-ui-react";
+import { Button, Grid } from "semantic-ui-react";
 import styled from "styled-components";
 
 const ImageSwitchWrapper = styled(Grid)`

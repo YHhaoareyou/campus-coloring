@@ -11,7 +11,7 @@ const Layout = styled("div")`
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 95%;
   height: 95%;
 `;
 

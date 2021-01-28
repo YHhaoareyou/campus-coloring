@@ -6,15 +6,6 @@ class Nft extends React.Component {
     this.entityRef = React.createRef();
   }
 
-  componentDidMount() {
-    // setTimeout(
-    //   () =>
-    //     this.entityRef.current &&
-    //     this.entityRef.current.setAttribute("scale", { x: 2, y: 2, z: 2 }),
-    //   15000
-    // );
-  }
-
   render() {
     return (
       <a-nft
@@ -34,8 +25,6 @@ class Nft extends React.Component {
         {this.props.images.map((img, i) => (
           <a-image
             src={"#" + img.id}
-            width={i === this.props.displayImageIndex ? 500 : 0}
-            height={i === this.props.displayImageIndex ? 500 : 0}
             position="150 0 0"
             rotation="-90 0 0"
             key={img.id}
