@@ -27,9 +27,10 @@ class Root extends React.Component {
     currentLocation: null,
     user: "loading",
     displayImageIndex: 0,
+    dbData: null,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     auth.onAuthStateChanged((user) => {
       if (user) {
         this.setState({ user });
@@ -37,6 +38,8 @@ class Root extends React.Component {
         this.setState({ user: null });
       }
     });
+    const dbData = await database.ref().once("value");
+    this.setState({ dbData: dbData.val() });
   }
 
   setImagesInfo = (images) => this.setState({ imagesInfo: images });
@@ -46,13 +49,16 @@ class Root extends React.Component {
   render() {
     return (
       <div style={{ width: "100%", height: "100%" }}>
-        <Scene
-          db={database}
-          storage={storage}
-          setImagesInfo={this.setImagesInfo}
-          setLocation={this.setLocation}
-          displayImageIndex={this.state.displayImageIndex}
-        />
+        {this.state.dbData && (
+          <Scene
+            db={database}
+            storage={storage}
+            dbData={this.state.dbData}
+            setImagesInfo={this.setImagesInfo}
+            setLocation={this.setLocation}
+            displayImageIndex={this.state.displayImageIndex}
+          />
+        )}
         <App
           imagesInfo={this.state.imagesInfo}
           currentLocation={this.state.currentLocation}
