@@ -27,7 +27,7 @@ class Nft extends React.Component {
             src={"#" + img.id}
             width={i === this.props.displayImageIndex ? 375 * 0.5 : 0}
             height={i === this.props.displayImageIndex ? 500 * 0.5 : 0}
-            position="22 0 -50"
+            position="35 0 0"
             rotation="-90 0 0"
             key={img.id}
           ></a-image>

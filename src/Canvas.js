@@ -55,7 +55,7 @@ const Canvas = ({ db, storage, location, bkImg, resetCanvas, closeCanvas }) => {
   return (
     <ReactPainter
       width={300}
-      height={400}
+      height={500}
       onSave={saveCanvas}
       image={bkImg}
       render={({ canvas, triggerSave, setColor, setLineWidth }) => {
