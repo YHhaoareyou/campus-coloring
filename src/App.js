@@ -103,7 +103,9 @@ class App extends React.Component {
           {isCanvasOpen && (
             <Canvas
               location={currentLocation}
-              bkImg={imgUrls ? imgUrls[currentImg.id] : null}
+              bkImg={
+                "https://firebasestorage.googleapis.com/v0/b/campus-coloring.appspot.com/o/images%2FFSE?alt=media&token=b71ce295-ff89-4623-9fe2-25feb18faca6"
+              }
               isEditMode={isEditMode}
               db={db}
               storage={storage}

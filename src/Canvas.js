@@ -2,6 +2,9 @@ import { Button } from "semantic-ui-react";
 import { ReactPainter } from "react-painter";
 
 const Canvas = ({ db, storage, location, bkImg, resetCanvas, closeCanvas }) => {
+  console.log(bkImg);
+  console.log(bkImg);
+  console.log(bkImg);
   const saveCanvas = (blob) => {
     var imageName, description, username, isPublic;
     do {
@@ -51,8 +54,8 @@ const Canvas = ({ db, storage, location, bkImg, resetCanvas, closeCanvas }) => {
 
   return (
     <ReactPainter
-      width={375}
-      height={500}
+      width={300}
+      height={400}
       onSave={saveCanvas}
       image={bkImg}
       render={({ canvas, triggerSave, setColor, setLineWidth }) => {
