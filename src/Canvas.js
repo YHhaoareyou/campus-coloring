@@ -1,7 +1,7 @@
 import { Button } from "semantic-ui-react";
 import { ReactPainter } from "react-painter";
 
-const Canvas = ({ db, storage, location, resetCanvas, closeCanvas }) => {
+const Canvas = ({ db, storage, location, bkImg, resetCanvas, closeCanvas }) => {
   const saveCanvas = (blob) => {
     var imageName, description, username, isPublic;
     do {
@@ -40,6 +40,7 @@ const Canvas = ({ db, storage, location, resetCanvas, closeCanvas }) => {
               })
               .then(function (snap) {
                 alert("Uploaded! Refresh the page to see your materpiece!");
+                closeCanvas();
               })
               .catch((error) => {
                 alert(error);
@@ -50,9 +51,10 @@ const Canvas = ({ db, storage, location, resetCanvas, closeCanvas }) => {
 
   return (
     <ReactPainter
-      width={window.innerWidth}
-      height={window.innerHeight * 0.75}
+      width={375}
+      height={500}
       onSave={saveCanvas}
+      image={bkImg}
       render={({ canvas, triggerSave, setColor, setLineWidth }) => {
         return (
           <div style={{ zIndex: "1000" }}>

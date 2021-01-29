@@ -24,6 +24,7 @@ const InnerLayout = styled("div")`
 class App extends React.Component {
   state = {
     isCanvasOpen: false,
+    isEditMode: false,
     currentImg:
       this.props.imagesInfo &&
       this.props.imagesInfo.length &&
@@ -94,18 +95,22 @@ class App extends React.Component {
   };
 
   render() {
-    const { currentLocation, db, storage } = this.props;
-    const { isCanvasOpen, currentImg } = this.state;
+    const { currentLocation, db, storage, imgUrls } = this.props;
+    const { isCanvasOpen, currentImg, isEditMode } = this.state;
     return (
       <Layout>
         <InnerLayout>
           {isCanvasOpen && (
             <Canvas
               location={currentLocation}
+              bkImg={imgUrls ? imgUrls[currentImg.id] : null}
+              isEditMode={isEditMode}
               db={db}
               storage={storage}
               resetCanvas={this.resetCanvas}
-              closeCanvas={() => this.setState({ isCanvasOpen: false })}
+              closeCanvas={() =>
+                this.setState({ isCanvasOpen: false, isEditMode: false })
+              }
             />
           )}
 
@@ -120,7 +125,12 @@ class App extends React.Component {
             <Footer
               location={currentLocation}
               image={currentImg}
-              openCanvas={() => this.setState({ isCanvasOpen: true })}
+              openCanvas={() =>
+                this.setState({ isCanvasOpen: true, isEditMode: false })
+              }
+              openCanvasWithImg={() =>
+                this.setState({ isCanvasOpen: true, isEditMode: true })
+              }
               db={db}
             />
           )}

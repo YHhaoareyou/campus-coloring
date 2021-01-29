@@ -66,6 +66,7 @@ class Root extends React.Component {
           user={this.state.user}
           db={database}
           storage={storage}
+          imgUrls={this.state.dbData && this.state.dbData.image_urls}
           setDisplayImageIndex={this.setDisplayImageIndex}
         />
       </div>
