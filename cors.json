@@ -1,0 +1,15 @@
+[
+  {
+    "origin": [
+      "https://yhhaoareyou.github.io/campus-coloring",
+      "https://yhhaoareyou.github.io",
+      "http://localhost:3000",
+      "https://localhost:3000",
+      "http://localhost:3000/campus-coloring",
+      "https://localhost:3000/campus-coloring"
+    ],
+    "responseHeader": ["*"],
+    "method": ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE"],
+    "maxAgeSeconds": 3600
+  }
+]
