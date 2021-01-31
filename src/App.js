@@ -95,7 +95,8 @@ class App extends React.Component {
   };
 
   render() {
-    const { currentLocation, db, storage, imgUrls } = this.props;
+    const { currentLocation, db, storage } = this.props;
+    // const { currentLocation, db, storage, imgUrls } = this.props;
     const { isCanvasOpen, currentImg, isEditMode } = this.state;
     return (
       <Layout>
