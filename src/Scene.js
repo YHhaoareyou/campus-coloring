@@ -15,7 +15,9 @@ class Scene extends React.Component {
   async componentDidMount() {
     const { db, dbData } = this.props;
     const imageUrlsById = dbData.image_urls;
-    const locationData = dbData.locations;
+    let locationData = dbData.locations;
+    delete locationData.trex;
+    console.log(locationData);
     this.setState({
       imageUrlsById: imageUrlsById,
       locationNames: Object.keys(locationData),
