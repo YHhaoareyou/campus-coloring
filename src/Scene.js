@@ -7,7 +7,7 @@ import "firebase/storage";
 class Scene extends React.Component {
   state = {
     locationNames: [],
-    currentLocation: "",
+    currentLocation: null,
     currentImages: [],
     imageUrlsById: {},
   };
@@ -16,8 +16,6 @@ class Scene extends React.Component {
     const { db, dbData } = this.props;
     const imageUrlsById = dbData.image_urls;
     let locationData = dbData.locations;
-    delete locationData.trex;
-    console.log(locationData);
     this.setState({
       imageUrlsById: imageUrlsById,
       locationNames: Object.keys(locationData),
@@ -49,7 +47,10 @@ class Scene extends React.Component {
             });
         });
 
-        this.el.sceneEl.addEventListener("markerLost", (e) => setImages([]));
+        this.el.sceneEl.addEventListener("markerLost", (e) => {
+          setLocation(null);
+          setImages([]);
+        });
       },
     });
   }

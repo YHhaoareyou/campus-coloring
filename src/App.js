@@ -123,7 +123,7 @@ class App extends React.Component {
             />
           )}
 
-          {currentImg && !isCanvasOpen && (
+          {currentLocation && !isCanvasOpen && (
             <Footer
               location={currentLocation}
               image={currentImg}
