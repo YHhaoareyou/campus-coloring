@@ -1,10 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-import Scene from "./Scene";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
 import firebase from "firebase/app";
 import "firebase/auth";
+import { Scene } from 'three';
 
 const firebaseApp = firebase.initializeApp({
   apiKey: "AIzaSyAA4zXM0wRBrL1l65NHg_8mQcjg75ew9RQ",
@@ -23,10 +24,7 @@ const storage = firebaseApp.storage();
 
 class Root extends React.Component {
   state = {
-    imagesInfo: null,
-    currentLocation: null,
     user: "loading",
-    displayImageIndex: 0,
     dbData: null,
   };
 
@@ -42,33 +40,11 @@ class Root extends React.Component {
     this.setState({ dbData: dbData.val() });
   }
 
-  setImagesInfo = (images) => this.setState({ imagesInfo: images });
-  setLocation = (loc) => this.setState({ currentLocation: loc });
-  setDisplayImageIndex = (index) => this.setState({ displayImageIndex: index });
-
   render() {
     return (
       <div style={{ width: "100%", height: "100%" }}>
-        {this.state.dbData && (
-          <Scene
-            db={database}
-            storage={storage}
-            dbData={this.state.dbData}
-            setImagesInfo={this.setImagesInfo}
-            setLocation={this.setLocation}
-            displayImageIndex={this.state.displayImageIndex}
-          />
-        )}
-        <App
-          imagesInfo={this.state.imagesInfo}
-          currentLocation={this.state.currentLocation}
-          auth={auth}
-          user={this.state.user}
-          db={database}
-          storage={storage}
-          imgUrls={this.state.dbData && this.state.dbData.image_urls}
-          setDisplayImageIndex={this.setDisplayImageIndex}
-        />
+        <Scene />
+        <App />
       </div>
     );
   }
@@ -76,4 +52,7 @@ class Root extends React.Component {
 
 ReactDOM.render(<Root />, document.getElementById("root"));
 
-// setTimeout(ReactDOM.render(<App />, document.getElementById("root")), 1500);
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
