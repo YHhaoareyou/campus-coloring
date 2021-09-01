@@ -16,6 +16,7 @@
     "react-painter": "^0.4.0",
     "react-scripts": "4.0.3",
     "react-web-ar": "^1.0.0-beta0",
+    "recoil": "^0.4.1",
     "styled-components": "^5.3.1",
     "web-vitals": "^1.1.2"
   },
