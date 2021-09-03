@@ -1,14 +1,16 @@
-const currentLoc = atom({
-  key: 'currentLoc',
+import { atom } from "recoil";
+
+export const currentLocState = atom({
+  key: 'currentLocState',
   default: '',
 });
 
-const currentImgId = atom({
-  key: 'currentImgId',
+export const currentImgIdState = atom({
+  key: 'currentImgIdState',
   default: '',
 });
 
-const currentImgSrc = atom({
-  key: 'currentImgSrc',
+export const currentImgSrcState = atom({
+  key: 'currentImgSrcState',
   default: '',
 });
