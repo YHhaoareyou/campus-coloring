@@ -16,7 +16,7 @@ function Scene() {
       <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
       {/* <a-assets></a-assets> */}
-      <a-entity camera></a-entity>
+      {/* <a-entity camera></a-entity> */}
     </a-scene>
   )
 }
