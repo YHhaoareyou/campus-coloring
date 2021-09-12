@@ -4,26 +4,21 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { initializeApp } from 'firebase/app';
-import "firebase/auth";
 import Scene from './Scene';
 import { useRecoilValue } from 'recoil';
 import { currentLocState } from './atoms.js';
 import { RecoilRoot } from "recoil";
 
-// const firebaseApp = initializeApp({
-//   apiKey: "AIzaSyAA4zXM0wRBrL1l65NHg_8mQcjg75ew9RQ",
-//   authDomain: "campus-coloring.firebaseapp.com",
-//   databaseURL: "https://campus-coloring.firebaseio.com",
-//   projectId: "campus-coloring",
-//   storageBucket: "campus-coloring.appspot.com",
-//   messagingSenderId: "45926036058",
-//   appId: "1:45926036058:web:a9271137ac86762843de63",
-//   measurementId: "G-WPPW3TX4QG",
-// });
-
-// const auth = firebaseApp.auth();
-// const database = firebaseApp.database();
-// const storage = firebaseApp.storage();
+const firebaseApp = initializeApp({
+  apiKey: "AIzaSyAA4zXM0wRBrL1l65NHg_8mQcjg75ew9RQ",
+  authDomain: "campus-coloring.firebaseapp.com",
+  databaseURL: "https://campus-coloring.firebaseio.com",
+  projectId: "campus-coloring",
+  storageBucket: "campus-coloring.appspot.com",
+  messagingSenderId: "45926036058",
+  appId: "1:45926036058:web:a9271137ac86762843de63",
+  measurementId: "G-WPPW3TX4QG",
+});
 
 const Root = () => {
   const currentLoc = useRecoilValue(currentLocState);
