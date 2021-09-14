@@ -16,29 +16,54 @@ function App() {
   const [currentImgSrc, setCurrentImgSrc] = useRecoilState(currentImgSrcState);
   const [currentImgIdIndex, setCurrentImgIdIndex] = useState(0);
   const [canvasVisibility, setCanvasVisibility] = useState(false);
-
-  useEffect(() => {
-    const db = getDatabase();
-    const infoRef = ref(db, 'img_locs');
-    get(infoRef).then(snap => {
-      if(snap.exists()){
-        for (const key in snap.val()) {
-          console.log(key);
-        }
-      }
-    }).catch(err => console.error(err));
-  });
+  const [imgInfos, setImgInfos] = useState([]);
 
   const switchToPrevImg = () => {
-
+    if (imgInfos.length > 1) {
+      const prevIndex = currentImgIdIndex === 0 ? imgInfos.length - 1 : currentImgIdIndex - 1;
+      setCurrentImgIdIndex(prevIndex);
+      setCurrentImgId(imgInfos[prevIndex].id);
+      switchImgSrc(imgInfos[prevIndex].id);
+    }
   }
 
   const switchToNextImg = () => {
-    
+    if (imgInfos.length > 1) {
+      const nextIndex = currentImgIdIndex === imgInfos.length - 1 ? 0 : currentImgIdIndex + 1;
+      setCurrentImgIdIndex(nextIndex);
+      setCurrentImgId(imgInfos[nextIndex].id);
+      switchImgSrc(imgInfos[nextIndex].id);
+    }
   }
 
-  // retrieve all images' ids of current location
-  // ...
+  const initImgInfos = (infos) => {
+    const imgInfosArr = Object.keys(infos).map(id => ({
+      id: id,
+      ...infos[id]
+    }))
+    setImgInfos(imgInfosArr);
+    setCurrentImgId(imgInfosArr[0].id);
+    setCurrentImgIdIndex(0);
+    switchImgSrc(imgInfosArr[0].id);
+  }
+
+  const switchImgSrc = (imgId) => {
+    const db = getDatabase();
+    get(ref(db, 'img_urls/' + currentLoc + '/' + imgId)).then(snap => {
+      if(snap.exists()){
+        setCurrentImgSrc(snap.val())
+      }
+    }).catch(err => console.error(err));
+  }
+
+  useEffect(() => {
+    const db = getDatabase();
+    get(ref(db, 'img_info/' + currentLoc)).then(snap => {
+      if(snap.exists()){
+        initImgInfos(snap.val())
+      }
+    }).catch(err => console.error(err));
+  }, [currentLoc])
 
   return (
     <div className="App">
