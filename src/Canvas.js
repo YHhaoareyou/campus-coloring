@@ -1,18 +1,91 @@
+import { useEffect, useState } from 'react';
 import { ReactPainter } from "react-painter";
+import Button from 'react-bootstrap/Button';
+import { getDatabase, ref as dbRef, set as dbSet } from "firebase/database";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useRecoilValue } from 'recoil';
+import { currentLocState, currentImgIdState, currentImgSrcState } from './atoms.js';
 
-const Canvas = () => {
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height
+  };
+}
+
+const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
+  const currentLoc = useRecoilValue(currentLocState);
+  const currentImgId = useRecoilValue(currentImgIdState);
+  const currentImgSrc = useRecoilValue(currentImgSrcState);
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+  const [context, setContext] = useState(null);
+
+  // load base painting on canvas
+  useEffect(() => {
+    if (!isNew) {
+      var basePainting = new Image();
+      basePainting.src = currentImgSrc;
+      basePainting.crossOrigin = "anonymous";
+      basePainting.onload = () => {
+        document.getElementsByTagName("canvas")[1].getContext('2d').drawImage(basePainting, 0, 0)
+      }
+    }
+  })
+
   const saveCanvas = (blob) => {
+    var title, detail, painting, id;
+    const storage = getStorage();
+    const db = getDatabase();
 
+    do {
+      title = prompt("Please name your painting:");
+    } while (!title);
+    detail = prompt("Please write something about this painting:");
+    
+    painting = new Image();
+    painting.src = blob;
+    id = Date.now();
+
+    uploadBytes(storageRef(storage, 'paintings/' + title), blob)
+      .then(snap => getDownloadURL(snap.ref))
+      .then(url => {
+
+        // save url
+        dbSet(dbRef(db, 'img_urls/' + currentLoc + '/' + id), url)
+          .then(snap => {
+
+            // save info
+            dbSet(dbRef(db, 'img_info/' + currentLoc + '/' + id), {
+              title,
+              detail,
+              creator_id: '26577319',
+              prev_img_ids: !isNew && [currentImgId, ...Object.keys(basePrevIds)]
+            })
+              .then(snap => {
+
+                // add img id to user
+                dbSet(dbRef(db, 'users/' + '26577319' + '/img_ids/' + currentLoc + '/' + id), true)
+                  .then(snap => {
+
+                    // uploaded notification
+                    alert("Uploaded! Refresh the page to see your masterpiece!");
+                    closeCanvas();
+
+                  }).catch(err => alert(err))
+              }).catch(err => alert(err));
+          }).catch(err => alert(err));
+      }).catch(err => alert(err));
   }
 
   return (
     <ReactPainter
-      width={300}
-      height={500}
+      width={windowDimensions.width - 50}
+      height={windowDimensions.height - 100}
       onSave={saveCanvas}
       render={({ canvas, triggerSave, setColor, setLineWidth }) => {
         return (
-          <div style={{ zIndex: "1000" }}>
+          <div style={{ position: 'absolute', left: 0, zIndex: "2000" }}>
             <h2 style={{ margin: "0px" }}>{/* location */}</h2>
             <div
               style={{
@@ -22,7 +95,7 @@ const Canvas = () => {
             >
               {canvas}
             </div>
-            <div style={{ padding: "1rem", background: "#ccc" }}>
+            <div style={{ padding: "1rem", background: "#ccc", width: '100vw', height: 100 }}>
               <div>
                 Color{" "}
                 <input
@@ -41,6 +114,8 @@ const Canvas = () => {
                 />
               </div>
               <div style={{ paddingTop: "1rem" }}>
+                <Button onClick={triggerSave}>保存</Button>
+                <Button onClick={closeCanvas}>やめる</Button>
                 { /* Buttons */ }
               </div>
             </div>

@@ -17,6 +17,7 @@ function App() {
   const [currentImgIdIndex, setCurrentImgIdIndex] = useState(0);
   const [canvasVisibility, setCanvasVisibility] = useState(false);
   const [imgInfos, setImgInfos] = useState([]);
+  const [isNewPainting, setIsNewPainting] = useState(true);
 
   const switchToPrevImg = () => {
     if (imgInfos.length > 1) {
@@ -72,12 +73,12 @@ function App() {
           ? <div>
               <Header location={currentLoc} />
               <ImageSwitch switchPrev={switchToPrevImg} switchNext={switchToNextImg} />
-              <ActionMenu openCanvas={() => setCanvasVisibility(true)} closeCanvas={() => setCanvasVisibility(false)} />
+              <ActionMenu openCanvas={({ isNew }) => {setCanvasVisibility(true); setIsNewPainting(isNew);}} />
             </div>
           : <LocationsMenu />
       }
       {
-        canvasVisibility && <Canvas />
+        canvasVisibility && <Canvas isNew={isNewPainting} basePrevIds={imgInfos[currentImgIdIndex].prev_img_ids || []} closeCanvas={() => setCanvasVisibility(false)} />
       }
     </div>
   );
