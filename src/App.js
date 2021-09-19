@@ -66,6 +66,17 @@ function App() {
     }).catch(err => console.error(err));
   }, [currentLoc])
 
+  // useEffect(() => {
+  //   navigator.geolocation.getCurrentPosition(
+  //     function(position) {
+  //       console.log(position);
+  //     },
+  //     function(error) {
+  //       console.error("Error Code = " + error.code + " - " + error.message);
+  //     }
+  //   );
+  // })
+
   return (
     <div className="App">
       {
