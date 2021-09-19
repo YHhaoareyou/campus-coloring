@@ -13,7 +13,7 @@ const HeaderWrapper = styled.div`
 function Header({ location }) {
   return(
     <HeaderWrapper>
-      <h2 style={{ textAlign: 'center' }}>60号館{/*location*/}</h2>
+      <h2 style={{ textAlign: 'center' }}>{location}</h2>
     </HeaderWrapper>
   )
 }

@@ -25,7 +25,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
   useEffect(() => {
     if (!isNew) {
       var basePainting = new Image();
-      basePainting.src = '/example.jpeg' //currentImgSrc;
+      basePainting.src = currentImgSrc;
       console.log(basePainting);
       basePainting.crossOrigin = "anonymous";
       basePainting.onload = () => {
