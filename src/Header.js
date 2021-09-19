@@ -7,13 +7,13 @@ const HeaderWrapper = styled.div`
   text-align: center;
   width: 100vw;
   height: 50px;
-  background-color: #ECECEC;
+  background-color: rgba(248, 249, 250, 0.5);
 `
 
 function Header({ location }) {
   return(
     <HeaderWrapper>
-      <p style={{ textAlign: 'center' }}>{location}</p>
+      <h2 style={{ textAlign: 'center' }}>60号館{/*location*/}</h2>
     </HeaderWrapper>
   )
 }

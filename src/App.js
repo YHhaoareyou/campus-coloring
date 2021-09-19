@@ -84,7 +84,7 @@ function App() {
           ? <div>
               <Header location={currentLoc} />
               <ImageSwitch switchPrev={switchToPrevImg} switchNext={switchToNextImg} />
-              <ActionMenu openCanvas={({ isNew }) => {setCanvasVisibility(true); setIsNewPainting(isNew);}} />
+              <ActionMenu imgInfo={imgInfos[currentImgIdIndex]} openCanvas={({ isNew }) => {setCanvasVisibility(true); setIsNewPainting(isNew);}} canvasVisibility={canvasVisibility} />
             </div>
           : <LocationsMenu />
       }

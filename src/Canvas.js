@@ -25,10 +25,11 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
   useEffect(() => {
     if (!isNew) {
       var basePainting = new Image();
-      basePainting.src = currentImgSrc;
+      basePainting.src = '/example.jpeg' //currentImgSrc;
+      console.log(basePainting);
       basePainting.crossOrigin = "anonymous";
       basePainting.onload = () => {
-        document.getElementsByTagName("canvas")[1].getContext('2d').drawImage(basePainting, 0, 0)
+        document.getElementsByTagName("canvas")[1].getContext('2d').drawImage(basePainting, 0, 0, windowDimensions.width, windowDimensions.height)
       }
     }
   })
@@ -80,8 +81,8 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
 
   return (
     <ReactPainter
-      width={windowDimensions.width - 50}
-      height={windowDimensions.height - 100}
+      width={windowDimensions.width}
+      height={windowDimensions.height - 15}
       onSave={saveCanvas}
       render={({ canvas, triggerSave, setColor, setLineWidth }) => {
         return (
@@ -95,7 +96,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
             >
               {canvas}
             </div>
-            <div style={{ padding: "1rem", background: "#ccc", width: '100vw', height: 100 }}>
+            <div style={{ position: 'absolute', bottom: 0, left: 0, padding: "1rem", background: "#ccc", width: '100vw', height: 100 }}>
               <div>
                 Color{" "}
                 <input
@@ -114,8 +115,8 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
                 />
               </div>
               <div style={{ paddingTop: "1rem" }}>
-                <Button onClick={triggerSave}>保存</Button>
-                <Button onClick={closeCanvas}>やめる</Button>
+                <Button onClick={triggerSave} style={{ padding: '0 10px' }}>保存</Button>
+                <Button onClick={closeCanvas} style={{ padding: '0 10px' }}>やめる</Button>
                 { /* Buttons */ }
               </div>
             </div>

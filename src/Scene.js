@@ -30,9 +30,9 @@ function Scene() {
       </a-assets>
       {currentImgSrc && <a-image
         src={'#'+currentImgId}
-        width={5}
-        height={5}
-        position="0 1 -10"
+        width={11}
+        height={8}
+        position="0 1.5 -10"
         rotation="0 0 0">
       </a-image>}
       

@@ -6,27 +6,33 @@ const MenuWrapper = styled(Container)`
   position: absolute;
   bottom: 0;
   left: 0;
-  background-color: #f8f9fa;
+  background-color: rgba(248, 249, 250, 0.5);
   padding: 10px;
+  padding-right: 20px;
+`
+
+const ActionButton = styled(Button)`
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  width: 100%;
 `
 
 // Todo2: display based paintings
 // Todo3: like
 // Todo4: check a user's paintings in a loc
 
-function ActionMenu({ openCanvas }) {
+function ActionMenu({ imgInfo, openCanvas, canvasVisibility }) {
   const [showModal, setShowModal] = useState(false);
 
-  return(
+  return !canvasVisibility && (
     <MenuWrapper>
       <Row>
         <Col xs={8}>
           <Card style={{ height: '100px', overflowY: 'scroll' }}>
             <Card.Body style={{ padding: '5px' }}>
-              <Card.Title as='h6' style={{ margin: '5px' }}>Card Title</Card.Title>
+              <Card.Title as='h6' style={{ margin: '5px' }}>{imgInfo.title}</Card.Title>
               <Card.Text style={{ fontSize: '14px' }}>
-                Some quick example text to build on the card title and make up the bulk of
-                the card's content.
+                {imgInfo.detail}
               </Card.Text>
             </Card.Body>
           </Card>
@@ -34,34 +40,34 @@ function ActionMenu({ openCanvas }) {
         <Col xs={4}>
           <Row>
             <Col style={{ padding: 0 }}>
-              <Button variant='light' size='sm' onClick={() => {}}>
+              <ActionButton variant='light' size='sm' onClick={() => {}}>
                 <i className="bi bi-person"></i>
                 <br />
                 User
-              </Button>
+              </ActionButton>
             </Col>
             <Col style={{ padding: 0 }}>
-              <Button variant='light' size='sm' onClick={() => {}}>
+              <ActionButton variant='light' size='sm' onClick={() => {}}>
                 <i className="bi bi-heart"></i>
                 <br />
                 5
-              </Button>
+              </ActionButton>
             </Col>
           </Row>
           <Row>
             <Col style={{ padding: 0 }}>
-              <Button variant='light' size='sm' onClick={() => {}}>
+              <ActionButton variant='light' size='sm' onClick={() => {}}>
                 <i className="bi bi-collection"></i>
                 <br />
                 前作へ
-              </Button>
+              </ActionButton>
             </Col>
             <Col style={{ padding: 0 }}>
-              <Button variant='light' size='sm' onClick={() => setShowModal(true)}>
+              <ActionButton variant='light' size='sm' onClick={() => setShowModal(true)}>
                 <i className="bi bi-pencil"></i>
                 <br />
                 描こう
-              </Button>
+              </ActionButton>
             </Col>
           </Row>
           {/* <Button onClick={() => openCanvas({ isNew: false })}>ベースにして描こう</Button>
