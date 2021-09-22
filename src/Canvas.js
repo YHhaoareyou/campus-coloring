@@ -61,7 +61,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
               title,
               detail,
               creator_id: '26577319',
-              prev_img_ids: !isNew && [currentImgId, ...Object.keys(basePrevIds)]
+              prev_img_ids: !isNew && { [currentImgId]: true, ...basePrevIds }
             })
               .then(snap => {
 

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from '@reach/router';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -43,13 +44,15 @@ function LocationsMenu() {
         <Cards xs={2} className="g-4">
           {currentCoor && locations.map(loc => (
             <Col key={loc.id}>
-              <Card onClick={() => setCurrentLoc(loc.id)}>
-                <Card.Img variant="top" src={logo} style={{ height: '100px' }} />
-                <Card.Body>
-                  <Card.Title>{loc.name}</Card.Title>
-                  <Card.Text>{isCoorInRange(loc.range) ? 'yes' : 'no'}</Card.Text>
-                </Card.Body>
-              </Card>
+              <Link to={"/" + loc.id}>
+                <Card>
+                  <Card.Img variant="top" src={logo} style={{ height: '100px' }} />
+                  <Card.Body>
+                    <Card.Title>{loc.name}</Card.Title>
+                    <Card.Text>{isCoorInRange(loc.range) ? 'yes' : 'no'}</Card.Text>
+                  </Card.Body>
+                </Card>
+              </Link>
             </Col>
           ))}
         </Cards>

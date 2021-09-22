@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Container, Row, Col, Button, Card, Modal } from 'react-bootstrap';
+import { Link } from '@reach/router';
 
 const MenuWrapper = styled(Container)`
   position: absolute;
@@ -17,11 +18,11 @@ const ActionButton = styled(Button)`
   width: 100%;
 `
 
-// Todo2: display based paintings
 // Todo3: like
 // Todo4: check a user's paintings in a loc
+// Todo: notification
 
-function ActionMenu({ imgInfo, openCanvas, canvasVisibility }) {
+function ActionMenu({ imgInfo, openCanvas, canvasVisibility, isPrevMode, prevModeTrigger }) {
   const [showModal, setShowModal] = useState(false);
 
   return !canvasVisibility && (
@@ -56,7 +57,7 @@ function ActionMenu({ imgInfo, openCanvas, canvasVisibility }) {
           </Row>
           <Row>
             <Col style={{ padding: 0 }}>
-              <ActionButton variant='light' size='sm' onClick={() => {}}>
+              <ActionButton variant='light' size='sm' disabled={isPrevMode || !imgInfo.prev_img_ids} onClick={prevModeTrigger}>
                 <i className="bi bi-collection"></i>
                 <br />
                 前作へ

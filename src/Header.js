@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Button } from 'react-bootstrap';
 
 const HeaderWrapper = styled.div`
   position: absolute;
@@ -10,10 +11,11 @@ const HeaderWrapper = styled.div`
   background-color: rgba(248, 249, 250, 0.5);
 `
 
-function Header({ location }) {
+function Header({ location, isPrevMode, prevModeTrigger }) {
   return(
     <HeaderWrapper>
       <h2 style={{ textAlign: 'center' }}>{location}</h2>
+      {isPrevMode && <Button onClick={prevModeTrigger}>←</Button>}
     </HeaderWrapper>
   )
 }
