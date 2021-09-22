@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Container, Row, Col, Button, Card, Modal } from 'react-bootstrap';
-import { Link } from '@reach/router';
+import { getDatabase, ref, set } from "firebase/database";
 
 const MenuWrapper = styled(Container)`
   position: absolute;
@@ -18,12 +18,19 @@ const ActionButton = styled(Button)`
   width: 100%;
 `
 
-// Todo3: like
 // Todo4: check a user's paintings in a loc
-// Todo: notification
+// Todo: notification (like, 上書き)
 
-function ActionMenu({ imgInfo, openCanvas, canvasVisibility, isPrevMode, prevModeTrigger }) {
+function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger, isPrevMode, prevModeTrigger }) {
   const [showModal, setShowModal] = useState(false);
+  const [likes, setLikes] = useState(imgInfo.likes ? Object.keys(imgInfo.likes).length : 0)
+  const [liked, setLiked] = useState(imgInfo.likes && Object.keys(imgInfo.likes).includes('26577319'))
+
+  const handleLikeTrigger = () => {
+    likeTrigger();
+    setLikes(liked ? likes - 1 : likes + 1);
+    setLiked(!liked);
+  }
 
   return !canvasVisibility && (
     <MenuWrapper>
@@ -48,10 +55,10 @@ function ActionMenu({ imgInfo, openCanvas, canvasVisibility, isPrevMode, prevMod
               </ActionButton>
             </Col>
             <Col style={{ padding: 0 }}>
-              <ActionButton variant='light' size='sm' onClick={() => {}}>
-                <i className="bi bi-heart"></i>
+              <ActionButton variant='light' size='sm' onClick={handleLikeTrigger}>
+                <i className="bi bi-heart" style={{ color: liked ? 'red' : 'black' }}></i>
                 <br />
-                5
+                {likes}
               </ActionButton>
             </Col>
           </Row>

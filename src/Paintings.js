@@ -5,9 +5,8 @@ import ActionMenu from './ActionMenu';
 import Canvas from './Canvas';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { currentImgIdState, currentImgSrcState, currentLocState } from './atoms.js';
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, get, set } from "firebase/database";
 import locations from './locations';
-import * as queryString from 'query-string';
 
 function Paintings({ loc, location }) {
   const setCurrentLoc = useSetRecoilState(currentLocState);
@@ -66,6 +65,30 @@ function Paintings({ loc, location }) {
     setIsPrevMode(!isPrevMode);
   }
 
+  const updateLikes = (action) => {
+    var infos = imgInfos;
+    if (action === 1) {
+      infos[currentImgIdIndex].likes = {
+        ...infos[currentImgIdIndex].likes,
+        '26577319': true
+      };
+    } else {
+      delete infos[currentImgIdIndex].likes['26577319']
+    }
+    setImgInfos(infos);
+  }
+
+  const likeTrigger = () => {
+    const db = getDatabase();
+    imgInfos[currentImgIdIndex].likes && imgInfos[currentImgIdIndex].likes['26577319']
+      ? set(ref(db, 'img_info/' + loc + '/' + currentImgId + '/likes/' + '26577319'), null).then(snap => updateLikes(-1))
+      : set(ref(db, 'img_info/' + loc + '/' + currentImgId + '/likes/' + '26577319'), true).then(snap => updateLikes(1))
+  }
+
+  useEffect(() => {
+    console.log(imgInfos);
+  }, [imgInfos[currentImgIdIndex]?.likes])
+
   useEffect(() => {
     setCurrentLoc(loc);
 
@@ -96,6 +119,7 @@ function Paintings({ loc, location }) {
             imgInfo={imgInfos[currentImgIdIndex]}
             openCanvas={({ isNew }) => {setCanvasVisibility(true); setIsNewPainting(isNew);}}
             canvasVisibility={canvasVisibility}
+            likeTrigger={likeTrigger}
             isPrevMode={isPrevMode}
             prevModeTrigger={prevModeTrigger}
           />
