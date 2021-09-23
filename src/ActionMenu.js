@@ -21,7 +21,7 @@ const ActionButton = styled(Button)`
 // Todo4: check a user's paintings in a loc
 // Todo: notification (like, 上書き)
 
-function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger, isPrevMode, prevModeTrigger }) {
+function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger }) {
   const [showModal, setShowModal] = useState(false);
   const [likes, setLikes] = useState(imgInfo.likes ? Object.keys(imgInfo.likes).length : 0)
   const [liked, setLiked] = useState(imgInfo.likes && Object.keys(imgInfo.likes).includes('26577319'))
@@ -30,6 +30,10 @@ function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger, isPrev
     likeTrigger();
     setLikes(liked ? likes - 1 : likes + 1);
     setLiked(!liked);
+  }
+
+  const navigateToBasePaintings = () => {
+    window.location.href = window.location.origin + window.location.pathname + '?mode=base&bid=' + imgInfo.id;
   }
 
   return !canvasVisibility && (
@@ -64,7 +68,7 @@ function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger, isPrev
           </Row>
           <Row>
             <Col style={{ padding: 0 }}>
-              <ActionButton variant='light' size='sm' disabled={isPrevMode || !imgInfo.prev_img_ids} onClick={prevModeTrigger}>
+              <ActionButton variant='light' size='sm' disabled={!imgInfo.prev_img_ids} onClick={navigateToBasePaintings}>
                 <i className="bi bi-collection"></i>
                 <br />
                 前作へ
@@ -78,8 +82,6 @@ function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger, isPrev
               </ActionButton>
             </Col>
           </Row>
-          {/* <Button onClick={() => openCanvas({ isNew: false })}>ベースにして描こう</Button>
-          <Button onClick={() => openCanvas({ isNew: true })}>新しく描こう</Button> */}
         </Col>
       </Row>
 

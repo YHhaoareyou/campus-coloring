@@ -11,11 +11,11 @@ const HeaderWrapper = styled.div`
   background-color: rgba(248, 249, 250, 0.5);
 `
 
-function Header({ location, isPrevMode, prevModeTrigger }) {
+function Header({ location }) {
   return(
     <HeaderWrapper>
       <h2 style={{ textAlign: 'center' }}>{location}</h2>
-      {isPrevMode && <Button onClick={prevModeTrigger}>←</Button>}
+      {false && <Button onClick={() => window.history.back()}>←</Button>}
     </HeaderWrapper>
   )
 }

@@ -7,6 +7,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { currentImgIdState, currentImgSrcState, currentLocState } from './atoms.js';
 import { getDatabase, ref, get, set } from "firebase/database";
 import locations from './locations';
+import queryString from 'query-string';
 
 function Paintings({ loc, location }) {
   const setCurrentLoc = useSetRecoilState(currentLocState);
@@ -16,8 +17,6 @@ function Paintings({ loc, location }) {
   const [canvasVisibility, setCanvasVisibility] = useState(false);
   const [imgInfos, setImgInfos] = useState([]);
   const [isNewPainting, setIsNewPainting] = useState(true);
-  const [isPrevMode, setIsPrevMode] = useState(false);
-  const [prevImgOf, setPrevImgOf] = useState('');
 
   const switchToPrevImg = () => {
     if (imgInfos.length > 1) {
@@ -25,6 +24,8 @@ function Paintings({ loc, location }) {
       setCurrentImgIdIndex(prevIndex);
       setCurrentImgId(imgInfos[prevIndex].id);
       switchImgSrc(imgInfos[prevIndex].id);
+      const url = window.location.origin + window.location.pathname + '?pid=' + imgInfos[prevIndex].id;
+      window.history.replaceState({ path: url }, '', url)
     }
   }
 
@@ -34,6 +35,8 @@ function Paintings({ loc, location }) {
       setCurrentImgIdIndex(nextIndex);
       setCurrentImgId(imgInfos[nextIndex].id);
       switchImgSrc(imgInfos[nextIndex].id);
+      const url = window.location.origin + window.location.pathname + '?pid=' + imgInfos[nextIndex].id;
+      window.history.replaceState({ path: url }, '', url)
     }
   }
 
@@ -45,10 +48,12 @@ function Paintings({ loc, location }) {
         ...infos[id]
       }))
     }
+
+    const pid = queryString.parse(location.search).pid;
     setImgInfos(imgInfosArr);
-    setCurrentImgId(!isPrevMode && prevImgOf ? prevImgOf : imgInfosArr[0].id);
-    setCurrentImgIdIndex(!isPrevMode && prevImgOf ? imgInfosArr.map(img => img.id).indexOf(prevImgOf) : 0);
-    switchImgSrc(!isPrevMode && prevImgOf ? prevImgOf : imgInfosArr[0].id);
+    setCurrentImgId(pid || imgInfosArr[0].id);
+    setCurrentImgIdIndex(pid ? imgInfosArr.map(img => img.id).indexOf(pid) : 0);
+    switchImgSrc(pid || imgInfosArr[0].id);
   }
 
   const switchImgSrc = (imgId) => {
@@ -58,11 +63,6 @@ function Paintings({ loc, location }) {
         setCurrentImgSrc(snap.val())
       }
     }).catch(err => console.error(err));
-  }
-
-  const prevModeTrigger = () => {
-    !isPrevMode && setPrevImgOf(currentImgId);
-    setIsPrevMode(!isPrevMode);
   }
 
   const updateLikes = (action) => {
@@ -86,31 +86,37 @@ function Paintings({ loc, location }) {
   }
 
   useEffect(() => {
-    console.log(imgInfos);
-  }, [imgInfos[currentImgIdIndex]?.likes])
-
-  useEffect(() => {
     setCurrentLoc(loc);
 
-    if (isPrevMode) {
-      const prevPaintingIds = Object.keys(imgInfos.find(img => img.id === prevImgOf)?.prev_img_ids);
-      initImgInfos(imgInfos.filter(img => prevPaintingIds.includes(img.id)));
-    } else {
-      const db = getDatabase();
-      get(ref(db, 'img_info/' + loc)).then(snap => {
-        if(snap.exists()){
+    const qs = queryString.parse(location.search)
+    const db = getDatabase();
+    get(ref(db, 'img_info/' + loc)).then(snap => {
+      if(snap.exists()){
+        if (qs.mode && qs.mode === 'base') {
+          const baseIds = Object.keys(snap.val()[qs.bid].prev_img_ids);
+          var idsObj = {};
+          baseIds.forEach(id => {
+            idsObj[id] = snap.val()[id]
+          });
+          initImgInfos(idsObj);
+        } else {
           initImgInfos(snap.val());
         }
-      }).catch(err => console.error(err));
-    }
-  }, [isPrevMode])
+      }
+    }).catch(err => console.error(err));
+  }, [])
+
+  /*
+  queryString
+    pid=XXX
+    mode=base&bid=XXX&pid=YYY
+    mode=user&uid=XXX&uid=YYY
+  */
 
   return (
     <div>
       <Header
         location={locations.find(l => l.id === loc)?.name}
-        isPrevMode={isPrevMode}
-        prevModeTrigger={prevModeTrigger}
        />
       <ImageSwitch switchPrev={switchToPrevImg} switchNext={switchToNextImg} />
       {
@@ -120,8 +126,6 @@ function Paintings({ loc, location }) {
             openCanvas={({ isNew }) => {setCanvasVisibility(true); setIsNewPainting(isNew);}}
             canvasVisibility={canvasVisibility}
             likeTrigger={likeTrigger}
-            isPrevMode={isPrevMode}
-            prevModeTrigger={prevModeTrigger}
           />
         )
       }
