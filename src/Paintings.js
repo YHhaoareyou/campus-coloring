@@ -24,7 +24,10 @@ function Paintings({ loc, location }) {
       setCurrentImgIdIndex(prevIndex);
       setCurrentImgId(imgInfos[prevIndex].id);
       switchImgSrc(imgInfos[prevIndex].id);
-      const url = window.location.origin + window.location.pathname + '?pid=' + imgInfos[prevIndex].id;
+
+      var qs = queryString.parse(location.search);
+      qs.pid = imgInfos[prevIndex].id;
+      const url = window.location.origin + window.location.pathname + '?' + queryString.stringify(qs);
       window.history.replaceState({ path: url }, '', url)
     }
   }
@@ -35,7 +38,10 @@ function Paintings({ loc, location }) {
       setCurrentImgIdIndex(nextIndex);
       setCurrentImgId(imgInfos[nextIndex].id);
       switchImgSrc(imgInfos[nextIndex].id);
-      const url = window.location.origin + window.location.pathname + '?pid=' + imgInfos[nextIndex].id;
+      
+      var qs = queryString.parse(location.search);
+      qs.pid = imgInfos[nextIndex].id;
+      const url = window.location.origin + window.location.pathname + '?' + queryString.stringify(qs);
       window.history.replaceState({ path: url }, '', url)
     }
   }
