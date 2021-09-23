@@ -38,7 +38,7 @@ function Paintings({ loc, location }) {
       setCurrentImgIdIndex(nextIndex);
       setCurrentImgId(imgInfos[nextIndex].id);
       switchImgSrc(imgInfos[nextIndex].id);
-      
+
       var qs = queryString.parse(location.search);
       qs.pid = imgInfos[nextIndex].id;
       const url = window.location.origin + window.location.pathname + '?' + queryString.stringify(qs);
@@ -105,19 +105,20 @@ function Paintings({ loc, location }) {
             idsObj[id] = snap.val()[id]
           });
           initImgInfos(idsObj);
+        } else if (qs.mode && qs.mode === 'user') {
+          get(ref(db, 'users/' + qs.uid + '/img_ids/' + loc)).then(userPaintingIdsSnap => {
+            var idsObj = {};
+            Object.keys(userPaintingIdsSnap.val()).forEach(id => {
+              idsObj[id] = snap.val()[id]
+            });
+            initImgInfos(idsObj);
+          })
         } else {
           initImgInfos(snap.val());
         }
       }
     }).catch(err => console.error(err));
   }, [])
-
-  /*
-  queryString
-    pid=XXX
-    mode=base&bid=XXX&pid=YYY
-    mode=user&uid=XXX&uid=YYY
-  */
 
   return (
     <div>

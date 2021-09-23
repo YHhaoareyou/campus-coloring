@@ -36,6 +36,10 @@ function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger }) {
     window.location.href = window.location.origin + window.location.pathname + '?mode=base&bid=' + imgInfo.id;
   }
 
+  const navigateToUserPaintings = () => {
+    window.location.href = window.location.origin + window.location.pathname + '?mode=user&uid=' + imgInfo.creator_id;
+  }
+
   return !canvasVisibility && (
     <MenuWrapper>
       <Row>
@@ -52,7 +56,7 @@ function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger }) {
         <Col xs={4}>
           <Row>
             <Col style={{ padding: 0 }}>
-              <ActionButton variant='light' size='sm' onClick={() => {}}>
+              <ActionButton variant='light' size='sm' onClick={navigateToUserPaintings}>
                 <i className="bi bi-person"></i>
                 <br />
                 User
