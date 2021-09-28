@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import Header from './Header';
 import ImageSwitch from './ImageSwitch';
 import ActionMenu from './ActionMenu';
 import Canvas from './Canvas';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { currentImgIdState, currentImgSrcState, currentLocState } from './atoms.js';
 import { getDatabase, ref, get, set } from "firebase/database";
-import locations from './locations';
 import queryString from 'query-string';
 
 function Paintings({ loc, location }) {
@@ -122,9 +120,6 @@ function Paintings({ loc, location }) {
 
   return (
     <div>
-      <Header
-        location={locations.find(l => l.id === loc)?.name}
-       />
       <ImageSwitch switchPrev={switchToPrevImg} switchNext={switchToNextImg} />
       {
         imgInfos.length > 0 && (

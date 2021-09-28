@@ -18,7 +18,6 @@ const ActionButton = styled(Button)`
   width: 100%;
 `
 
-// Todo4: check a user's paintings in a loc
 // Todo: notification (like, 上書き)
 
 function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger }) {

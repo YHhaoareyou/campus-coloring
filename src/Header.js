@@ -1,5 +1,10 @@
 import styled from 'styled-components';
-import { Button } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Container, Button } from 'react-bootstrap';
+import { login, logout, useUser } from './auth';
+import { useEffect } from 'react';
+import locations from './locations';
+import { currentLocState } from './atoms';
+import { useRecoilValue } from 'recoil';
 
 const HeaderWrapper = styled.div`
   position: absolute;
@@ -11,12 +16,41 @@ const HeaderWrapper = styled.div`
   background-color: rgba(248, 249, 250, 0.5);
 `
 
-function Header({ location }) {
+function Header() {
+  const user = useUser();
+  const loc = useRecoilValue(currentLocState);
+
+  const handleLogin = () => {
+    login().catch((error) => console.error(error));
+  };
+
+  const handleLogout = () => {
+    logout().catch((error) => console.error(error));
+  };
+
+  useEffect(() => {
+    console.log(user)
+  }, [])
+
   return(
-    <HeaderWrapper>
-      <h2 style={{ textAlign: 'center' }}>{location}</h2>
-      {false && <Button onClick={() => window.history.back()}>←</Button>}
-    </HeaderWrapper>
+    <Navbar>
+      <Container>
+        <Navbar.Brand>{loc ? locations.find(l => l.id === loc)?.name : 'Campus as Canvas'}</Navbar.Brand>
+        <Navbar.Collapse>
+          <Nav className="me-auto"><Button className="btn btn-sm" variant="outline-secondary">戻る</Button></Nav>
+          <Nav>
+            <NavDropdown title={user?.displayName || "ログイン"}>
+              {
+                user
+                  ? <NavDropdown.Item onClick={handleLogout}>ログアウト</NavDropdown.Item>
+                  : <NavDropdown.Item onClick={handleLogin}>ログイン</NavDropdown.Item>
+              }
+            </NavDropdown>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+      {/* {false && <Button onClick={() => window.history.back()}>←</Button>} */}
+    </Navbar>
   )
 }
 
