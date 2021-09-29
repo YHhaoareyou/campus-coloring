@@ -35,7 +35,7 @@ function Header() {
   return(
     <Navbar>
       <Container>
-        <Navbar.Brand>{loc ? locations.find(l => l.id === loc)?.name : 'Campus as Canvas'}</Navbar.Brand>
+        <Navbar.Brand>{loc ? locations[loc].name : 'Campus as Canvas'}</Navbar.Brand>
         <Navbar.Collapse>
           <Nav className="me-auto"><Button className="btn btn-sm" variant="outline-secondary">戻る</Button></Nav>
           <Nav>
