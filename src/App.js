@@ -27,7 +27,7 @@ function App() {
             user
               ? (
                 <div>
-                  <Header location={"666"} />
+                  <Header />
                   <Router>
                     <Home path="/" />
                     <Paintings path="/:loc" />

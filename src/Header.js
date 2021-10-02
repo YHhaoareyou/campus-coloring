@@ -28,16 +28,16 @@ function Header() {
     logout().catch((error) => console.error(error));
   };
 
-  useEffect(() => {
-    console.log(user)
-  }, [])
-
   return(
-    <Navbar>
+    <Navbar style={{ position: 'absolute', left: 0, top: 0, width: '100vw', background: 'rgba(255, 255, 255, 0.5)' }}>
       <Container>
         <Navbar.Brand>{loc ? locations[loc].name : 'Campus as Canvas'}</Navbar.Brand>
         <Navbar.Collapse>
-          <Nav className="me-auto"><Button className="btn btn-sm" variant="outline-secondary">戻る</Button></Nav>
+          {loc ? <Nav className="me-auto">
+            <Button className="btn btn-sm" variant="outline-secondary" onClick={() => window.location.href = '/'}>他の場所へ</Button>
+            <span style={{ width: '10px' }}></span>
+            <Button className="btn btn-sm" variant="outline-secondary" onClick={() => window.history.back()}>戻る</Button>
+          </Nav> : <Nav className="me-auto"></Nav>}
           <Nav>
             <NavDropdown title={user?.displayName || "ログイン"}>
               {

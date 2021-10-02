@@ -60,30 +60,36 @@ const Pin62 = styled(BasePin)`
 `;
 
 const locationComponentPairs = [
-  {loc: 'garden', Comp: PinGarden},
-  {loc: '51', Comp: Pin51},
-  {loc: '52', Comp: Pin52},
-  {loc: '51_60', Comp: Pin51_60},
-  {loc: '60_61', Comp: Pin60_61},
-  {loc: '58', Comp: Pin58}, {loc: '62', Comp: Pin62}
+  {loc: 'garden', Pin: PinGarden},
+  {loc: '51', Pin: Pin51},
+  {loc: '52', Pin: Pin52},
+  {loc: '51_60', Pin: Pin51_60},
+  {loc: '60_61', Pin: Pin60_61},
+  {loc: '62', Pin: Pin62}
 ]
 
 function LocationsMenu() {
   const [currentCoor, setCurrentCoor] = useState(null);
   const [selectedLoc, setSelectedLoc] = useState('');
+  const [retrieveCoorFailed, setRetrieveCoorFailed] = useState(false);
+
+  const handleRetrievingCoor = () => {
+    console.log('retrieve location')
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        setCurrentCoor(position.coords);
+        if (retrieveCoorFailed) setRetrieveCoorFailed(false);
+      },
+      function(error) {
+        setRetrieveCoorFailed(true);
+      }
+    );
+  }
 
   useEffect(() => {
-    if (!currentCoor) {
-      navigator.geolocation.getCurrentPosition(
-        function(position) {
-          setCurrentCoor(position.coords);
-        },
-        function(error) {
-          alert("位置情報取得失敗。位置情報の取得を許可し、遮蔽物のない空間に移動してからリロードしてください。");
-          console.error("Error Code = " + error.code + " - " + error.message);
-        }
-      );
-    }
+    handleRetrievingCoor();
+    var retrieveCoorTimer = setInterval(handleRetrievingCoor, 5000);
+    return () => clearInterval(retrieveCoorTimer);
   }, [])
 
   const isCoorInRange = (LocCoorRange) =>
@@ -94,15 +100,18 @@ function LocationsMenu() {
       && (currentCoor.longitude <= LocCoorRange.maxLong);
 
   return (
-    <div >
+    <div style={{ paddingTop: '100px' }}>
       <h3>場所を選択</h3>
       {
-        !currentCoor && <p><i class="bi bi-arrow-clockwise"></i> 位置情報取得中...</p>
+        !currentCoor && <p><i className="bi bi-arrow-clockwise"></i> 位置情報取得中...</p>
+      }
+      {
+        retrieveCoorFailed && <p>位置情報取得失敗。位置情報の取得を許可し、遮蔽物のない空間に移動して数秒待ってください。</p>
       }
       <MapContainer>
         {
-          locationComponentPairs.map(({loc, Comp}) => 
-            <Comp onClick={() => setSelectedLoc(loc)} className='bi bi-geo-alt-fill' style={{ color: isCoorInRange(locations[loc].range) ? 'orange' : 'black' }} />
+          locationComponentPairs.map(({loc, Pin}) => 
+            <Pin key={loc} onClick={() => setSelectedLoc(loc)} className='bi bi-geo-alt-fill' style={{ color: isCoorInRange(locations[loc].range) ? 'orange' : 'black' }} />
           )
         }
       </MapContainer>
@@ -112,7 +121,7 @@ function LocationsMenu() {
           <Modal.Title>{selectedLoc && locations[selectedLoc].name}</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ textAlign: 'center' }}>
-          <img src='/logo512.png' width='100%' />
+          <img src={`/img/loc/${selectedLoc}.jpeg`} width='100%' />
           {
             selectedLoc && isCoorInRange(locations[selectedLoc].range)
               ? (
@@ -125,7 +134,7 @@ function LocationsMenu() {
                   </Link>
                 </div>
               )
-              : <p>ここに移動し、リロードすると絵が見えるよ</p>
+              : <p>この場所に移動し、数秒待つと絵が見えるよ</p>
           }
         </Modal.Body>
       </Modal>

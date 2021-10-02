@@ -81,7 +81,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
 
   return (
     <ReactPainter
-      width={windowDimensions.width}
+      width={windowDimensions.width - 10}
       height={windowDimensions.height - 15}
       onSave={saveCanvas}
       render={({ canvas, triggerSave, setColor, setLineWidth }) => {
@@ -90,7 +90,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
             <h2 style={{ margin: "0px" }}>{/* location */}</h2>
             <div
               style={{
-                backgroundColor: "rgba(0, 0, 0, 0)",
+                backgroundColor: "rgba(255, 255, 255, 0.5)",
                 border: "5px solid #666",
               }}
             >

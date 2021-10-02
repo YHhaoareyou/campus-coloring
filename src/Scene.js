@@ -26,7 +26,7 @@ function Scene() {
       arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
     >
       <a-assets>
-        {imgSrcs && Object.keys(imgSrcs).map(imgId => <img id={imgId} src={imgSrcs[imgId]} crossOrigin="anonymous" />)}
+        {imgSrcs && Object.keys(imgSrcs).map(imgId => <img key={imgId} id={imgId} src={imgSrcs[imgId]} crossOrigin="anonymous" />)}
       </a-assets>
       {currentImgSrc && <a-image
         src={'#'+currentImgId}
