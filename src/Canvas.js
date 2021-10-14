@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { Container, Row, Col, Button, ButtonGroup, OverlayTrigger, Popover } from 'react-bootstrap';
 
 import { CompactPicker } from 'react-color';
-import { SketchField, Tools } from 'react-sketch2';
+import { SketchField, Tools } from 'react-sketch';
 import RangeSlider from 'react-bootstrap-range-slider';
 
 const PainterMenuWrapper = styled(Container)`
@@ -22,8 +22,11 @@ const PainterMenuWrapper = styled(Container)`
 `;
 
 const ActionButton = styled(Button)`
-  background: rgba(255, 255, 255, 0.5);
-  border: none;
+  margin: 0px;
+  margin-bottom: 5px;
+  padding: 0px;
+  width: 60px;
+  height: 30px;
 `
 
 function getWindowDimensions() {
@@ -51,6 +54,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
 
   // load base painting on canvas
   useEffect(() => {
+    console.log(cv)
     if (!isNew) {
       var basePainting = new Image();
       basePainting.src = currentImgSrc;
@@ -59,7 +63,11 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
         document.getElementsByTagName("canvas")[1].getContext('2d').drawImage(basePainting, 0, 0, windowDimensions.width, windowDimensions.height)
       }
     }
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    console.log(cv.current.toJSON().objects)
+  }, [lineColor]);
 
   const undo = () => {
     cv.current.undo();
@@ -78,6 +86,8 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
     setCanUndo(cv.current.canUndo());
     setCanRedo(cv.current.canRedo());
   };
+
+  // Todo; copy & delete seleted
 
   const duplicateSelected = () => {
     cv.current.copy();
@@ -102,7 +112,9 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
     } while (!title);
     detail = prompt("Please write something about this painting:");
     
-    const blob = cv.current.toBlob();
+    const data = JSON.stringify(cv.current.toJSON().objects);
+    var blob = new Blob([data], { type: "text/json" });
+    // const blob = cv.current.toBlob();
     painting = new Image();
     painting.src = blob;
     id = Date.now();
@@ -153,7 +165,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
       <CompactPicker
         id='fillColor'
         color={fillColor}
-        onChange={(color) => setFillColor(color.hex)}
+        onChange={(color) => {setFillColor(color.hex); setLineColor('#000'); setLineColor(lineColor);}}
       />
     </Popover>
   )
@@ -208,15 +220,30 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
               <i class="bi bi-border-width" />{" "}
               <div style={{ display: 'inline-block', verticalAlign: 'middle' }}>
                 <RangeSlider
+                  min={1}
+                  max={30}
                   value={lineWidth}
                   onChange={changeEvent => setLineWidth(changeEvent.target.value)}
                 />
               </div>
             </div>
           </Col>
-          <Col>
-            <ActionButton variant='light' onClick={saveCanvas} style={{ padding: '0 10px' }}>完成</ActionButton>
-            <ActionButton variant='light' onClick={closeCanvas} style={{ padding: '0 10px' }}>やめる</ActionButton>
+          
+          <Col style={{ padding: '0px 5px' }}>
+            <ActionButton disabled={!canUndo} variant='light' onClick={undo}><i class='bi bi-arrow-90deg-left' /></ActionButton>
+            <br />
+            <ActionButton disabled={!canRedo} variant='light' onClick={redo}><i class='bi bi-arrow-90deg-right' /></ActionButton>
+            <br />
+            <ActionButton variant='light' onClick={clear}><i class='bi bi-trash' /></ActionButton>
+            { /* Buttons */ }
+          </Col>
+
+          <Col style={{ padding: '0px 5px' }}>
+            <ActionButton variant='light' onClick={saveCanvas}>完成</ActionButton>
+            <br />
+            <ActionButton variant='light' onClick={() => {}}>セーブ</ActionButton>
+            <br />
+            <ActionButton variant='light' onClick={closeCanvas}><i class='bi bi-x-lg' /></ActionButton>
             { /* Buttons */ }
           </Col>
         </Row>
