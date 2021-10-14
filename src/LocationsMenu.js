@@ -74,7 +74,6 @@ function LocationsMenu() {
   const [retrieveCoorFailed, setRetrieveCoorFailed] = useState(false);
 
   const handleRetrievingCoor = () => {
-    console.log('retrieve location')
     navigator.geolocation.getCurrentPosition(
       function(position) {
         setCurrentCoor(position.coords);

@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { Container, Row, Col, Button, Card, Modal } from 'react-bootstrap';
-import { getDatabase, ref, set } from "firebase/database";
 
 const MenuWrapper = styled(Container)`
   position: absolute;

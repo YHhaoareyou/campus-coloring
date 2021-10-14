@@ -14,14 +14,22 @@ const RightSwitchWrapper = styled.div`
   right: 0;
 `
 
+const SwitchButton = styled(Button)`
+  background: rgba(255, 255, 255, 0.3);
+  color: rgba(200, 200, 200);
+  border: none;
+  font-size: 36px;
+  padding: 0px;
+`;
+
 function ImageSwitch({ switchPrev, switchNext }) {
   return(
     <React.Fragment>
       <LeftSwitchWrapper>
-        <Button onClick={switchPrev}>＜</Button>
+        <SwitchButton variant="light" onClick={switchPrev}><i class="bi bi-chevron-compact-left"></i></SwitchButton>
       </LeftSwitchWrapper>
       <RightSwitchWrapper>
-        <Button onClick={switchNext}>＞</Button>
+        <SwitchButton variant="light" onClick={switchNext}><i class="bi bi-chevron-compact-right"></i></SwitchButton>
       </RightSwitchWrapper>
     </React.Fragment>
   )

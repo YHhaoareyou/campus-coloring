@@ -1,6 +1,7 @@
 import { Router } from '@reach/router';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import Home from './Home';
 import Paintings from "./Paintings";
 import { useAuth, useUser, login } from './auth';
