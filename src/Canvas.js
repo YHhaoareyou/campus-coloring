@@ -118,6 +118,8 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
     }
   }
 
+  // Todo: save draft
+
   const onSketchChange = () => {
     let prev = canUndo;
     let now = cv.current.canUndo();
@@ -265,7 +267,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
             <ButtonGroup>
               <ActionButtonLg variant='light' onClick={saveCanvas}><i className='bi bi-check-lg' /></ActionButtonLg>
               <br />
-              <ActionButtonLg variant='light' onClick={() => {}}><i className='bi bi-hdd' /></ActionButtonLg>
+              <ActionButtonLg disabled={true} variant='light' onClick={() => {}}><i className='bi bi-hdd' /></ActionButtonLg>
               <br />
               <ActionButtonLg variant='light' onClick={closeCanvas}><i className='bi bi-x-lg' /></ActionButtonLg>
             </ButtonGroup>
