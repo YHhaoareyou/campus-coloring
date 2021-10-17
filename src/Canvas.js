@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { ReactPainter } from "react-painter";
 import { getDatabase, ref as dbRef, set as dbSet } from "firebase/database";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref as storageRef, uploadString, getDownloadURL } from "firebase/storage";
 import { useRecoilValue } from 'recoil';
 import { currentLocState, currentImgIdState, currentImgSrcState } from './atoms.js';
 import styled from 'styled-components';
@@ -10,6 +10,7 @@ import { Container, Row, Col, Button, ButtonGroup, OverlayTrigger, Popover } fro
 import { CompactPicker } from 'react-color';
 import { SketchField, Tools } from 'react-sketch';
 import RangeSlider from 'react-bootstrap-range-slider';
+import { fabric } from "fabric";
 
 const PainterMenuWrapper = styled(Container)`
   position: absolute;
@@ -17,19 +18,24 @@ const PainterMenuWrapper = styled(Container)`
   left: 0;
   width: 100vw;
   height: 120px;
-  padding: 10px;
+  padding: 5px;
   background-color: rgba(248, 249, 250, 0.5);
 `;
 
 const ActionButton = styled(Button)`
   margin: 0px;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   padding: 0px;
   width: 60px;
-  height: 30px;
+  height: 35px;
+`;
+
+const ActionButtonLg = styled(ActionButton)`
+  width: 50px;
+  height: 50px;
 `
 
-function getWindowDimensions() {
+function getWindowDimensions(url, cv) {
   const { innerWidth: width, innerHeight: height } = window;
   return {
     width,
@@ -37,12 +43,27 @@ function getWindowDimensions() {
   };
 }
 
+function insertImageToCanvas(url, fabricCanvas) {
+  fabric.Image.fromURL(
+    url,
+    function (img) {
+      img.scaleToWidth(getWindowDimensions().width);
+      fabricCanvas.add(img.set({
+        left: 0,
+        top: 0,
+      }));
+    },
+    {
+      crossOrigin: 'Anonymous'
+    }
+  )
+}
+
 const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
   const currentLoc = useRecoilValue(currentLocState);
   const currentImgId = useRecoilValue(currentImgIdState);
   const currentImgSrc = useRecoilValue(currentImgSrcState);
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-  const [context, setContext] = useState(null);
 
   const cv = useRef(null);
   const [ lineColor, setLineColor ] = useState('#000');
@@ -54,20 +75,10 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
 
   // load base painting on canvas
   useEffect(() => {
-    console.log(cv)
     if (!isNew) {
-      var basePainting = new Image();
-      basePainting.src = currentImgSrc;
-      basePainting.crossOrigin = "anonymous";
-      basePainting.onload = () => {
-        document.getElementsByTagName("canvas")[1].getContext('2d').drawImage(basePainting, 0, 0, windowDimensions.width, windowDimensions.height)
-      }
+      insertImageToCanvas(currentImgSrc, cv.current._fc);
     }
   }, []);
-
-  useEffect(() => {
-    console.log(cv.current.toJSON().objects)
-  }, [lineColor]);
 
   const undo = () => {
     cv.current.undo();
@@ -85,16 +96,27 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
     cv.current.clear();
     setCanUndo(cv.current.canUndo());
     setCanRedo(cv.current.canRedo());
+    if (!isNew) {
+      insertImageToCanvas(currentImgSrc, cv.current._fc);
+    }
   };
 
-  // Todo; copy & delete seleted
-
   const duplicateSelected = () => {
-    cv.current.copy();
-    cv.current.paste();
+    try {
+      cv.current.copy();
+      cv.current.paste();
+    } catch (error) {
+      alert("まずコピペしたいパーツを選択してください")
+    }
   }
 
-  const removeSelected = () => cv.current.removeSelected();
+  const removeSelected = () => {
+    try {
+      cv.current.removeSelected();
+    } catch (error) {
+      alert("まず削除したいパーツを選択してください")
+    }
+  }
 
   const onSketchChange = () => {
     let prev = canUndo;
@@ -102,24 +124,20 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
     if (prev !== now) setCanUndo(now);
   };
 
-  const saveCanvas = (/*blob*/) => {
-    var title, detail, painting, id;
+  const saveCanvas = () => {
+    var title, detail, id;
     const storage = getStorage();
     const db = getDatabase();
 
-    do {
-      title = prompt("Please name your painting:");
-    } while (!title);
-    detail = prompt("Please write something about this painting:");
+    title = prompt("タイトル：");
+    detail = prompt("この作品についての説明：");
     
-    const data = JSON.stringify(cv.current.toJSON().objects);
-    var blob = new Blob([data], { type: "text/json" });
-    // const blob = cv.current.toBlob();
-    painting = new Image();
-    painting.src = blob;
     id = Date.now();
+    if (title === "") title = id;
 
-    uploadBytes(storageRef(storage, 'paintings/' + title), blob)
+    const dataUrl = cv.current.toDataURL();
+
+    uploadString(storageRef(storage, 'paintings/' + title), dataUrl, 'data_url')
       .then(snap => getDownloadURL(snap.ref))
       .then(url => {
 
@@ -141,8 +159,9 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
                   .then(snap => {
 
                     // uploaded notification
-                    alert("Uploaded! Refresh the page to see your masterpiece!");
+                    alert("アップロードしました！");
                     closeCanvas();
+                    window.location.href = "/" + currentLoc + "?pid=" + id
 
                   }).catch(err => alert(err))
               }).catch(err => alert(err));
@@ -186,7 +205,6 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
         lineColor={lineColor}
         lineWidth={lineWidth}
         fillColor={fillColor || 'transparent'}
-        backgroundColor={'transparent'}
         width={windowDimensions.width}
         height={windowDimensions.height}
         forceValue
@@ -197,27 +215,25 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
 
       <PainterMenuWrapper>
         <Row>
-          <Col>
-            <div style={{ marginBottom: '10px' }}>
+          <Col xs={7} style={{ paddingRight: '5px' }}>
+            <div>
               <ButtonGroup>
-                <Button variant={tool === Tools.Select ? "outline-secondary" : "light"} onClick={() => setTool(Tools.Select)}><i class="bi bi-hand-index-thumb" /></Button>
-                <Button variant={tool === Tools.Pencil ? "outline-secondary" : "light"} onClick={() => setTool(Tools.Pencil)}><i class="bi bi-pencil" /></Button>
-                <Button variant={tool === Tools.Line ? "outline-secondary" : "light"} onClick={() => setTool(Tools.Line)}><i class="bi bi-slash-lg" /></Button>
-                <Button variant={tool === Tools.Rectangle ? "outline-secondary" : "light"} onClick={() => setTool(Tools.Rectangle)}><i class="bi bi-square" /></Button>
-                <Button variant={tool === Tools.Circle ? "outline-secondary" : "light"} onClick={() => setTool(Tools.Circle)}><i class="bi bi-circle" /></Button>
-                <Button variant={tool === Tools.Pan ? "outline-secondary" : "light"} onClick={() => setTool(Tools.Pan)}><i class="bi bi-arrows-move" /></Button>
+                <Button variant={tool === Tools.Pencil ? "secondary" : "light"} onClick={() => setTool(Tools.Pencil)}><i className="bi bi-pencil" /></Button>
+                <Button variant={tool === Tools.Line ? "secondary" : "light"} onClick={() => setTool(Tools.Line)}><i className="bi bi-slash-lg" /></Button>
+                <Button variant={tool === Tools.Rectangle ? "secondary" : "light"} onClick={() => setTool(Tools.Rectangle)}><i className="bi bi-square" /></Button>
+                <Button variant={tool === Tools.Circle ? "secondary" : "light"} onClick={() => setTool(Tools.Circle)}><i className="bi bi-circle" /></Button>
+                <OverlayTrigger trigger="click" placement="top" overlay={colorSelector} style={{ position: 'relative' }}>
+                  <Button variant='light'>
+                    <i className="bi bi-palette" />{" "}
+                    <span style={{ border: '3px solid' + lineColor, backgroundColor: fillColor, width: '15px', height: '15px', display: 'inline-block', verticalAlign: 'middle' }}></span>
+                  </Button>
+                </OverlayTrigger>
               </ButtonGroup>
             </div>
+
             <div>
-              <OverlayTrigger trigger="click" placement="top" overlay={colorSelector} style={{ position: 'relative' }}>
-                <Button variant='light'>
-                  <i class="bi bi-palette" />{" "}
-                  <span style={{ border: '3px solid' + lineColor, backgroundColor: fillColor, width: '20px', height: '20px', display: 'inline-block', verticalAlign: 'middle' }}></span>
-                </Button>
-              </OverlayTrigger>
-              
               <span style={{ display: 'inline-block', width: '20px' }}></span>
-              <i class="bi bi-border-width" />{" "}
+              <i className="bi bi-border-width" />{" "}
               <div style={{ display: 'inline-block', verticalAlign: 'middle' }}>
                 <RangeSlider
                   min={1}
@@ -227,78 +243,37 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
                 />
               </div>
             </div>
-          </Col>
-          
-          <Col style={{ padding: '0px 5px' }}>
-            <ActionButton disabled={!canUndo} variant='light' onClick={undo}><i class='bi bi-arrow-90deg-left' /></ActionButton>
-            <br />
-            <ActionButton disabled={!canRedo} variant='light' onClick={redo}><i class='bi bi-arrow-90deg-right' /></ActionButton>
-            <br />
-            <ActionButton variant='light' onClick={clear}><i class='bi bi-trash' /></ActionButton>
-            { /* Buttons */ }
+
+            <ButtonGroup>
+              <ActionButton variant={tool === Tools.Select ? "secondary" : "light"} onClick={() => setTool(Tools.Select)}><i className="bi bi-hand-index-thumb" /></ActionButton>
+              <br />
+              <ActionButton disabled={tool !== Tools.Select} variant='light' onClick={duplicateSelected}><i className='bi bi-files' /></ActionButton>
+              <br />
+              <ActionButton disabled={tool !== Tools.Select} variant='light' onClick={removeSelected}><i className='bi bi-trash' /></ActionButton>
+            </ButtonGroup>
           </Col>
 
-          <Col style={{ padding: '0px 5px' }}>
-            <ActionButton variant='light' onClick={saveCanvas}>完成</ActionButton>
-            <br />
-            <ActionButton variant='light' onClick={() => {}}>セーブ</ActionButton>
-            <br />
-            <ActionButton variant='light' onClick={closeCanvas}><i class='bi bi-x-lg' /></ActionButton>
-            { /* Buttons */ }
+          <Col xs={5}>
+            <ButtonGroup style={{ marginBottom: '5px' }}>
+              <ActionButtonLg disabled={!canUndo} variant='light' onClick={undo}><i className='bi bi-arrow-90deg-left' /></ActionButtonLg>
+              <br />
+              <ActionButtonLg disabled={!canRedo} variant='light' onClick={redo}><i className='bi bi-arrow-90deg-right' /></ActionButtonLg>
+              <br />
+              <ActionButtonLg variant='light' onClick={clear}><i className='bi bi-arrow-counterclockwise' /></ActionButtonLg>
+            </ButtonGroup>
+
+            <ButtonGroup>
+              <ActionButtonLg variant='light' onClick={saveCanvas}><i className='bi bi-check-lg' /></ActionButtonLg>
+              <br />
+              <ActionButtonLg variant='light' onClick={() => {}}><i className='bi bi-hdd' /></ActionButtonLg>
+              <br />
+              <ActionButtonLg variant='light' onClick={closeCanvas}><i className='bi bi-x-lg' /></ActionButtonLg>
+            </ButtonGroup>
           </Col>
         </Row>
       </PainterMenuWrapper>
     </div>
   )
-
-  // return (
-  //   <ReactPainter
-  //     width={windowDimensions.width}
-  //     height={windowDimensions.height}
-  //     onSave={saveCanvas}
-  //     render={({ canvas, triggerSave, setColor, setLineWidth }) => {
-  //       return (
-  //         <div style={{ position: 'absolute', left: 0, zIndex: "2000" }}>
-  //           <h2 style={{ margin: "0px" }}>{/* location */}</h2>
-  //           <div
-  //             style={{
-  //               backgroundColor: "rgba(255, 255, 255, 0.5)"
-  //             }}
-  //           >
-  //             {canvas}
-  //           </div>
-  //           <PainterMenuWrapper>
-  //             <Row>
-  //               <Col>
-  //                 Color{" "}
-  //                 <input
-  //                   type="color"
-  //                   onChange={(e) => setColor(e.target.value)}
-  //                   style={{ width: "30%" }}
-  //                 />{" "}
-  //                 <br />
-  //                 Width{" "}
-  //                 <input
-  //                   type="number"
-  //                   placeholder="5"
-  //                   min="1"
-  //                   max="20"
-  //                   onChange={(e) => setLineWidth(e.target.value)}
-  //                   style={{ width: "30%" }}
-  //                 />
-  //               </Col>
-  //               <Col>
-  //                 <ActionButton variant='light' onClick={triggerSave} style={{ padding: '0 10px' }}>完成</ActionButton>
-  //                 <ActionButton variant='light' onClick={closeCanvas} style={{ padding: '0 10px' }}>やめる</ActionButton>
-  //                 { /* Buttons */ }
-  //               </Col>
-  //             </Row>
-  //           </PainterMenuWrapper>
-  //         </div>
-  //       );
-  //     }}
-  //   />
-  // );
 };
 
 export default Canvas;

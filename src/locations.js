@@ -64,6 +64,4 @@ const locations = {
   }
 };
 
-// Todo: set range for each location
-
 export default locations;

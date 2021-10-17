@@ -18,6 +18,9 @@ function Scene() {
     }).catch(err => console.error(err));
   }, [currentLoc]);
 
+  // Todo: locate AR images (depth)
+  // Todo: adjust AR images size
+
   return (
     <a-scene
       id="a-scene"

@@ -26,10 +26,10 @@ function ImageSwitch({ switchPrev, switchNext }) {
   return(
     <React.Fragment>
       <LeftSwitchWrapper>
-        <SwitchButton variant="light" onClick={switchPrev}><i class="bi bi-chevron-compact-left"></i></SwitchButton>
+        <SwitchButton variant="light" onClick={switchPrev}><i className="bi bi-chevron-compact-left"></i></SwitchButton>
       </LeftSwitchWrapper>
       <RightSwitchWrapper>
-        <SwitchButton variant="light" onClick={switchNext}><i class="bi bi-chevron-compact-right"></i></SwitchButton>
+        <SwitchButton variant="light" onClick={switchNext}><i className="bi bi-chevron-compact-right"></i></SwitchButton>
       </RightSwitchWrapper>
     </React.Fragment>
   )
