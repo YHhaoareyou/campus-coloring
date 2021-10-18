@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
-import { ReactPainter } from "react-painter";
 import { getDatabase, ref as dbRef, set as dbSet } from "firebase/database";
 import { getStorage, ref as storageRef, uploadString, getDownloadURL } from "firebase/storage";
 import { useRecoilValue } from 'recoil';
 import { currentLocState, currentImgIdState, currentImgSrcState } from './atoms.js';
 import styled from 'styled-components';
 import { Container, Row, Col, Button, ButtonGroup, OverlayTrigger, Popover } from 'react-bootstrap';
+import { useUser } from './auth'
 
 import { CompactPicker } from 'react-color';
 import { SketchField, Tools } from 'react-sketch';
@@ -60,6 +60,7 @@ function insertImageToCanvas(url, fabricCanvas) {
 }
 
 const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
+  const user = useUser();
   const currentLoc = useRecoilValue(currentLocState);
   const currentImgId = useRecoilValue(currentImgIdState);
   const currentImgSrc = useRecoilValue(currentImgSrcState);
@@ -75,10 +76,11 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
 
   // load base painting on canvas
   useEffect(() => {
+    setWindowDimensions(getWindowDimensions());
     if (!isNew) {
       insertImageToCanvas(currentImgSrc, cv.current._fc);
     }
-  }, []);
+  }, [isNew, currentImgSrc]);
 
   const undo = () => {
     cv.current.undo();
@@ -151,13 +153,13 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
             dbSet(dbRef(db, 'img_info/' + currentLoc + '/' + id), {
               title,
               detail,
-              creator_id: '26577319',
+              creator_id: user.uid,
               prev_img_ids: !isNew && { [currentImgId]: true, ...basePrevIds }
             })
               .then(snap => {
 
                 // add img id to user
-                dbSet(dbRef(db, 'users/' + '26577319' + '/img_ids/' + currentLoc + '/' + id), true)
+                dbSet(dbRef(db, 'users/' + user.uid + '/img_ids/' + currentLoc + '/' + id), true)
                   .then(snap => {
 
                     // uploaded notification
@@ -198,6 +200,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
         zIndex: 1000,
         left: 0,
         backgroundColor: "rgba(255, 255, 255, 0.5)",
+        borderBottom: "5px solid #aaa"
       }}
     >
       <SketchField
@@ -208,7 +211,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
         lineWidth={lineWidth}
         fillColor={fillColor || 'transparent'}
         width={windowDimensions.width}
-        height={windowDimensions.height}
+        height={windowDimensions.width*3/2}
         forceValue
         onChange={onSketchChange}
         tool={tool}
@@ -248,27 +251,21 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
 
             <ButtonGroup>
               <ActionButton variant={tool === Tools.Select ? "secondary" : "light"} onClick={() => setTool(Tools.Select)}><i className="bi bi-hand-index-thumb" /></ActionButton>
-              <br />
-              <ActionButton disabled={tool !== Tools.Select} variant='light' onClick={duplicateSelected}><i className='bi bi-files' /></ActionButton>
-              <br />
               <ActionButton disabled={tool !== Tools.Select} variant='light' onClick={removeSelected}><i className='bi bi-trash' /></ActionButton>
+              <ActionButton disabled={tool !== Tools.Select} variant='light' onClick={duplicateSelected}><i className='bi bi-files' /></ActionButton>
             </ButtonGroup>
           </Col>
 
           <Col xs={5}>
             <ButtonGroup style={{ marginBottom: '5px' }}>
               <ActionButtonLg disabled={!canUndo} variant='light' onClick={undo}><i className='bi bi-arrow-90deg-left' /></ActionButtonLg>
-              <br />
               <ActionButtonLg disabled={!canRedo} variant='light' onClick={redo}><i className='bi bi-arrow-90deg-right' /></ActionButtonLg>
-              <br />
               <ActionButtonLg variant='light' onClick={clear}><i className='bi bi-arrow-counterclockwise' /></ActionButtonLg>
             </ButtonGroup>
 
             <ButtonGroup>
               <ActionButtonLg variant='light' onClick={saveCanvas}><i className='bi bi-check-lg' /></ActionButtonLg>
-              <br />
               <ActionButtonLg disabled={true} variant='light' onClick={() => {}}><i className='bi bi-hdd' /></ActionButtonLg>
-              <br />
               <ActionButtonLg variant='light' onClick={closeCanvas}><i className='bi bi-x-lg' /></ActionButtonLg>
             </ButtonGroup>
           </Col>

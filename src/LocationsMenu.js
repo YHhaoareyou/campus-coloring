@@ -1,14 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from '@reach/router';
 import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
 import Modal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
 import locations from './locations';
-
-const Cards = styled(Row)`
-  margin: 0px 10px;
-`;
 
 const MapContainer = styled.div`
   position: relative;
@@ -49,18 +44,24 @@ const Pin60_61 = styled(BasePin)`
   left: 105px;
 `;
 
-const Pin58 = styled(BasePin)`
-  top: 20px;
-  left: 70px;
-`;
+// const Pin58 = styled(BasePin)`
+//   top: 20px;
+//   left: 70px;
+// `;
 
 const Pin62 = styled(BasePin)`
   top: 20px;
   left: 60px;
 `;
 
-const locationComponentPairs = [
-  {loc: 'garden', Pin: PinGarden},
+const locationComponentPairs = process.env.NODE_ENV === "development" ? [
+  {loc: '51', Pin: Pin51},
+  {loc: '52', Pin: Pin52},
+  {loc: '51_60', Pin: Pin51_60},
+  {loc: '60_61', Pin: Pin60_61},
+  {loc: '62', Pin: Pin62},
+  {loc: 'garden', Pin: PinGarden}
+] : [
   {loc: '51', Pin: Pin51},
   {loc: '52', Pin: Pin52},
   {loc: '51_60', Pin: Pin51_60},
@@ -120,9 +121,9 @@ function LocationsMenu() {
           <Modal.Title>{selectedLoc && locations[selectedLoc].name}</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ textAlign: 'center' }}>
-          <img src={`/img/loc/${selectedLoc}.jpeg`} width='100%' />
+          <img src={`/img/loc/${selectedLoc}.jpeg`} width='100%' alt="View of the location" />
           {
-            selectedLoc && isCoorInRange(locations[selectedLoc].range)
+            selectedLoc && (isCoorInRange(locations[selectedLoc].range) || selectedLoc === 'garden')
               ? (
                 <div>
                   <p>↑の景色に向いてください</p>

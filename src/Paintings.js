@@ -5,6 +5,7 @@ import Canvas from './Canvas';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { currentImgIdState, currentImgSrcState, currentLocState } from './atoms.js';
 import { getDatabase, ref, get, set } from "firebase/database";
+import { useUser } from './auth'
 import queryString from 'query-string';
 
 function Paintings({ loc, location }) {
@@ -15,6 +16,7 @@ function Paintings({ loc, location }) {
   const [canvasVisibility, setCanvasVisibility] = useState(false);
   const [imgInfos, setImgInfos] = useState([]);
   const [isNewPainting, setIsNewPainting] = useState(true);
+  const user = useUser();
 
   const switchToPrevImg = () => {
     if (imgInfos.length > 1) {
@@ -74,19 +76,19 @@ function Paintings({ loc, location }) {
     if (action === 1) {
       infos[currentImgIdIndex].likes = {
         ...infos[currentImgIdIndex].likes,
-        '26577319': true
+        [user.uid]: true
       };
     } else {
-      delete infos[currentImgIdIndex].likes['26577319']
+      delete infos[currentImgIdIndex].likes[user.uid]
     }
     setImgInfos(infos);
   }
 
   const likeTrigger = () => {
     const db = getDatabase();
-    imgInfos[currentImgIdIndex].likes && imgInfos[currentImgIdIndex].likes['26577319']
-      ? set(ref(db, 'img_info/' + loc + '/' + currentImgId + '/likes/' + '26577319'), null).then(snap => updateLikes(-1))
-      : set(ref(db, 'img_info/' + loc + '/' + currentImgId + '/likes/' + '26577319'), true).then(snap => updateLikes(1))
+    imgInfos[currentImgIdIndex].likes && imgInfos[currentImgIdIndex].likes[user.uid]
+      ? set(ref(db, 'img_info/' + loc + '/' + currentImgId + '/likes/' + user.uid), null).then(snap => updateLikes(-1))
+      : set(ref(db, 'img_info/' + loc + '/' + currentImgId + '/likes/' + user.uid), true).then(snap => updateLikes(1))
   }
 
   useEffect(() => {

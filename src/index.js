@@ -10,7 +10,7 @@ import { currentLocState } from './atoms.js';
 import { RecoilRoot } from "recoil";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-const firebaseApp = initializeApp({
+initializeApp({
   apiKey: "AIzaSyAA4zXM0wRBrL1l65NHg_8mQcjg75ew9RQ",
   authDomain: "campus-coloring.firebaseapp.com",
   databaseURL: "https://campus-coloring.firebaseio.com",

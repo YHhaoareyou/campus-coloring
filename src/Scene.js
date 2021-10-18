@@ -10,6 +10,7 @@ function Scene() {
   const [imgSrcs, setImgSrcs] = useState({});
 
   useEffect(() => {
+    console.log(window.innerHeight / (window.innerWidth / 10.0))
     const db = getDatabase();
     get(ref(db, 'img_urls/' + currentLoc)).then(snap => {
       if(snap.exists()){
@@ -17,9 +18,6 @@ function Scene() {
       }
     }).catch(err => console.error(err));
   }, [currentLoc]);
-
-  // Todo: locate AR images (depth)
-  // Todo: adjust AR images size
 
   return (
     <a-scene
@@ -29,13 +27,13 @@ function Scene() {
       arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;"
     >
       <a-assets>
-        {imgSrcs && Object.keys(imgSrcs).map(imgId => <img key={imgId} id={imgId} src={imgSrcs[imgId]} crossOrigin="anonymous" />)}
+        {imgSrcs && Object.keys(imgSrcs).map(imgId => <img key={imgId} id={imgId} src={imgSrcs[imgId]} crossOrigin="anonymous" alt={"Painting " + imgId} />)}
       </a-assets>
       {currentImgSrc && <a-image
         src={'#'+currentImgId}
-        width={11}
+        width={10}
         height={8}
-        position="0 1.5 -10"
+        position="-0.3 1.5 -10"
         rotation="0 0 0">
       </a-image>}
       
