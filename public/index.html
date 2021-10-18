@@ -31,7 +31,7 @@
   </head>
   <body>
     <script>
-      if ((typeof crossOriginIsolated === 'undefined') || !crossOriginIsolated) SharedArrayBuffer = ArrayBuffer;
+      if ((typeof crossOriginIsolated === 'undefined') || !crossOriginIsolated) var SharedArrayBuffer = ArrayBuffer;
     </script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
