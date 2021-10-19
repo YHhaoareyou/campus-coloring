@@ -57,7 +57,7 @@ function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger }) {
               <ActionButton variant='light' size='sm' onClick={navigateToUserPaintings}>
                 <i className="bi bi-person"></i>
                 <br />
-                User
+                ユーザ
               </ActionButton>
             </Col>
             <Col style={{ padding: 0 }}>

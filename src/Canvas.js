@@ -172,12 +172,16 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
                 dbSet(dbRef(db, 'users/' + user.uid + '/img_ids/' + currentLoc + '/' + id), true)
                   .then(snap => {
 
-                    // uploaded notification
-                    alert("アップロードしました！");
-                    closeCanvas();
-                    window.location.href = "/" + currentLoc + "?pid=" + id
+                    dbSet(dbRef(db, 'users/' + user.uid + '/name'), user.displayName)
+                      .then(snap => {
 
-                  }).catch(err => alert(err))
+                        // uploaded notification
+                        alert("アップロードしました！");
+                        closeCanvas();
+                        window.location.href = "/" + currentLoc + "?pid=" + id
+
+                      }).catch(err => alert(err));
+                  }).catch(err => alert(err));
               }).catch(err => alert(err));
           }).catch(err => alert(err));
       }).catch(err => alert(err));
@@ -231,6 +235,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
       <PainterMenuWrapper>
         <Row>
           <Col xs={7} style={{ paddingRight: '5px' }}>
+            <p>{angle}</p>
             <div>
               <ButtonGroup>
                 <Button variant={tool === Tools.Pencil ? "secondary" : "light"} onClick={() => setTool(Tools.Pencil)}><i className="bi bi-pencil" /></Button>

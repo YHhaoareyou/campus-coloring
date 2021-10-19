@@ -3,10 +3,14 @@ import { login, logout, useUser } from './auth';
 import locations from './locations';
 import { currentLocState } from './atoms';
 import { useRecoilValue } from 'recoil';
+import queryString from 'query-string';
+import { useEffect, useState } from 'react';
+import { getDatabase, ref, get } from "firebase/database";
 
 function Header() {
   const user = useUser();
   const loc = useRecoilValue(currentLocState);
+  const [title, setTitle] = useState('Campus as Canvas')
 
   const handleLogin = () => {
     login().catch((error) => console.error(error));
@@ -16,18 +20,49 @@ function Header() {
     logout().catch((error) => console.error(error));
   };
 
+  useEffect(() => {
+    const qs = queryString.parse(window.location.search);
+    if (qs.mode && qs.mode === 'base') {
+      const db = getDatabase();
+      get(ref(db, 'img_info/' + loc + '/' + qs.bid + '/title')).then(snap => {
+        setTitle('「' + snap.val() + '」' + 'のベース作品');
+      })
+    } else if (qs.mode && qs.mode === 'user') {
+      const db = getDatabase();
+      get(ref(db, 'users/' + qs.uid + '/name')).then(snap => {
+        setTitle(snap.val() + 'の作品');
+      })
+    } else {
+      if (loc) setTitle(locations[loc].name)
+    }
+  }, [loc])
+
   return(
     <Navbar style={{ position: 'absolute', left: 0, top: 0, width: '100vw', background: 'rgba(255, 255, 255, 0.5)' }}>
       <Container>
-        <Navbar.Brand>{loc ? locations[loc].name : 'Campus as Canvas'}</Navbar.Brand>
+        {loc && <Navbar.Collapse>
+          <Nav className="me-auto">
+            <Button className="btn btn-sm" variant="outline-secondary" onClick={() => window.location.href = '/'}>
+              <i className="bi bi-house"></i>
+            </Button>
+            <span style={{ width: '10px' }}></span>
+            <Button className="btn btn-sm" variant="outline-secondary" onClick={() => window.history.back()}>
+              <i className="bi bi-chevron-compact-left"></i>
+            </Button>
+          </Nav>
+        </Navbar.Collapse>}
+
+        <Navbar.Brand>{title}</Navbar.Brand>
         <Navbar.Collapse>
-          {loc ? <Nav className="me-auto">
+          <Nav className="me-auto"></Nav>
+          {/*loc ? <Nav className="me-auto">
             <Button className="btn btn-sm" variant="outline-secondary" onClick={() => window.location.href = '/'}>他の場所へ</Button>
             <span style={{ width: '10px' }}></span>
             <Button className="btn btn-sm" variant="outline-secondary" onClick={() => window.history.back()}>戻る</Button>
-          </Nav> : <Nav className="me-auto"></Nav>}
+        </Nav> : <Nav className="me-auto"></Nav>*/}
           <Nav>
-            <NavDropdown title={user?.displayName || "ログイン"}>
+            <NavDropdown title={<i className="bi bi-person-circle"></i> || "ログイン"} drop={'start'}>
+              <p style={{ textAlign: 'center' }}>{user?.displayName}</p>
               {
                 user
                   ? <NavDropdown.Item onClick={handleLogout}>ログアウト</NavDropdown.Item>

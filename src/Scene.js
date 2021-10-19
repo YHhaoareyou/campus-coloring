@@ -19,13 +19,13 @@ function Scene() {
         setImgSrcs(snap.val())
       }
     }).catch(err => console.error(err));
-    setPosition(`-0.3 ${1.5 - Math.round(Math.sin(currentImgAngle*Math.PI/180) * 10 * 100) / 100} -${Math.round(Math.cos(currentImgAngle*Math.PI/180) * 10 * 100) / 100}`);
-    setRotation(`-${currentImgAngle} 0 0`);
+    setPosition(`-0.3 ${1.5 - Math.round(Math.cos(currentImgAngle*Math.PI/180) * 10 * 100) / 100} ${(-1)*Math.round(Math.sin(currentImgAngle*Math.PI/180) * 10 * 100) / 100}`);
+    setRotation(`${currentImgAngle-90} 0 0`);
   }, [currentLoc]);
 
   useEffect(() => {
-    setPosition(`-0.3 ${1.5 - Math.round(Math.sin(currentImgAngle*Math.PI/180) * 10 * 100) / 100} -${Math.round(Math.cos(currentImgAngle*Math.PI/180) * 10 * 100) / 100}`);
-    setRotation(`-${currentImgAngle} 0 0`);
+    setPosition(`-0.3 ${1.5 - Math.round(Math.cos(currentImgAngle*Math.PI/180) * 10 * 100) / 100} ${(-1)*Math.round(Math.sin(currentImgAngle*Math.PI/180) * 10 * 100) / 100}`);
+    setRotation(`${currentImgAngle-90} 0 0`);
   }, [currentImgAngle])
 
   return (
