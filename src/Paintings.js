@@ -3,7 +3,7 @@ import ImageSwitch from './ImageSwitch';
 import ActionMenu from './ActionMenu';
 import Canvas from './Canvas';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { currentImgIdState, currentImgSrcState, currentLocState } from './atoms.js';
+import { currentImgIdState, currentImgSrcState, currentImgAngleState, currentLocState } from './atoms.js';
 import { getDatabase, ref, get, set } from "firebase/database";
 import { useUser } from './auth'
 import queryString from 'query-string';
@@ -13,6 +13,7 @@ function Paintings({ loc, location }) {
   const [currentImgId, setCurrentImgId] = useRecoilState(currentImgIdState);
   const setCurrentImgSrc = useSetRecoilState(currentImgSrcState);
   const [currentImgIdIndex, setCurrentImgIdIndex] = useState(0);
+  const setCurrentImgAngle = useSetRecoilState(currentImgAngleState);
   const [canvasVisibility, setCanvasVisibility] = useState(false);
   const [imgInfos, setImgInfos] = useState([]);
   const [isNewPainting, setIsNewPainting] = useState(true);
@@ -24,6 +25,7 @@ function Paintings({ loc, location }) {
       setCurrentImgIdIndex(prevIndex);
       setCurrentImgId(imgInfos[prevIndex].id);
       switchImgSrc(imgInfos[prevIndex].id);
+      setCurrentImgAngle(imgInfos[prevIndex].angle);
 
       var qs = queryString.parse(location.search);
       qs.pid = imgInfos[prevIndex].id;
@@ -38,6 +40,7 @@ function Paintings({ loc, location }) {
       setCurrentImgIdIndex(nextIndex);
       setCurrentImgId(imgInfos[nextIndex].id);
       switchImgSrc(imgInfos[nextIndex].id);
+      setCurrentImgAngle(imgInfos[nextIndex].angle);
 
       var qs = queryString.parse(location.search);
       qs.pid = imgInfos[nextIndex].id;
@@ -58,8 +61,10 @@ function Paintings({ loc, location }) {
     const pid = queryString.parse(location.search).pid;
     setImgInfos(imgInfosArr);
     setCurrentImgId(pid || imgInfosArr[0].id);
-    setCurrentImgIdIndex(pid ? imgInfosArr.map(img => img.id).indexOf(pid) : 0);
+    const imgIdIndex = pid ? imgInfosArr.map(img => img.id).indexOf(pid) : 0;
+    setCurrentImgIdIndex(imgIdIndex);
     switchImgSrc(pid || imgInfosArr[0].id);
+    setCurrentImgAngle(imgInfosArr[imgIdIndex].angle);
   }
 
   const switchImgSrc = (imgId) => {

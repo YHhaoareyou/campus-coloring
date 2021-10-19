@@ -46,12 +46,12 @@ const Pin60_61 = styled(BasePin)`
 
 // const Pin58 = styled(BasePin)`
 //   top: 20px;
-//   left: 70px;
+//   left: 60px;
 // `;
 
 const Pin62 = styled(BasePin)`
   top: 20px;
-  left: 60px;
+  left: 70px;
 `;
 
 const locationComponentPairs = process.env.NODE_ENV === "development" ? [

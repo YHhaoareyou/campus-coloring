@@ -15,6 +15,10 @@ export const currentImgSrcState = atom({
   default: '',
 });
 
+export const currentImgAngleState = atom({
+  key: 'currentImgAngleState',
+  default: 0,
+});
 export const userState = atom ({
   key: 'userState',
   default: null,

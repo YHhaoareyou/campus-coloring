@@ -73,6 +73,8 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
   const [ tool, setTool ] = useState(Tools.Pencil);
   const [ canUndo, setCanUndo ] = useState(false);
   const [ canRedo, setCanRedo ] = useState(false);
+  const [ angle, setAngle ] = useState(0);
+
 
   // load base painting on canvas
   useEffect(() => {
@@ -81,6 +83,13 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
       insertImageToCanvas(currentImgSrc, cv.current._fc);
     }
   }, [isNew, currentImgSrc]);
+
+  useEffect(() => {
+    window.addEventListener("deviceorientation", function(e){
+      const { beta } = e;
+      setAngle(Math.round(beta * 100) / 100)
+    });
+  }, [])
 
   const undo = () => {
     cv.current.undo();
@@ -153,6 +162,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
             dbSet(dbRef(db, 'img_info/' + currentLoc + '/' + id), {
               title,
               detail,
+              angle: angle,
               creator_id: user.uid,
               prev_img_ids: !isNew && { [currentImgId]: true, ...basePrevIds }
             })
