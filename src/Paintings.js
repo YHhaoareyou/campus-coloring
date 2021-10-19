@@ -7,6 +7,7 @@ import { currentImgIdState, currentImgSrcState, currentImgAngleState, currentLoc
 import { getDatabase, ref, get, set } from "firebase/database";
 import { useUser } from './auth'
 import queryString from 'query-string';
+import Button from 'react-bootstrap/Button';
 
 function Paintings({ loc, location }) {
   const setCurrentLoc = useSetRecoilState(currentLocState);
@@ -129,20 +130,25 @@ function Paintings({ loc, location }) {
     <div>
       <ImageSwitch switchPrev={switchToPrevImg} switchNext={switchToNextImg} />
       {
-        imgInfos.length > 0 && (
+        imgInfos.length > 0 ? (
           <ActionMenu
             imgInfo={imgInfos[currentImgIdIndex]}
             openCanvas={({ isNew }) => {setCanvasVisibility(true); setIsNewPainting(isNew);}}
             canvasVisibility={canvasVisibility}
             likeTrigger={likeTrigger}
           />
+        ) : (
+          <Button
+            style={{ position: 'absolute', bottom: 0, left: 0, width: '100vw' }}
+            onClick={() => {setCanvasVisibility(true); setIsNewPainting(true);}}
+          >この場所で初の作品を描こう！</Button>
         )
       }
       {
         canvasVisibility && (
           <Canvas
             isNew={isNewPainting}
-            basePrevIds={imgInfos[currentImgIdIndex].prev_img_ids || {}}
+            basePrevIds={imgInfos[currentImgIdIndex]?.prev_img_ids || {}}
             closeCanvas={() => setCanvasVisibility(false)}
           />
         )

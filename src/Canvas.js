@@ -133,7 +133,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
 
   const onSketchChange = () => {
     let prev = canUndo;
-    let now = cv.current.canUndo();
+    let now = cv.current?.canUndo();
     if (prev !== now) setCanUndo(now);
   };
 
@@ -235,7 +235,6 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
       <PainterMenuWrapper>
         <Row>
           <Col xs={7} style={{ paddingRight: '5px' }}>
-            <p>{angle}</p>
             <div>
               <ButtonGroup>
                 <Button variant={tool === Tools.Pencil ? "secondary" : "light"} onClick={() => setTool(Tools.Pencil)}><i className="bi bi-pencil" /></Button>
@@ -243,7 +242,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
                 <Button variant={tool === Tools.Rectangle ? "secondary" : "light"} onClick={() => setTool(Tools.Rectangle)}><i className="bi bi-square" /></Button>
                 <Button variant={tool === Tools.Circle ? "secondary" : "light"} onClick={() => setTool(Tools.Circle)}><i className="bi bi-circle" /></Button>
                 <OverlayTrigger trigger="click" placement="top" overlay={colorSelector} style={{ position: 'relative' }}>
-                  <Button variant='light'>
+                  <Button variant='light' style={{ padding: '3px' }}>
                     <i className="bi bi-palette" />{" "}
                     <span style={{ border: '3px solid' + lineColor, backgroundColor: fillColor, width: '15px', height: '15px', display: 'inline-block', verticalAlign: 'middle' }}></span>
                   </Button>
@@ -280,7 +279,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
 
             <ButtonGroup>
               <ActionButtonLg variant='light' onClick={saveCanvas}><i className='bi bi-check-lg' /></ActionButtonLg>
-              <ActionButtonLg disabled={true} variant='light' onClick={() => {}}><i className='bi bi-hdd' /></ActionButtonLg>
+              <ActionButtonLg disabled={true} variant='secondary' onClick={() => {}}><i className='bi bi-hdd' /></ActionButtonLg>
               <ActionButtonLg variant='light' onClick={closeCanvas}><i className='bi bi-x-lg' /></ActionButtonLg>
             </ButtonGroup>
           </Col>
