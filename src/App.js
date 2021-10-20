@@ -6,6 +6,7 @@ import Home from './Home';
 import Paintings from "./Paintings";
 import { useAuth, useUser, login } from './auth';
 import Header from './Header';
+import { Button } from 'react-bootstrap';
 
 const Auth = ({ children }) => {
   const isLoading = useAuth();
@@ -37,7 +38,8 @@ function App() {
               )
               : (
                 <div>
-                  <button onClick={handleLogin}>ログイン</button>
+                  <Header />
+                  <Button style={{ marginTop: '45vh' }} onClick={handleLogin}>Googleアカウントでログイン</Button>
                 </div>
               )
           }

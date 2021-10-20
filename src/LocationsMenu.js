@@ -103,14 +103,15 @@ function LocationsMenu() {
       && (currentCoor.longitude <= LocCoorRange.maxLong);
 
   return (
-    <div style={{ paddingTop: '100px' }}>
+    <div style={{ paddingTop: '70px' }}>
       <h3>場所を選択</h3>
       {
         !currentCoor && <p><i className="bi bi-arrow-clockwise"></i> 位置情報取得中...</p>
       }
       {
-        retrieveCoorFailed && <p>位置情報取得失敗。位置情報の取得を許可し、遮蔽物のない空間に移動して数秒待ってください。</p>
+        retrieveCoorFailed && <p style={{ color: 'red' }}>位置情報取得失敗。位置情報の取得を許可し、遮蔽物のない空間に移動して数秒待ってください。</p>
       }
+
       <MapContainer>
         {
           locationComponentPairs.map(({loc, Pin}) => 
@@ -119,17 +120,36 @@ function LocationsMenu() {
         }
       </MapContainer>
 
+      <div style={{ textAlign: 'left', padding: '20px' }}>
+        <strong>説明</strong>
+        <ul>
+          <li>ピンをタッチすると、そこの景色が映った画像が表示されます</li>
+          <li>ピンされた場所の近くに移動すると、ピンが黄色になり、タッチすると絵が見えます</li>
+          <li>5秒ごとに位置情報を取得します</li>
+        </ul>
+
+        <strong>場所一覧</strong>
+        <ul>
+          <li><b>51号館</b>：北門寄りの空中通路からの視点</li>
+          <li><b>55号館外</b>：外の廊下から、中庭向き；雨天OK</li>
+          <li><b>51、60号館の間</b>：59号館側の地面通路からの視点</li>
+          <li><b>60、61号館の間</b>：59号館側の空中通路からの視点；雨天OK</li>
+        </ul>
+      </div>
+
+
       <Modal centered show={selectedLoc !== ''} onHide={() => setSelectedLoc('')}>
         <Modal.Header closeButton>
-          <Modal.Title>{selectedLoc && locations[selectedLoc].name + "（" + (locations[selectedLoc].description || "") + "）"}</Modal.Title>
+          <Modal.Title>{selectedLoc && locations[selectedLoc].name}</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ textAlign: 'center' }}>
-          <img src={`/img/loc/${selectedLoc}.jpeg`} width='100%' alt="View of the location" />
+          <p>{selectedLoc && locations[selectedLoc].description}</p>
+          <img src={`/img/loc/${selectedLoc}.jpeg`} width='80%' alt="View of the location" />
           {
             selectedLoc && (isCoorInRange(locations[selectedLoc].range) || selectedLoc === 'garden')
               ? (
                 <div>
-                  <p>↑の景色に向いてください</p>
+                  <p>↑の景色にカメラを向けてください</p>
                   <Link to={'/' + selectedLoc}>
                     <Button variant="outline-primary">
                       絵を観る
@@ -137,7 +157,12 @@ function LocationsMenu() {
                   </Link>
                 </div>
               )
-              : <p>この場所に移動し、数秒待つと絵が見えるよ</p>
+              : (
+                <div>
+                  <p>この場所に移動し、数秒待つと絵が見えるよ</p>
+                  <p>移動してもダメでしたら、画面を更新してください</p>
+                </div>
+              )
           }
         </Modal.Body>
       </Modal>
