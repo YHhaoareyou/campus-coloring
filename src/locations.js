@@ -1,6 +1,7 @@
 const locations = {
   garden: {
     name: 'Garden',
+    description: '',
     range: {
       minLat: 35.0,
       maxLat: 36.0,
@@ -10,6 +11,7 @@ const locations = {
   },
   '51': {
     name: '51号館',
+    description: '',
     range: {
       minLat: 35.7056,
       maxLat: 35.7065,
@@ -17,22 +19,34 @@ const locations = {
       maxLong: 139.7069
     }
   },
-  '51_60': {
-    name: '51、60号館間の小路（一階視点）',
+  '55': {
+    name: '55号館外',
+    description: '一階廊下視点',
     range: {
-      minLat: 35.7057,
-      maxLat: 35.7060,
-      minLong: 139.7058,
-      maxLong: 139.7061
+      minLat: 35.70585,
+      maxLat: 35.70605,
+      minLong: 139.70805,
+      maxLong: 139.70825
     }
   },
-  '60_61': {
-    name: '60、61号館間の空間（二階視点）',
+  '51_60_top': {
+    name: '51、60号館の間',
+    description: '二階視点',
     range: {
       minLat: 35.7057,
       maxLat: 35.7060,
       minLong: 139.7061,
       maxLong: 139.7064
+    }
+  },
+  '60_61': {
+    name: '60、61号館の間',
+    description: '一階視点',
+    range: {
+      minLat: 35.7057,
+      maxLat: 35.7060,
+      minLong: 139.7058,
+      maxLong: 139.7061
     }
   }
 };

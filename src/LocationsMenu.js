@@ -29,10 +29,10 @@ const Pin51 = styled(BasePin)`
   left: 170px;
 `;
 
-const Pin52 = styled(BasePin)`
-  top: 60px;
-  left: 210px;
-`;
+// const Pin52 = styled(BasePin)`
+//   top: 60px;
+//   left: 210px;
+// `;
 
 const Pin51_60 = styled(BasePin)`
   top: 70px;
@@ -49,24 +49,27 @@ const Pin60_61 = styled(BasePin)`
 //   left: 60px;
 // `;
 
-const Pin62 = styled(BasePin)`
-  top: 20px;
-  left: 70px;
+// const Pin62 = styled(BasePin)`
+//   top: 20px;
+//   left: 70px;
+// `;
+
+const Pin55 = styled(BasePin)`
+  top: 50px;
+  left: 310px;
 `;
 
 const locationComponentPairs = process.env.NODE_ENV === "development" ? [
   {loc: '51', Pin: Pin51},
-  {loc: '52', Pin: Pin52},
-  {loc: '51_60', Pin: Pin51_60},
+  {loc: '51_60_top', Pin: Pin51_60},
   {loc: '60_61', Pin: Pin60_61},
-  {loc: '62', Pin: Pin62},
+  {loc: '55', Pin: Pin55},
   {loc: 'garden', Pin: PinGarden}
 ] : [
   {loc: '51', Pin: Pin51},
-  {loc: '52', Pin: Pin52},
-  {loc: '51_60', Pin: Pin51_60},
+  {loc: '51_60_top', Pin: Pin51_60},
   {loc: '60_61', Pin: Pin60_61},
-  {loc: '62', Pin: Pin62}
+  {loc: '55', Pin: Pin55},
 ]
 
 function LocationsMenu() {
@@ -118,7 +121,7 @@ function LocationsMenu() {
 
       <Modal centered show={selectedLoc !== ''} onHide={() => setSelectedLoc('')}>
         <Modal.Header closeButton>
-          <Modal.Title>{selectedLoc && locations[selectedLoc].name}</Modal.Title>
+          <Modal.Title>{selectedLoc && locations[selectedLoc].name + "（" + (locations[selectedLoc].description || "") + "）"}</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ textAlign: 'center' }}>
           <img src={`/img/loc/${selectedLoc}.jpeg`} width='100%' alt="View of the location" />
