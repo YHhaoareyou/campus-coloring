@@ -17,35 +17,8 @@ const locations = {
       maxLong: 139.7069
     }
   },
-  '52': {
-    name: '52号館正面',
-    range: {
-      minLat: 35.7059,
-      maxLat: 35.7061,
-      minLong: 139.70695,
-      maxLong: 139.70725
-    }
-  },
-  '58': {
-    name: '58号館壁',
-    range: {
-      minLat: 35.70625,
-      maxLat: 35.70645,
-      minLong: 139.7054,
-      maxLong: 139.7057
-    }
-  },
-  '62': {
-    name: '62号館壁',
-    range: {
-      minLat: 35.70625,
-      maxLat: 35.70645,
-      minLong: 139.7054,
-      maxLong: 139.7057
-    }
-  },
   '51_60': {
-    name: '51、60号館間の小路',
+    name: '51、60号館間の小路（一階視点）',
     range: {
       minLat: 35.7057,
       maxLat: 35.7060,
@@ -54,7 +27,7 @@ const locations = {
     }
   },
   '60_61': {
-    name: '60、61号館間の小路',
+    name: '60、61号館間の空間（二階視点）',
     range: {
       minLat: 35.7057,
       maxLat: 35.7060,
@@ -63,5 +36,24 @@ const locations = {
     }
   }
 };
+
+  // '52': {
+  //   name: '52号館正面',
+  //   range: {
+  //     minLat: 35.7059,
+  //     maxLat: 35.7061,
+  //     minLong: 139.70695,
+  //     maxLong: 139.70725
+  //   }
+  // },
+  // '62': {
+  //   name: '62号館壁',
+  //   range: {
+  //     minLat: 35.70625,
+  //     maxLat: 35.70645,
+  //     minLong: 139.7054,
+  //     maxLong: 139.7057
+  //   }
+  // },
 
 export default locations;

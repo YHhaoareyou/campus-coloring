@@ -138,6 +138,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
   };
 
   const saveCanvas = () => {
+    const lastAngle = angle;
     var title, detail, id;
     const storage = getStorage();
     const db = getDatabase();
@@ -162,7 +163,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
             dbSet(dbRef(db, 'img_info/' + currentLoc + '/' + id), {
               title,
               detail,
-              angle: angle,
+              angle: lastAngle,
               creator_id: user.uid,
               prev_img_ids: !isNew && { [currentImgId]: true, ...basePrevIds }
             })
