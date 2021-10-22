@@ -7,6 +7,7 @@ import Paintings from "./Paintings";
 import { useAuth, useUser, login } from './auth';
 import Header from './Header';
 import { Button } from 'react-bootstrap';
+import { useEffect } from 'react';
 
 const Auth = ({ children }) => {
   const isLoading = useAuth();
@@ -20,6 +21,18 @@ function App() {
   const handleLogin = () => {
     login().catch((error) => console.error(error));
   };
+
+  useEffect(() => {
+    window.addEventListener('popstate', (event) => {
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+          console.log("Camera on")
+        })
+        .catch(err => {
+          console.error(err)
+        });
+    });
+  })
 
   return (
     <div className="App">
