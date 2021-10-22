@@ -138,7 +138,15 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
   };
 
   const saveCanvas = () => {
+    if(!window.confirm("あなたの作品を最も適切に表示するように、スマホの前後傾きを固定してからOKを押してください！")) return;
     const lastAngle = angle;
+    if (lastAngle) {
+      alert("傾きを取得しました。今からタイピングに適した姿勢に変えていただいても大丈夫です。");
+    } else {
+      alert("エラーが発生しました。もう一度チェックボタンを押してください。");
+      return;
+    }
+
     var title, detail, id;
     const storage = getStorage();
     const db = getDatabase();

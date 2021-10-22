@@ -14,7 +14,7 @@ function Paintings({ loc, location }) {
   const [currentImgId, setCurrentImgId] = useRecoilState(currentImgIdState);
   const setCurrentImgSrc = useSetRecoilState(currentImgSrcState);
   const [currentImgIdIndex, setCurrentImgIdIndex] = useState(0);
-  const [angle, setCurrentImgAngle] = useRecoilState(currentImgAngleState);
+  const setCurrentImgAngle = useSetRecoilState(currentImgAngleState);
   const [canvasVisibility, setCanvasVisibility] = useState(false);
   const [imgInfos, setImgInfos] = useState([]);
   const [isNewPainting, setIsNewPainting] = useState(true);

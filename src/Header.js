@@ -25,7 +25,7 @@ function Header() {
     if (qs.mode && qs.mode === 'base') {
       const db = getDatabase();
       get(ref(db, 'img_info/' + loc + '/' + qs.bid + '/title')).then(snap => {
-        setTitle('「' + snap.val() + '」' + 'のベース作品');
+        setTitle('「' + snap.val() + '」のベース作品');
       })
     } else if (qs.mode && qs.mode === 'user') {
       const db = getDatabase();

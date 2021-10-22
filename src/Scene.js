@@ -19,12 +19,12 @@ function Scene() {
         setImgSrcs(snap.val())
       }
     }).catch(err => console.error(err));
-    setPosition(`-0.3 ${1.5 - Math.round(Math.cos(currentImgAngle*Math.PI/180) * 10 * 100) / 100} ${(-1)*Math.round(Math.sin(currentImgAngle*Math.PI/180) * 10 * 100) / 100}`);
+    setPosition(`-0.3 ${1.5 - Math.round(Math.cos(currentImgAngle*Math.PI/180) * 50 * 100) / 100} ${(-1)*Math.round(Math.sin(currentImgAngle*Math.PI/180) * 50 * 100) / 100}`);
     setRotation(`${currentImgAngle-90} 0 0`);
   }, [currentLoc]);
 
   useEffect(() => {
-    setPosition(`-0.3 ${1.5 - Math.round(Math.cos(currentImgAngle*Math.PI/180) * 10 * 100) / 100} ${(-1)*Math.round(Math.sin(currentImgAngle*Math.PI/180) * 10 * 100) / 100}`);
+    setPosition(`-0.3 ${1.5 - Math.round(Math.cos(currentImgAngle*Math.PI/180) * 50 * 100) / 100} ${(-1)*Math.round(Math.sin(currentImgAngle*Math.PI/180) * 50 * 100) / 100}`);
     setRotation(`${currentImgAngle-90} 0 0`);
   }, [currentImgAngle])
 
@@ -40,8 +40,8 @@ function Scene() {
       </a-assets>
       {currentImgSrc && <a-image
         src={'#'+currentImgId}
-        width={10}
-        height={8}
+        width={50}
+        height={40}
         position={position}
         rotation={rotation}>
       </a-image>}
