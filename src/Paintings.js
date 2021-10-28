@@ -3,7 +3,7 @@ import ImageSwitch from './ImageSwitch';
 import ActionMenu from './ActionMenu';
 import Canvas from './Canvas';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { currentImgIdState, currentImgSrcState, currentImgAngleState, currentLocState } from './atoms.js';
+import { currentImgIdState, currentImgSrcState, currentImgAngleState, currentImgSizeState, currentLocState } from './atoms.js';
 import { getDatabase, ref, get, set } from "firebase/database";
 import { useUser } from './auth'
 import queryString from 'query-string';
@@ -15,6 +15,7 @@ function Paintings({ loc, location }) {
   const setCurrentImgSrc = useSetRecoilState(currentImgSrcState);
   const [currentImgIdIndex, setCurrentImgIdIndex] = useState(0);
   const setCurrentImgAngle = useSetRecoilState(currentImgAngleState);
+  const setCurrentImgSize = useSetRecoilState(currentImgSizeState);
   const [canvasVisibility, setCanvasVisibility] = useState(false);
   const [imgInfos, setImgInfos] = useState([]);
   const [isNewPainting, setIsNewPainting] = useState(true);
@@ -27,6 +28,7 @@ function Paintings({ loc, location }) {
       setCurrentImgId(imgInfos[prevIndex].id);
       switchImgSrc(imgInfos[prevIndex].id);
       setCurrentImgAngle(imgInfos[prevIndex].angle);
+      setCurrentImgSize(imgInfos[prevIndex].size);
 
       var qs = queryString.parse(location.search);
       qs.pid = imgInfos[prevIndex].id;
@@ -42,6 +44,7 @@ function Paintings({ loc, location }) {
       setCurrentImgId(imgInfos[nextIndex].id);
       switchImgSrc(imgInfos[nextIndex].id);
       setCurrentImgAngle(imgInfos[nextIndex].angle);
+      setCurrentImgSize(imgInfos[nextIndex].size);
 
       var qs = queryString.parse(location.search);
       qs.pid = imgInfos[nextIndex].id;
@@ -66,6 +69,7 @@ function Paintings({ loc, location }) {
     setCurrentImgIdIndex(imgIdIndex);
     switchImgSrc(pid || imgInfosArr[0].id);
     setCurrentImgAngle(imgInfosArr[imgIdIndex].angle);
+    setCurrentImgSize(imgInfosArr[imgIdIndex].size);
   }
 
   const switchImgSrc = (imgId) => {

@@ -1,18 +1,30 @@
 import { useState, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-import { currentLocState, currentImgIdState, currentImgSrcState, currentImgAngleState } from './atoms.js';
+import { currentLocState, currentImgIdState, currentImgSrcState, currentImgAngleState, currentImgSizeState } from './atoms.js';
 import { getDatabase, ref, get } from "firebase/database";
+
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height
+  };
+}
 
 function Scene() {
   const currentLoc = useRecoilValue(currentLocState);
   const currentImgSrc = useRecoilValue(currentImgSrcState);
   const currentImgId = useRecoilValue(currentImgIdState);
   const currentImgAngle = useRecoilValue(currentImgAngleState);
+  const currentImgSize = useRecoilValue(currentImgSizeState);
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
   const [imgSrcs, setImgSrcs] = useState({});
   const [position, setPosition] = useState("0.3 1.5 -10");
   const [rotation, setRotation] = useState("0 0 0");
 
   useEffect(() => {
+    setWindowDimensions(getWindowDimensions());
+
     const db = getDatabase();
     get(ref(db, 'img_urls/' + currentLoc)).then(snap => {
       if(snap.exists()){
@@ -40,8 +52,8 @@ function Scene() {
       </a-assets>
       {currentImgSrc && <a-image
         src={'#'+currentImgId}
-        width={50}
-        height={40}
+        width={currentImgSize ? windowDimensions.width / (8 * windowDimensions.width / 414) : 52}
+        height={currentImgSize ? currentImgSize.height * windowDimensions.width / currentImgSize.width / (12.5 * windowDimensions.height / 617) : 40}
         position={position}
         rotation={rotation}>
       </a-image>}

@@ -35,7 +35,7 @@ const ActionButtonLg = styled(ActionButton)`
   height: 50px;
 `
 
-function getWindowDimensions(url, cv) {
+function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
   return {
     width,
@@ -74,7 +74,6 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
   const [ canUndo, setCanUndo ] = useState(false);
   const [ canRedo, setCanRedo ] = useState(false);
   const [ angle, setAngle ] = useState(0);
-
 
   // load base painting on canvas
   useEffect(() => {
@@ -172,6 +171,10 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
               title,
               detail,
               angle: lastAngle,
+              size: {
+                width: windowDimensions.width,
+                height: windowDimensions.height - 120,
+              },
               creator_id: user.uid,
               prev_img_ids: !isNew && { [currentImgId]: true, ...basePrevIds }
             })
@@ -234,7 +237,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
         lineWidth={lineWidth}
         fillColor={fillColor || 'transparent'}
         width={windowDimensions.width}
-        height={windowDimensions.width*3/2}
+        height={windowDimensions.height}
         forceValue
         onChange={onSketchChange}
         tool={tool}

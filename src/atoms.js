@@ -19,6 +19,12 @@ export const currentImgAngleState = atom({
   key: 'currentImgAngleState',
   default: 0,
 });
+
+export const currentImgSizeState = atom({
+  key: 'currentImgSizeState',
+  default: null,
+});
+
 export const userState = atom ({
   key: 'userState',
   default: null,
