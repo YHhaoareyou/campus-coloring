@@ -156,6 +156,7 @@ function Paintings({ loc, location }) {
             isNew={isNewPainting}
             basePrevIds={imgInfos[currentImgIdIndex]?.prev_img_ids || {}}
             closeCanvas={() => setCanvasVisibility(false)}
+            imgInfos={imgInfos}
           />
         )
       }

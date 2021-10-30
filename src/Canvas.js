@@ -59,7 +59,7 @@ function insertImageToCanvas(url, fabricCanvas) {
   )
 }
 
-const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
+const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
   const user = useUser();
   const currentLoc = useRecoilValue(currentLocState);
   const currentImgId = useRecoilValue(currentImgIdState);
@@ -162,40 +162,40 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew }) => {
       .then(snap => getDownloadURL(snap.ref))
       .then(url => {
 
-        // save url
-        dbSet(dbRef(db, 'img_urls/' + currentLoc + '/' + id), url)
-          .then(snap => {
+        Promise.all([
+          dbSet(dbRef(db, 'img_urls/' + currentLoc + '/' + id), url), // save url
+          dbSet(dbRef(db, 'img_info/' + currentLoc + '/' + id), {
+            title,
+            detail,
+            angle: lastAngle,
+            size: {
+              width: windowDimensions.width,
+              height: windowDimensions.height - 120,
+            },
+            creator_id: user.uid,
+            prev_img_ids: !isNew && { [currentImgId]: true, ...basePrevIds }
+          }), // save info
+          dbSet(dbRef(db, 'users/' + user.uid + '/img_ids/' + currentLoc + '/' + id), true) // add img id to user
+        ]).then(snap => {
 
-            // save info
-            dbSet(dbRef(db, 'img_info/' + currentLoc + '/' + id), {
-              title,
-              detail,
-              angle: lastAngle,
-              size: {
-                width: windowDimensions.width,
-                height: windowDimensions.height - 120,
-              },
-              creator_id: user.uid,
-              prev_img_ids: !isNew && { [currentImgId]: true, ...basePrevIds }
-            })
-              .then(snap => {
+          // send notifications
+          const prev_user_ids = imgInfos.map(img => img.creator_id);
+          Promise.all(prev_user_ids.map(uid => dbSet(dbRef(db, 'users/' + uid + '/notifications/' + id), {
+            type: 0,
+            uid: uid
+          })))
+            .then(s => {
+              dbSet(dbRef(db, 'users/' + user.uid + '/name'), user.displayName)
+                .then(snap => {
 
-                // add img id to user
-                dbSet(dbRef(db, 'users/' + user.uid + '/img_ids/' + currentLoc + '/' + id), true)
-                  .then(snap => {
+                  // upload success & reload
+                  alert("アップロードしました！");
+                  closeCanvas();
+                  window.location.href = "/" + currentLoc + "?pid=" + id
 
-                    dbSet(dbRef(db, 'users/' + user.uid + '/name'), user.displayName)
-                      .then(snap => {
-
-                        // uploaded notification
-                        alert("アップロードしました！");
-                        closeCanvas();
-                        window.location.href = "/" + currentLoc + "?pid=" + id
-
-                      }).catch(err => alert(err));
-                  }).catch(err => alert(err));
-              }).catch(err => alert(err));
-          }).catch(err => alert(err));
+                }).catch(err => alert(err));
+            }).catch(err => alert(err));
+        }).catch(err => alert(err));
       }).catch(err => alert(err));
   }
 

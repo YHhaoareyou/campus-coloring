@@ -67,7 +67,7 @@ function Header() {
                   ? <NavDropdown.Item onClick={handleLogout}>ログアウト</NavDropdown.Item>
                   : <NavDropdown.Item onClick={handleLogin}>ログイン</NavDropdown.Item>
               }
-              <NavDropdown.Item onClick={navigateToMyPaintings}>自分の絵を見る（{loc && locations[loc].name}）</NavDropdown.Item>
+              {loc && <NavDropdown.Item onClick={navigateToMyPaintings}>自分の絵を見る：<br /> {locations[loc].name}</NavDropdown.Item>}
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
