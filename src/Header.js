@@ -20,6 +20,10 @@ function Header() {
     logout().catch((error) => console.error(error));
   };
 
+  const navigateToMyPaintings = () => {
+    window.location.href = window.location.origin + window.location.pathname + '?mode=user&uid=' + user.uid;
+  }
+
   useEffect(() => {
     const qs = queryString.parse(window.location.search);
     if (qs.mode && qs.mode === 'base') {
@@ -55,11 +59,6 @@ function Header() {
         <Navbar.Brand>{title}</Navbar.Brand>
         <Navbar.Collapse>
           <Nav className="me-auto"></Nav>
-          {/*loc ? <Nav className="me-auto">
-            <Button className="btn btn-sm" variant="outline-secondary" onClick={() => window.location.href = '/'}>他の場所へ</Button>
-            <span style={{ width: '10px' }}></span>
-            <Button className="btn btn-sm" variant="outline-secondary" onClick={() => window.history.back()}>戻る</Button>
-        </Nav> : <Nav className="me-auto"></Nav>*/}
           <Nav>
             <NavDropdown title={<i className="bi bi-person-circle"></i> || "ログイン"} drop={'start'}>
               <p style={{ textAlign: 'center' }}>{user?.displayName}</p>
@@ -68,11 +67,11 @@ function Header() {
                   ? <NavDropdown.Item onClick={handleLogout}>ログアウト</NavDropdown.Item>
                   : <NavDropdown.Item onClick={handleLogin}>ログイン</NavDropdown.Item>
               }
+              <NavDropdown.Item onClick={navigateToMyPaintings}>自分の絵を見る（{loc && locations[loc].name}）</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
       </Container>
-      {/* {false && <Button onClick={() => window.history.back()}>←</Button>} */}
     </Navbar>
   )
 }

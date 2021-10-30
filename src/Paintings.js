@@ -118,10 +118,12 @@ function Paintings({ loc, location }) {
         } else if (qs.mode && qs.mode === 'user') {
           get(ref(db, 'users/' + qs.uid + '/img_ids/' + loc)).then(userPaintingIdsSnap => {
             var idsObj = {};
-            Object.keys(userPaintingIdsSnap.val()).forEach(id => {
-              idsObj[id] = snap.val()[id]
-            });
-            initImgInfos(idsObj);
+            if (userPaintingIdsSnap.val()) {
+              Object.keys(userPaintingIdsSnap.val()).forEach(id => {
+                idsObj[id] = snap.val()[id]
+              });
+              initImgInfos(idsObj);
+            }
           })
         } else {
           initImgInfos(snap.val());
