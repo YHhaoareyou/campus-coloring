@@ -5,12 +5,14 @@ import { currentLocState } from './atoms';
 import { useRecoilValue } from 'recoil';
 import queryString from 'query-string';
 import { useEffect, useState } from 'react';
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, get, set } from "firebase/database";
+import notificationMap from './notificationMap';
 
 function Header() {
   const user = useUser();
   const loc = useRecoilValue(currentLocState);
-  const [title, setTitle] = useState('Campus as Canvas')
+  const [title, setTitle] = useState('Campus as Canvas');
+  const [notifications, setNotifications] = useState({});
 
   const handleLogin = () => {
     login().catch((error) => console.error(error));
@@ -24,21 +26,35 @@ function Header() {
     window.location.href = window.location.origin + window.location.pathname + '?mode=user&uid=' + user.uid;
   }
 
+  const navigateToPaintingFromNotification = (location, nid) => {
+    set(ref(getDatabase(), 'users/' + user.uid + '/notifications/' + nid), null)
+      .then(snap => window.location.href = window.location.origin + '/' + location + '?pid=' + nid)
+      .catch(err => alert(err));
+  }
+
+  const clearNotifications = () => {
+    set(ref(getDatabase(), 'users/' + user.uid + '/notifications/'), null);
+    setNotifications({});
+  }
+
   useEffect(() => {
+    const db = getDatabase();
     const qs = queryString.parse(window.location.search);
     if (qs.mode && qs.mode === 'base') {
-      const db = getDatabase();
       get(ref(db, 'img_info/' + loc + '/' + qs.bid + '/title')).then(snap => {
         setTitle('「' + snap.val() + '」のベース作品');
       })
     } else if (qs.mode && qs.mode === 'user') {
-      const db = getDatabase();
       get(ref(db, 'users/' + qs.uid + '/name')).then(snap => {
         setTitle(snap.val() + 'の作品');
       })
     } else {
       if (loc) setTitle(locations[loc].name)
     }
+
+    user && get(ref(db, 'users/' + user.uid + '/notifications')).then(snap => {
+      setNotifications(snap.val());
+    })
   }, [loc])
 
   return(
@@ -57,10 +73,23 @@ function Header() {
         </Navbar.Collapse>}
 
         <Navbar.Brand>{title}</Navbar.Brand>
+
         <Navbar.Collapse>
           <Nav className="me-auto"></Nav>
           <Nav>
-            <NavDropdown title={<i className="bi bi-person-circle"></i> || "ログイン"} drop={'start'}>
+            <NavDropdown title={<span><i className="bi bi-bell"></i>{notifications && Object.keys(notifications).length}</span>} drop={'start'}>
+              <Button variant="outline-primary" size="sm" style={{ marginLeft: '10px' }} onClick={clearNotifications}>クリア</Button>
+              {
+                notifications && Object.keys(notifications).map(nid => (
+                  <NavDropdown.Item key={nid} disabled={!loc || loc !== notifications[nid].loc} onClick={() => navigateToPaintingFromNotification(loc, nid)}>
+                    {notifications[nid].username + notificationMap[notifications[nid].type]}
+                    <br />
+                    <small>{loc && loc === notifications[nid].loc ? 'クリックして見にいく' : 'この場所のARモードに入ったら見れるよ'}</small>
+                  </NavDropdown.Item>
+                ))
+              }
+            </NavDropdown>
+            <NavDropdown title={<i className="bi bi-person-circle"></i>} drop={'start'}>
               <p style={{ textAlign: 'center' }}>{user?.displayName}</p>
               {
                 user

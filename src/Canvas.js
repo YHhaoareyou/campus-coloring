@@ -182,7 +182,8 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
           const prev_user_ids = imgInfos.map(img => img.creator_id);
           Promise.all(prev_user_ids.map(uid => dbSet(dbRef(db, 'users/' + uid + '/notifications/' + id), {
             type: 0,
-            uid: uid
+            loc: currentLoc,
+            username: user.displayName
           })))
             .then(s => {
               dbSet(dbRef(db, 'users/' + user.uid + '/name'), user.displayName)

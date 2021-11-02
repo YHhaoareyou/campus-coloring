@@ -10,7 +10,7 @@ import queryString from 'query-string';
 import Button from 'react-bootstrap/Button';
 
 function Paintings({ loc, location }) {
-  const setCurrentLoc = useSetRecoilState(currentLocState);
+  const [currentLoc, setCurrentLoc] = useRecoilState(currentLocState);
   const [currentImgId, setCurrentImgId] = useRecoilState(currentImgIdState);
   const setCurrentImgSrc = useSetRecoilState(currentImgSrcState);
   const [currentImgIdIndex, setCurrentImgIdIndex] = useState(0);
@@ -96,9 +96,18 @@ function Paintings({ loc, location }) {
 
   const likeTrigger = () => {
     const db = getDatabase();
-    imgInfos[currentImgIdIndex].likes && imgInfos[currentImgIdIndex].likes[user.uid]
-      ? set(ref(db, 'img_info/' + loc + '/' + currentImgId + '/likes/' + user.uid), null).then(snap => updateLikes(-1))
-      : set(ref(db, 'img_info/' + loc + '/' + currentImgId + '/likes/' + user.uid), true).then(snap => updateLikes(1))
+    if (imgInfos[currentImgIdIndex].likes && imgInfos[currentImgIdIndex].likes[user.uid]) {
+      set(ref(db, 'img_info/' + loc + '/' + currentImgId + '/likes/' + user.uid), null).then(snap => updateLikes(-1)).catch(err => alert(err));
+    } else {
+      set(ref(db, 'img_info/' + loc + '/' + currentImgId + '/likes/' + user.uid), true).then(snap => {
+        updateLikes(1);
+        set(ref(db, 'users/' + imgInfos[currentImgIdIndex].creator_id + '/notifications/' + currentImgId), {
+          type: 1,
+          loc: currentLoc,
+          username: imgInfos[currentImgIdIndex].likes && Object.keys(imgInfos[currentImgIdIndex].likes).length > 1 ? user.displayName + "と他の" + (Object.keys(imgInfos[currentImgIdIndex].likes).length - 1) + "人" : user.displayName
+        })
+      }).catch(err => alert(err));
+    }
   }
 
   useEffect(() => {

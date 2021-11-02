@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Container, Row, Col, Button, Card, Modal } from 'react-bootstrap';
+import { useUser } from './auth';
 
 const MenuWrapper = styled(Container)`
   position: absolute;
@@ -17,12 +18,11 @@ const ActionButton = styled(Button)`
   width: 100%;
 `
 
-// Todo: notification (like, 上書き)
-
 function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger }) {
+  const user = useUser();
   const [showModal, setShowModal] = useState(false);
   const [likes, setLikes] = useState(imgInfo.likes ? Object.keys(imgInfo.likes).length : 0)
-  const [liked, setLiked] = useState(imgInfo.likes && Object.keys(imgInfo.likes).includes('26577319'))
+  const [liked, setLiked] = useState(imgInfo.likes && Object.keys(imgInfo.likes).includes(user.uid))
 
   const handleLikeTrigger = () => {
     likeTrigger();
@@ -37,6 +37,12 @@ function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger }) {
   const navigateToUserPaintings = () => {
     window.location.href = window.location.origin + window.location.pathname + '?mode=user&uid=' + imgInfo.creator_id;
   }
+
+  useEffect(() => {
+    console.log(imgInfo.likes)
+    setLikes(imgInfo.likes ? Object.keys(imgInfo.likes).length : 0);
+    setLiked(imgInfo.likes && Object.keys(imgInfo.likes).includes(user.uid));
+  }, [imgInfo])
 
   return !canvasVisibility && (
     <MenuWrapper>
