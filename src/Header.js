@@ -1,4 +1,4 @@
-import { Navbar, Nav, NavDropdown, Container, Button } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Container, Button, Row, Col } from 'react-bootstrap';
 import { login, logout, useUser } from './auth';
 import locations from './locations';
 import { currentLocState } from './atoms';
@@ -77,27 +77,49 @@ function Header() {
         <Navbar.Collapse>
           <Nav className="me-auto"></Nav>
           <Nav>
-            <NavDropdown title={<span style={{ color: '#fff' }}><i className="bi bi-bell"></i>{notifications && Object.keys(notifications).length}</span>} drop={'start'}>
-              <Button variant="outline-primary" size="sm" style={{ marginLeft: '10px' }} onClick={clearNotifications}>クリア</Button>
+            <NavDropdown title={<span style={{ color: '#fff' }}><i className="bi bi-person-circle"></i></span>} drop={'start'}>
+              <p style={{ textAlign: 'center', marginBottom: '5px' }}>{user?.displayName}</p>
+              {
+                user
+                  ? <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={handleLogout}><i className='bi bi-box-arrow-right' /> ログアウト</NavDropdown.Item>
+                  : <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={handleLogin}><i className='bi bi-box-arrow-in-right' /> ログイン</NavDropdown.Item>
+              }
+              {loc && <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={navigateToMyPaintings}><i className='bi bi-images' /> 自分の絵を見る</NavDropdown.Item>}
+            </NavDropdown>
+            <NavDropdown
+              title={<span style={{ color: '#fff' }}><i className="bi bi-bell"></i>{notifications && Object.keys(notifications).length}</span>}
+              drop={'start'}
+            >
+              <div style={{ padding: '0px 10px' }}>
+                <i className="bi bi-bell" />
+                <Button variant="outline-secondary" size="sm" style={{ padding: '0px 5px', margin: '0px 0px 5px 10px', border: '1px solid #ccc', color: '#aaa', float: 'right' }} onClick={clearNotifications}>クリア</Button>
+              </div>
               {
                 notifications && Object.keys(notifications).map(nid => (
-                  <NavDropdown.Item key={nid} disabled={!loc || loc !== notifications[nid].loc} onClick={() => navigateToPaintingFromNotification(loc, nid)}>
-                    <p style={{ display: 'block', margin: 0, width: '200px', whiteSpace: 'normal' }}>
-                      {notifications[nid].username + notificationMap[notifications[nid].type]}
-                    </p>
-                    <small style={{ color: '#aaa' }}>{loc && loc === notifications[nid].loc ? 'クリックして見にいく' : 'この場所のARモードに入ったら見れるよ'}</small>
+                  <NavDropdown.Item
+                    style={{ width: '300px', padding: 0, borderTop: '1px solid #ccc' }}
+                    key={nid}
+                    disabled={!loc || loc !== notifications[nid].loc}
+                    onClick={() => navigateToPaintingFromNotification(loc, nid)}
+                  >
+                    <Row style={{ width: '100%', margin: 0, padding: '5px 0px' }}>
+                      <Col xs={1}>
+                        <div style={{ display: 'flex' }}>
+                          {notifications[nid].type === 0 && <i style={{ color: 'orange' }} className='bi bi-brush' />}
+                          {notifications[nid].type === 1 && <i style={{ color: 'red', paddingTop: '12px' }} className='bi bi-heart' />}
+                        </div>
+                      </Col>
+                      <Col xs={11}>
+                        <small style={{ margin: 0, whiteSpace: 'normal' }}>
+                          {' '}{notifications[nid].username + notificationMap[notifications[nid].type]}
+                        </small>
+                        <br />
+                        <small style={{ color: '#aaa' }}>{loc && loc === notifications[nid].loc ? 'クリックして見にいく' : 'この場所のARモードに入ったら見れるよ'}</small>
+                      </Col>
+                    </Row>
                   </NavDropdown.Item>
                 ))
               }
-            </NavDropdown>
-            <NavDropdown title={<span style={{ color: '#fff' }}><i className="bi bi-person-circle"></i></span>} drop={'start'}>
-              <p style={{ textAlign: 'center' }}>{user?.displayName}</p>
-              {
-                user
-                  ? <NavDropdown.Item onClick={handleLogout}>ログアウト</NavDropdown.Item>
-                  : <NavDropdown.Item onClick={handleLogin}>ログイン</NavDropdown.Item>
-              }
-              {loc && <NavDropdown.Item onClick={navigateToMyPaintings}>自分の絵を見る：<br /> {locations[loc].name}</NavDropdown.Item>}
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

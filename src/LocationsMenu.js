@@ -120,7 +120,7 @@ function LocationsMenu() {
         }
       </MapContainer>
 
-      <div style={{ textAlign: 'left', padding: '20px' }}>
+      <div style={{ textAlign: 'left', padding: '20px', fontSize: '14px' }}>
         <strong>説明</strong>
         <ul>
           <li>ピンをタッチすると、そこの景色が映った画像が表示されます</li>
@@ -130,10 +130,10 @@ function LocationsMenu() {
 
         <strong>場所一覧</strong>
         <ul>
-          <li><b>51号館</b>：北門寄りの空中通路からの視点</li>
-          <li><b>55号館外</b>：外の廊下から、中庭向き；雨天OK</li>
-          <li><b>51、60号館の間</b>：59号館側の地面通路からの視点</li>
-          <li><b>60、61号館の間</b>：59号館側の空中通路からの視点；雨天OK</li>
+          <li><b>51号館</b>：北門寄りの空中通路からの視点（雨天×）</li>
+          <li><b>55号館外</b>：外の廊下から、中庭向き</li>
+          <li><b>51、60号館の間</b>：59号館側の地面通路からの視点（雨天×）</li>
+          <li><b>60、61号館の間</b>：59号館側の空中通路からの視点</li>
         </ul>
       </div>
 

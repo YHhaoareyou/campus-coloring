@@ -107,6 +107,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
   };
 
   const clear = () => {
+    if(!window.confirm("最初からやり直しますか？")) return;
     cv.current.clear();
     setCanUndo(cv.current.canUndo());
     setCanRedo(cv.current.canRedo());
@@ -146,7 +147,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
     if (lastAngle) {
       alert("傾きを取得しました。今からタイピングに適した姿勢に変えていただいても大丈夫です。");
     } else {
-      alert("エラーが発生しました。もう一度チェックボタンを押してください。");
+      alert("エラーが発生しました。もう一度「できた」ボタンを押してみてください。");
       return;
     }
 
@@ -202,6 +203,10 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
             }).catch(err => alert(err));
         }).catch(err => alert(err));
       }).catch(err => alert(err));
+  }
+
+  const confirmCloseCanvas = () => {
+    window.confirm("作成中の絵をやめますか？") && closeCanvas();
   }
 
   const colorSelector = (props) => (
@@ -275,8 +280,8 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
           <ActionButton disabled={!canUndo} variant='light' onClick={undo}><i className='bi bi-arrow-90deg-left' /></ActionButton>
           <ActionButton disabled={!canRedo} variant='light' onClick={redo}><i className='bi bi-arrow-90deg-right' /></ActionButton>
           <ActionButton variant='light' onClick={clear}><i className='bi bi-arrow-counterclockwise' /></ActionButton>
-          <ActionButton variant='light' onClick={saveCanvas}><i className='bi bi-check-lg' /> 提出</ActionButton>
-          <ActionButton variant='light' onClick={closeCanvas}><i className='bi bi-x-lg' /></ActionButton>
+          <ActionButton variant='light' onClick={saveCanvas}><i className='bi bi-check-lg' /> できた</ActionButton>
+          <ActionButton variant='light' onClick={confirmCloseCanvas}><i className='bi bi-x-lg' /> やめる</ActionButton>
         </ButtonGroup>
       </PainterMenuWrapper>
     </div>
