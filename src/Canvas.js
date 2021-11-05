@@ -17,23 +17,28 @@ const PainterMenuWrapper = styled(Container)`
   bottom: 0;
   left: 0;
   width: 100vw;
-  height: 120px;
-  padding: 5px;
-  background-color: rgba(248, 249, 250, 0.5);
+  height: 80px;
+  padding: 0px;
+  background-color: transparent;
+`;
+
+const DrawButton = styled(Button)`
+  margin: 0px 3px;
+  padding: 0px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 0.5px solid #fff;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #fff;
 `;
 
 const ActionButton = styled(Button)`
-  margin: 0px;
-  margin-bottom: 2px;
-  padding: 0px;
-  width: 60px;
-  height: 35px;
+  padding: 3px 0px;
+  border: 0.5px solid #fff;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #fff;
 `;
-
-const ActionButtonLg = styled(ActionButton)`
-  width: 50px;
-  height: 50px;
-`
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
@@ -69,7 +74,6 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
   const cv = useRef(null);
   const [ lineColor, setLineColor ] = useState('#000');
   const [ lineWidth, setLineWidth ] = useState(5);
-  const [ fillColor, setFillColor ] = useState('transparent');
   const [ tool, setTool ] = useState(Tools.Pencil);
   const [ canUndo, setCanUndo ] = useState(false);
   const [ canRedo, setCanRedo ] = useState(false);
@@ -202,20 +206,10 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
 
   const colorSelector = (props) => (
     <Popover {...props} style={{ ...props.style, padding: '10px' }}>
-      線<br />
       <CompactPicker
         id='lineColor'
         color={lineColor}
         onChange={(color) => setLineColor(color.hex)}
-      />
-      <br /><br />
-      中身{" "}
-      <Button style={{ padding: '0px 10px' }} variant='secondary' onClick={() => setFillColor('transparent')}>中身なし</Button>
-      <br />
-      <CompactPicker
-        id='fillColor'
-        color={fillColor}
-        onChange={(color) => {setFillColor(color.hex); setLineColor('#000'); setLineColor(lineColor);}}
       />
     </Popover>
   )
@@ -236,7 +230,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
         ref={cv}
         lineColor={lineColor}
         lineWidth={lineWidth}
-        fillColor={fillColor || 'transparent'}
+        fillColor='transparent'
         width={windowDimensions.width}
         height={windowDimensions.height}
         forceValue
@@ -246,57 +240,44 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
       />
 
       <PainterMenuWrapper>
-        <Row>
-          <Col xs={7} style={{ paddingRight: '5px' }}>
+        <Row style={{ padding: '0px 15px', marginBottom: '10px' }}>
+          <Col xs={4} style={{ padding: 0 }}>
+            <DrawButton variant={tool === Tools.Pencil ? "secondary" : "light"} onClick={() => setTool(Tools.Pencil)}><i className="bi bi-pencil" /></DrawButton>
+            <DrawButton variant={tool === Tools.Line ? "secondary" : "light"} onClick={() => setTool(Tools.Line)}><i className="bi bi-slash-lg" /></DrawButton>
+            <OverlayTrigger trigger="click" placement="top" overlay={colorSelector} style={{ position: 'relative' }}>
+              <DrawButton variant='light' style={{ backgroundColor: '#fff' }}>
+                <i className="bi bi-palette" style={{ color: lineColor }} />{" "}
+              </DrawButton>
+            </OverlayTrigger>
+          </Col>
+          <Col xs={4} style={{ paddingRight: '5px', padding: 0 }}>
             <div>
-              <ButtonGroup>
-                <Button variant={tool === Tools.Pencil ? "secondary" : "light"} onClick={() => setTool(Tools.Pencil)}><i className="bi bi-pencil" /></Button>
-                <Button variant={tool === Tools.Line ? "secondary" : "light"} onClick={() => setTool(Tools.Line)}><i className="bi bi-slash-lg" /></Button>
-                <Button variant={tool === Tools.Rectangle ? "secondary" : "light"} onClick={() => setTool(Tools.Rectangle)}><i className="bi bi-square" /></Button>
-                <Button variant={tool === Tools.Circle ? "secondary" : "light"} onClick={() => setTool(Tools.Circle)}><i className="bi bi-circle" /></Button>
-                <OverlayTrigger trigger="click" placement="top" overlay={colorSelector} style={{ position: 'relative' }}>
-                  <Button variant='light' style={{ padding: '3px' }}>
-                    <i className="bi bi-palette" />{" "}
-                    <span style={{ border: '3px solid' + lineColor, backgroundColor: fillColor, width: '15px', height: '15px', display: 'inline-block', verticalAlign: 'middle' }}></span>
-                  </Button>
-                </OverlayTrigger>
-              </ButtonGroup>
-            </div>
-
-            <div>
-              <span style={{ display: 'inline-block', width: '20px' }}></span>
               <i className="bi bi-border-width" />{" "}
               <div style={{ display: 'inline-block', verticalAlign: 'middle' }}>
                 <RangeSlider
                   min={1}
-                  max={30}
+                  max={15}
                   value={lineWidth}
+                  style={{ width: '80px' }}
                   onChange={changeEvent => setLineWidth(changeEvent.target.value)}
                 />
               </div>
             </div>
-
-            <ButtonGroup>
-              <ActionButton variant={tool === Tools.Select ? "secondary" : "light"} onClick={() => setTool(Tools.Select)}><i className="bi bi-hand-index-thumb" /></ActionButton>
-              <ActionButton disabled={tool !== Tools.Select} variant='light' onClick={removeSelected}><i className='bi bi-trash' /></ActionButton>
-              <ActionButton disabled={tool !== Tools.Select} variant='light' onClick={duplicateSelected}><i className='bi bi-files' /></ActionButton>
-            </ButtonGroup>
           </Col>
-
-          <Col xs={5}>
-            <ButtonGroup style={{ marginBottom: '5px' }}>
-              <ActionButtonLg disabled={!canUndo} variant='light' onClick={undo}><i className='bi bi-arrow-90deg-left' /></ActionButtonLg>
-              <ActionButtonLg disabled={!canRedo} variant='light' onClick={redo}><i className='bi bi-arrow-90deg-right' /></ActionButtonLg>
-              <ActionButtonLg variant='light' onClick={clear}><i className='bi bi-arrow-counterclockwise' /></ActionButtonLg>
-            </ButtonGroup>
-
-            <ButtonGroup>
-              <ActionButtonLg variant='light' onClick={saveCanvas}><i className='bi bi-check-lg' /></ActionButtonLg>
-              <ActionButtonLg disabled={true} variant='secondary' onClick={() => {}}><i className='bi bi-hdd' /></ActionButtonLg>
-              <ActionButtonLg variant='light' onClick={closeCanvas}><i className='bi bi-x-lg' /></ActionButtonLg>
-            </ButtonGroup>
+          <Col xs={4} style={{ padding: 0 }}>
+            <DrawButton variant={tool === Tools.Select ? "secondary" : "light"} onClick={() => setTool(Tools.Select)}><i className="bi bi-hand-index-thumb" /></DrawButton>
+            <DrawButton disabled={tool !== Tools.Select} variant='light' onClick={removeSelected}><i className='bi bi-trash' /></DrawButton>
+            <DrawButton disabled={tool !== Tools.Select} variant='light' onClick={duplicateSelected}><i className='bi bi-files' /></DrawButton>
           </Col>
         </Row>
+
+        <ButtonGroup style={{ width: '100%' }}>
+          <ActionButton disabled={!canUndo} variant='light' onClick={undo}><i className='bi bi-arrow-90deg-left' /></ActionButton>
+          <ActionButton disabled={!canRedo} variant='light' onClick={redo}><i className='bi bi-arrow-90deg-right' /></ActionButton>
+          <ActionButton variant='light' onClick={clear}><i className='bi bi-arrow-counterclockwise' /></ActionButton>
+          <ActionButton variant='light' onClick={saveCanvas}><i className='bi bi-check-lg' /> 提出</ActionButton>
+          <ActionButton variant='light' onClick={closeCanvas}><i className='bi bi-x-lg' /></ActionButton>
+        </ButtonGroup>
       </PainterMenuWrapper>
     </div>
   )

@@ -58,38 +58,39 @@ function Header() {
   }, [loc])
 
   return(
-    <Navbar style={{ position: 'absolute', left: 0, top: 0, width: '100vw', background: 'rgba(255, 255, 255, 0.5)' }}>
+    <Navbar style={{ position: 'absolute', left: 0, top: 0, width: '100vw', background: 'rgba(0, 0, 0, 0.3)' }}>
       <Container>
         {loc && <Navbar.Collapse>
           <Nav className="me-auto">
-            <Button className="btn btn-sm" variant="outline-secondary" onClick={() => window.location.href = '/'}>
+            <Button style={{ color: '#fff', borderColor: '#fff' }} className="btn btn-sm" variant="outline-secondary" onClick={() => window.location.href = '/'}>
               <i className="bi bi-house"></i>
             </Button>
             <span style={{ width: '10px' }}></span>
-            <Button className="btn btn-sm" variant="outline-secondary" onClick={() => window.history.back()}>
+            <Button style={{ color: '#fff', borderColor: '#fff' }} className="btn btn-sm" variant="outline-secondary" onClick={() => window.history.back()}>
               <i className="bi bi-chevron-compact-left"></i>
             </Button>
           </Nav>
         </Navbar.Collapse>}
 
-        <Navbar.Brand>{title}</Navbar.Brand>
+        <Navbar.Brand style={{ color: '#fff', margin: '0px 5px' }}>{title}</Navbar.Brand>
 
         <Navbar.Collapse>
           <Nav className="me-auto"></Nav>
           <Nav>
-            <NavDropdown title={<span><i className="bi bi-bell"></i>{notifications && Object.keys(notifications).length}</span>} drop={'start'}>
+            <NavDropdown title={<span style={{ color: '#fff' }}><i className="bi bi-bell"></i>{notifications && Object.keys(notifications).length}</span>} drop={'start'}>
               <Button variant="outline-primary" size="sm" style={{ marginLeft: '10px' }} onClick={clearNotifications}>クリア</Button>
               {
                 notifications && Object.keys(notifications).map(nid => (
                   <NavDropdown.Item key={nid} disabled={!loc || loc !== notifications[nid].loc} onClick={() => navigateToPaintingFromNotification(loc, nid)}>
-                    {notifications[nid].username + notificationMap[notifications[nid].type]}
-                    <br />
-                    <small>{loc && loc === notifications[nid].loc ? 'クリックして見にいく' : 'この場所のARモードに入ったら見れるよ'}</small>
+                    <p style={{ display: 'block', margin: 0, width: '200px', whiteSpace: 'normal' }}>
+                      {notifications[nid].username + notificationMap[notifications[nid].type]}
+                    </p>
+                    <small style={{ color: '#aaa' }}>{loc && loc === notifications[nid].loc ? 'クリックして見にいく' : 'この場所のARモードに入ったら見れるよ'}</small>
                   </NavDropdown.Item>
                 ))
               }
             </NavDropdown>
-            <NavDropdown title={<i className="bi bi-person-circle"></i>} drop={'start'}>
+            <NavDropdown title={<span style={{ color: '#fff' }}><i className="bi bi-person-circle"></i></span>} drop={'start'}>
               <p style={{ textAlign: 'center' }}>{user?.displayName}</p>
               {
                 user
