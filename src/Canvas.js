@@ -13,6 +13,7 @@ import RangeSlider from 'react-bootstrap-range-slider';
 import { fabric } from "fabric";
 
 const PainterMenuWrapper = styled(Container)`
+  ${props => !props.isOpen && 'display: none;'}
   position: absolute;
   bottom: 0;
   left: 0;
@@ -40,6 +41,34 @@ const ActionButton = styled(Button)`
   color: #fff;
 `;
 
+const HideMenuButton = styled(Button)`
+  position: absolute;
+  bottom: 80px;
+  right: 5px;
+  padding: 0px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(0, 0, 0, 0.4);
+  background-color: transparent;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 24px;
+`;
+
+const OpenMenuButton = styled(Button)`
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 30px;
+  padding: 0px;
+  font-size: 36px;
+  line-height: 0px;
+  background: rgba(255, 255, 255, 0.3);
+  color: rgb(200, 200, 200);
+  border: none;
+`;
+
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
   return {
@@ -64,7 +93,7 @@ function insertImageToCanvas(url, fabricCanvas) {
   )
 }
 
-const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
+const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
   const user = useUser();
   const currentLoc = useRecoilValue(currentLocState);
   const currentImgId = useRecoilValue(currentImgIdState);
@@ -78,14 +107,15 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
   const [ canUndo, setCanUndo ] = useState(false);
   const [ canRedo, setCanRedo ] = useState(false);
   const [ angle, setAngle ] = useState(0);
+  const [ isMenuOpen, setIsMenuOpen ] = useState(true);
 
   // load base painting on canvas
   useEffect(() => {
     setWindowDimensions(getWindowDimensions());
-    if (!isNew) {
+    if (mode !== 'new') {
       insertImageToCanvas(currentImgSrc, cv.current._fc);
     }
-  }, [isNew, currentImgSrc]);
+  }, [mode, currentImgSrc]);
 
   useEffect(() => {
     window.addEventListener("deviceorientation", function(e){
@@ -111,7 +141,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
     cv.current.clear();
     setCanUndo(cv.current.canUndo());
     setCanRedo(cv.current.canRedo());
-    if (!isNew) {
+    if (mode !== 'new') {
       insertImageToCanvas(currentImgSrc, cv.current._fc);
     }
   };
@@ -155,10 +185,10 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
     const storage = getStorage();
     const db = getDatabase();
 
-    title = prompt("タイトル：");
-    detail = prompt("この作品についての説明：");
+    title = prompt("タイトル：", mode === 'edit' ? imgInfo.title : '');
+    detail = prompt("この作品についての説明：", mode === 'edit' ? imgInfo.detail : '');
     
-    id = Date.now();
+    id = mode === 'edit' ? currentImgId : Date.now();
     if (title === "") title = id;
 
     const dataUrl = cv.current.toDataURL();
@@ -178,7 +208,7 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
               height: windowDimensions.height - 120,
             },
             creator_id: user.uid,
-            prev_img_ids: !isNew && { [currentImgId]: true, ...basePrevIds }
+            prev_img_ids: mode === 'overwrite' && { [currentImgId]: true, ...basePrevIds }
           }), // save info
           dbSet(dbRef(db, 'users/' + user.uid + '/img_ids/' + currentLoc + '/' + id), true) // add img id to user
         ]).then(snap => {
@@ -244,7 +274,13 @@ const Canvas = ({ closeCanvas, basePrevIds, isNew, imgInfos }) => {
         imageFormat={'jpeg'}
       />
 
-      <PainterMenuWrapper>
+      {
+        isMenuOpen
+          ? <HideMenuButton variant='outline-light' onClick={() => setIsMenuOpen(false)}><i className='bi bi-x' /></HideMenuButton>
+          : <OpenMenuButton variant='outline-light' onClick={() => setIsMenuOpen(true)}><i className='bi bi-chevron-compact-up' /></OpenMenuButton>
+        }
+
+      <PainterMenuWrapper isOpen={isMenuOpen}>
         <Row style={{ padding: '0px 15px', marginBottom: '10px' }}>
           <Col xs={4} style={{ padding: 0 }}>
             <DrawButton variant={tool === Tools.Pencil ? "secondary" : "light"} onClick={() => setTool(Tools.Pencil)}><i className="bi bi-pencil" /></DrawButton>

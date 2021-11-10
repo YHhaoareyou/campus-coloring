@@ -18,7 +18,7 @@ function Paintings({ loc, location }) {
   const setCurrentImgSize = useSetRecoilState(currentImgSizeState);
   const [canvasVisibility, setCanvasVisibility] = useState(false);
   const [imgInfos, setImgInfos] = useState([]);
-  const [isNewPainting, setIsNewPainting] = useState(true);
+  const [paintingMode, setPaintingMode] = useState('new');
   const user = useUser();
 
   const switchToPrevImg = () => {
@@ -148,23 +148,23 @@ function Paintings({ loc, location }) {
         imgInfos.length > 0
           ? canvasVisibility ? (
               <Canvas
-                isNew={isNewPainting}
+                mode={paintingMode}
                 basePrevIds={imgInfos[currentImgIdIndex]?.prev_img_ids || {}}
                 closeCanvas={() => setCanvasVisibility(false)}
                 imgInfos={imgInfos}
+                imgInfo={imgInfos[currentImgIdIndex]}
               />
             ) : (
               <ActionMenu
                 imgInfo={imgInfos[currentImgIdIndex]}
-                openCanvas={({ isNew }) => {setCanvasVisibility(true); setIsNewPainting(isNew);}}
-                canvasVisibility={canvasVisibility}
+                openCanvas={({ mode }) => {setCanvasVisibility(true); setPaintingMode(mode);}}
                 likeTrigger={likeTrigger}
               />
             )
           : (
             <Button
               style={{ position: 'absolute', bottom: 0, left: 0, width: '100vw' }}
-              onClick={() => {setCanvasVisibility(true); setIsNewPainting(true);}}
+              onClick={() => {setCanvasVisibility(true); setPaintingMode('new');}}
             >この場所で初の作品を描こう！</Button>
           )
       }

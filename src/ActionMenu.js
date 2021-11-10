@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Container, Row, ButtonGroup, Button, Card, Modal } from 'react-bootstrap';
 import { useUser } from './auth';
+import NewPaintingModal from './NewPaintingModal';
+import EditPaintingModal from './EditPaintingModal';
 
 const MenuWrapper = styled(Container)`
   position: absolute;
@@ -20,18 +22,47 @@ const ActionButton = styled(Button)`
 `
 
 const IntroCard = styled(Card)`
+  ${props => !props.isOpen && 'display: none;'}
   height: 100px;
   overflow-y: scroll;
   background-color: rgba(0, 0, 0, 0.4);
   color: #fff;
   border: 0.5px solid #fff;
+  border-radius: 10px;
 `;
 
-function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger }) {
+const HideMenuButton = styled(Button)`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 25px;
+  height: 25px;
+  padding: 0px;
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  line-height: 0px;
+  border-radius: 50%;
+`;
+
+const OpenMenuButton = styled(Button)`
+  width: 100%;
+  height: 30px;
+  padding: 0px;
+  font-size: 36px;
+  line-height: 0px;
+  background: rgba(255, 255, 255, 0.3);
+  color: rgb(200, 200, 200);
+  border: none;
+`;
+
+function ActionMenu({ imgInfo, openCanvas, likeTrigger }) {
   const user = useUser();
-  const [showModal, setShowModal] = useState(false);
+  const [showNewPaintingModal, setShowNewPaintingModal] = useState(false);
+  const [showEditPaintingModal, setShowEditPaintingModal] = useState(false);
   const [likes, setLikes] = useState(imgInfo.likes ? Object.keys(imgInfo.likes).length : 0)
   const [liked, setLiked] = useState(imgInfo.likes && Object.keys(imgInfo.likes).includes(user.uid))
+  const [isMenuDisplayed, setIsMenuDisplayed] = useState(true)
 
   const handleLikeTrigger = () => {
     likeTrigger();
@@ -50,56 +81,55 @@ function ActionMenu({ imgInfo, openCanvas, canvasVisibility, likeTrigger }) {
   useEffect(() => {
     setLikes(imgInfo.likes ? Object.keys(imgInfo.likes).length : 0);
     setLiked(imgInfo.likes && Object.keys(imgInfo.likes).includes(user.uid));
-  }, [imgInfo])
+  }, [imgInfo]);
 
-  // return !canvasVisibility && (
   return (
     <MenuWrapper>
-      <IntroCard>
-        <Card.Body style={{ padding: 0 }}>
+      {!isMenuDisplayed && <OpenMenuButton variant='outline-light' onClick={() => setIsMenuDisplayed(true)}><i className='bi bi-chevron-compact-up' /></OpenMenuButton>}
+
+      <IntroCard isOpen={isMenuDisplayed}>
+        <Card.Body style={{ padding: 0, position: 'relative' }}>
+          <HideMenuButton variant='outline-light' onClick={() => setIsMenuDisplayed(false)}><i className='bi bi-x' /></HideMenuButton>
           <Card.Title as='h6' style={{ height: '15px', margin: '5px' }}>{imgInfo.title}</Card.Title>
           <Card.Text style={{ fontSize: '14px', height: '40px', margin: '5px' }}>
             {imgInfo.detail}
           </Card.Text>
           <ButtonGroup style={{ width: '100%', margin: 0, height: '30px' }}>
-          <ActionButton variant='light' size='sm' onClick={navigateToUserPaintings} style={{ borderLeft: 'none' }}>
-            <i className="bi bi-person"></i>
-            {' '}ユーザ
-          </ActionButton>
-          {
-            imgInfo?.prev_img_ids && (
-              <ActionButton variant='light' size='sm' onClick={navigateToBasePaintings} style={{ marginBottom: 0 }}>
-                <i className="bi bi-collection"></i>
-                {' '}前作へ
-              </ActionButton>
-            )
-          }
-          <ActionButton variant='light' size='sm' onClick={handleLikeTrigger}>
-            <i className={liked ? "bi bi-heart-fill" : "bi bi-heart"}></i>
-            {' '}{likes}
-          </ActionButton>
-          <ActionButton variant='light' size='sm' onClick={() => setShowModal(true)} style={{ borderRight: 'none' }}>
-            <i className="bi bi-pencil"></i>
-            {' '}描こう
-          </ActionButton>
+            {
+              imgInfo.creator_id === user.uid ? (
+                <ActionButton variant='light' size='sm' onClick={() => setShowEditPaintingModal(true)} style={{ borderLeft: 'none', borderTopLeftRadius: 0 }}>
+                  <i className="bi bi-gear"></i>
+                  {' '}編集・削除
+                </ActionButton>
+              ) : (
+                <ActionButton variant='light' size='sm' onClick={navigateToUserPaintings} style={{ borderLeft: 'none', borderTopLeftRadius: 0 }}>
+                  <i className="bi bi-person"></i>
+                  {' '}ユーザ
+                </ActionButton>
+              )
+            }
+            {
+              imgInfo?.prev_img_ids && (
+                <ActionButton variant='light' size='sm' onClick={navigateToBasePaintings} style={{ marginBottom: 0 }}>
+                  <i className="bi bi-collection"></i>
+                  {' '}前作へ
+                </ActionButton>
+              )
+            }
+            <ActionButton variant='light' size='sm' onClick={handleLikeTrigger}>
+              <i className={liked ? "bi bi-heart-fill" : "bi bi-heart"}></i>
+              {' '}{likes}
+            </ActionButton>
+            <ActionButton variant='light' size='sm' onClick={() => setShowNewPaintingModal(true)} style={{ borderRight: 'none', borderTopRightRadius: 0 }}>
+              <i className="bi bi-pencil"></i>
+              {' '}新規作成
+            </ActionButton>
           </ButtonGroup>
         </Card.Body>
       </IntroCard>
 
-      <Modal centered show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>どんな絵を描きたい？</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ textAlign: 'center' }}>
-          <Button variant="outline-primary" onClick={() => {openCanvas({ isNew: true }); setShowModal(false);}}>
-            新しく描こう
-          </Button>
-          <br /><br />
-          <Button variant="outline-primary" onClick={() => {openCanvas({ isNew: false }); setShowModal(false);}}>
-            これをベースにして描こう
-          </Button>
-        </Modal.Body>
-      </Modal>
+      <NewPaintingModal isOpen={showNewPaintingModal} closeModal={() => setShowNewPaintingModal(false)} openCanvas={openCanvas} />
+      <EditPaintingModal isOpen={showEditPaintingModal} closeModal={() => setShowEditPaintingModal(false)} openCanvas={openCanvas} imgInfo={imgInfo} />
 
     </MenuWrapper>
   )
