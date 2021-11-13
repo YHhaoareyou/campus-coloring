@@ -7,12 +7,14 @@ import queryString from 'query-string';
 import { useEffect, useState } from 'react';
 import { getDatabase, ref, get, set } from "firebase/database";
 import notificationMap from './notificationMap';
+import { useTranslation } from "react-i18next";
 
 function Header() {
   const user = useUser();
   const loc = useRecoilValue(currentLocState);
   const [title, setTitle] = useState('Campus as Canvas');
   const [notifications, setNotifications] = useState({});
+  const { t, i18n } = useTranslation();
 
   const handleLogin = () => {
     login().catch((error) => console.error(error));
@@ -77,22 +79,28 @@ function Header() {
         <Navbar.Collapse>
           <Nav className="me-auto"></Nav>
           <Nav>
+            <NavDropdown title={<span style={{ color: '#fff' }}><i className="bi bi-translate"></i></span>} drop={'start'}>
+              <NavDropdown.Item onClick={() => i18n.changeLanguage('ja')}>日本語</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => i18n.changeLanguage('en')}>English</NavDropdown.Item>
+            </NavDropdown>
+
             <NavDropdown title={<span style={{ color: '#fff' }}><i className="bi bi-person-circle"></i></span>} drop={'start'}>
               <p style={{ textAlign: 'center', marginBottom: '5px' }}>{user?.displayName}</p>
               {
                 user
-                  ? <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={handleLogout}><i className='bi bi-box-arrow-right' /> ログアウト</NavDropdown.Item>
-                  : <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={handleLogin}><i className='bi bi-box-arrow-in-right' /> ログイン</NavDropdown.Item>
+                  ? <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={handleLogout}><i className='bi bi-box-arrow-right' /> {t("Header.User.Sign out")}</NavDropdown.Item>
+                  : <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={handleLogin}><i className='bi bi-box-arrow-in-right' /> {t("Header.User.Sign in")}</NavDropdown.Item>
               }
-              {loc && <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={navigateToMyPaintings}><i className='bi bi-images' /> 自分の絵を見る</NavDropdown.Item>}
+              {loc && <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={navigateToMyPaintings}><i className='bi bi-images' /> {t("Header.User.Check my paintings")}</NavDropdown.Item>}
             </NavDropdown>
+
             <NavDropdown
               title={<span style={{ color: '#fff' }}><i className="bi bi-bell"></i>{notifications && Object.keys(notifications).length}</span>}
               drop={'start'}
             >
               <div style={{ padding: '0px 10px' }}>
                 <i className="bi bi-bell" />
-                <Button variant="outline-secondary" size="sm" style={{ padding: '0px 5px', margin: '0px 0px 5px 10px', border: '1px solid #ccc', color: '#aaa', float: 'right' }} onClick={clearNotifications}>クリア</Button>
+                <Button variant="outline-secondary" size="sm" style={{ padding: '0px 5px', margin: '0px 0px 5px 10px', border: '1px solid #ccc', color: '#aaa', float: 'right' }} onClick={clearNotifications}>{t("Header.Notifications.Clear")}</Button>
               </div>
               {
                 notifications && Object.keys(notifications).map(nid => (
@@ -111,10 +119,10 @@ function Header() {
                       </Col>
                       <Col xs={11}>
                         <small style={{ margin: 0, whiteSpace: 'normal' }}>
-                          {' '}{notifications[nid].username + notificationMap[notifications[nid].type]}
+                          {' '}{notifications[nid].username + t("Header.Notifications." + notificationMap[notifications[nid].type])}
                         </small>
                         <br />
-                        <small style={{ color: '#aaa' }}>{loc && loc === notifications[nid].loc ? 'クリックして見にいく' : 'この場所のARモードに入ったら見れるよ'}</small>
+                        <small style={{ color: '#aaa' }}>{loc && loc === notifications[nid].loc ? t("Header.Notifications.Click to check") : t("Header.Notifications.Check in AR")}</small>
                       </Col>
                     </Row>
                   </NavDropdown.Item>

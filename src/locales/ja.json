@@ -1,0 +1,44 @@
+{
+  "App": {
+    "Sign in with Google": "Googleアカウントでログイン"
+  },
+  "ActionMenu": {
+    "Edit/Delete": "編集・削除",
+    "User": "ユーザ",
+    "Based works": "前作へ",
+    "Paint yours": "新規作成"
+  },
+  "EditPaintingModal": {
+    "Title label": "タイトル：",
+    "Details label": "説明：",
+    "Updated": "更新しました！",
+    "Deleted": "削除しました！",
+    "Edit/Delete": "編集・削除",
+    "Edit painting": "絵を編集",
+    "Edit title and details": "タイトルと説明のみを編集",
+    "Delete": "削除"
+  },
+  "LocationsMenu": {
+    "Choose location": "場所を選択",
+    "Retrieving location": "位置情報取得中...",
+    "Failed to retrieve": "位置情報取得失敗。位置情報の取得を許可し、遮蔽物のない空間に移動して数秒待ってください。",
+    "Point camera": "↑の景色にカメラを向けてください",
+    "View paintings": "絵を観る",
+    "Move here and wait": "この場所に移動し、数秒待つと絵が見えるよ",
+    "Please reload": "移動してもダメでしたら、画面を更新してください"
+  },
+  "Header": {
+    "User": {
+      "Sign in": "ログイン",
+      "Sign out": "ログアウト",
+      "Check my paintings": "自分の絵を見る"
+    },
+    "Notifications": {
+      "Painted based on yours": "があなたの作品に基づいて描きました！",
+      "Liked your painting": "があなたの作品に「いいね」！",
+      "Click to check": "クリックして見にいく",
+      "Check in AR": "この場所のARモードに入ったら見れるよ",
+      "Clear": "クリア"
+    }
+  }
+}

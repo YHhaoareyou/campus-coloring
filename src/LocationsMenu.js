@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import styled from 'styled-components';
 import locations from './locations';
+import { useTranslation } from "react-i18next";
 
 const MapContainer = styled.div`
   position: relative;
@@ -73,6 +74,7 @@ const locationComponentPairs = process.env.NODE_ENV === "development" ? [
 ]
 
 function LocationsMenu() {
+  const { t } = useTranslation();
   const [currentCoor, setCurrentCoor] = useState(null);
   const [selectedLoc, setSelectedLoc] = useState('');
   const [retrieveCoorFailed, setRetrieveCoorFailed] = useState(false);
@@ -104,12 +106,12 @@ function LocationsMenu() {
 
   return (
     <div style={{ paddingTop: '70px' }}>
-      <h3>場所を選択</h3>
+      <h3>{t("LocationsMenu.Choose location")}</h3>
       {
-        !currentCoor && <p><i className="bi bi-arrow-clockwise"></i> 位置情報取得中...</p>
+        !currentCoor && <p><i className="bi bi-arrow-clockwise"></i> {t("LocationsMenu.Retrieving location")}</p>
       }
       {
-        retrieveCoorFailed && <p style={{ color: 'red' }}>位置情報取得失敗。位置情報の取得を許可し、遮蔽物のない空間に移動して数秒待ってください。</p>
+        retrieveCoorFailed && <p style={{ color: 'red' }}>{t("LocationsMenu.Failed to retrieve")}</p>
       }
 
       <MapContainer>
@@ -149,18 +151,18 @@ function LocationsMenu() {
             selectedLoc && (isCoorInRange(locations[selectedLoc].range) || selectedLoc === 'garden')
               ? (
                 <div>
-                  <p>↑の景色にカメラを向けてください</p>
+                  <p>{t("LocationsMenu.Point camera")}</p>
                   <Link to={'/' + selectedLoc}>
                     <Button variant="outline-primary">
-                      絵を観る
+                      {t("LocationsMenu.View paintings")}
                     </Button>
                   </Link>
                 </div>
               )
               : (
                 <div>
-                  <p>この場所に移動し、数秒待つと絵が見えるよ</p>
-                  <p>移動してもダメでしたら、画面を更新してください</p>
+                  <p>{t("LocationsMenu.Move here and wait")}</p>
+                  <p>{t("LocationsMenu.Please reload")}</p>
                 </div>
               )
           }

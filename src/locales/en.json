@@ -1,0 +1,44 @@
+{
+  "App": {
+    "Sign in with Google": "Sign in with Google"
+  },
+  "ActionMenu": {
+    "Edit/Delete": "Edit/Delete",
+    "User": "User",
+    "Based works": "Based works",
+    "Paint yours": "New!"
+  },
+  "EditPaintingModal": {
+    "Title label": "Title: ",
+    "Details label": "Details: ",
+    "Updated": "Updated successfully!",
+    "Deleted": "Deleted successfully!",
+    "Edit/Delete": "Edit/Delete",
+    "Edit painting": "Edit painting",
+    "Edit title and details": "Edit title and details only",
+    "Delete": "Delete"
+  },
+  "LocationsMenu": {
+    "Choose location": "Choose location",
+    "Retrieving location": "Retrieving your location...",
+    "Failed to retrieve": "Failed to retrieve your location. Please change the permission for retrieving GPS data, or move to somewhere outdoor and stay for seconds.",
+    "Point camera": "Point your camera to the scene shown in the picture above.",
+    "View paintings": "Check out the paintings!",
+    "Move here and wait": "Move to this place and you will be able to see the paintings in seconds.",
+    "Please reload": "If nothing changes after moving, please reload the page."
+  },
+  "Header": {
+    "User": {
+      "Sign in": "Sign in",
+      "Sign out": "Sign out",
+      "Check my paintings": "Check my paintings"
+    },
+    "Notifications": {
+      "Painted based on yours": " painted a new one based on yours!",
+      "Liked your painting": " liked your painting!",
+      "Click to check": "Click to check it out",
+      "Check in AR": "Move to this place and enter AR mode",
+      "Clear": "Clear"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 const notificationMap = [
-  "があなたの作品に基づいて描きました！",
-  "があなたの作品に「いいね」！"
+  "Painted based on yours",
+  "Liked your painting"
 ];
 
 export default notificationMap;

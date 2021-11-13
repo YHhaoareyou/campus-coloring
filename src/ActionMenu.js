@@ -4,6 +4,7 @@ import { Container, Row, ButtonGroup, Button, Card, Modal } from 'react-bootstra
 import { useUser } from './auth';
 import NewPaintingModal from './NewPaintingModal';
 import EditPaintingModal from './EditPaintingModal';
+import { useTranslation } from "react-i18next";
 
 const MenuWrapper = styled(Container)`
   position: absolute;
@@ -63,6 +64,7 @@ function ActionMenu({ imgInfo, openCanvas, likeTrigger }) {
   const [likes, setLikes] = useState(imgInfo.likes ? Object.keys(imgInfo.likes).length : 0)
   const [liked, setLiked] = useState(imgInfo.likes && Object.keys(imgInfo.likes).includes(user.uid))
   const [isMenuDisplayed, setIsMenuDisplayed] = useState(true)
+  const { t } = useTranslation();
 
   const handleLikeTrigger = () => {
     likeTrigger();
@@ -99,12 +101,12 @@ function ActionMenu({ imgInfo, openCanvas, likeTrigger }) {
               imgInfo.creator_id === user.uid ? (
                 <ActionButton variant='light' size='sm' onClick={() => setShowEditPaintingModal(true)} style={{ borderLeft: 'none', borderTopLeftRadius: 0 }}>
                   <i className="bi bi-gear"></i>
-                  {' '}編集・削除
+                  {' '}{t("ActionMenu.Edit/Delete")}
                 </ActionButton>
               ) : (
                 <ActionButton variant='light' size='sm' onClick={navigateToUserPaintings} style={{ borderLeft: 'none', borderTopLeftRadius: 0 }}>
                   <i className="bi bi-person"></i>
-                  {' '}ユーザ
+                  {' '}{t("ActionMenu.User")}
                 </ActionButton>
               )
             }
@@ -112,7 +114,7 @@ function ActionMenu({ imgInfo, openCanvas, likeTrigger }) {
               imgInfo?.prev_img_ids && (
                 <ActionButton variant='light' size='sm' onClick={navigateToBasePaintings} style={{ marginBottom: 0 }}>
                   <i className="bi bi-collection"></i>
-                  {' '}前作へ
+                  {' '}{t("ActionMenu.Based works")}
                 </ActionButton>
               )
             }
@@ -122,7 +124,7 @@ function ActionMenu({ imgInfo, openCanvas, likeTrigger }) {
             </ActionButton>
             <ActionButton variant='light' size='sm' onClick={() => setShowNewPaintingModal(true)} style={{ borderRight: 'none', borderTopRightRadius: 0 }}>
               <i className="bi bi-pencil"></i>
-              {' '}新規作成
+              {' '}{t("ActionMenu.Paint yours")}
             </ActionButton>
           </ButtonGroup>
         </Card.Body>

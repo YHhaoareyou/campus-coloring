@@ -8,6 +8,7 @@ import { useAuth, useUser, login } from './auth';
 import Header from './Header';
 import { Button } from 'react-bootstrap';
 import { useEffect } from 'react';
+import { useTranslation } from "react-i18next";
 
 const Auth = ({ children }) => {
   const isLoading = useAuth();
@@ -16,6 +17,7 @@ const Auth = ({ children }) => {
 };
 
 function App() {
+  const { t } = useTranslation();
   const user = useUser();
 
   const handleLogin = () => {
@@ -52,7 +54,7 @@ function App() {
               : (
                 <div>
                   <Header />
-                  <Button style={{ marginTop: '45vh' }} onClick={handleLogin}>Googleアカウントでログイン</Button>
+                  <Button style={{ marginTop: '45vh' }} onClick={handleLogin}>{t('App.Sign in with Google')}</Button>
                 </div>
               )
           }
