@@ -39,7 +39,7 @@
     "User": {
       "Sign in": "Sign in",
       "Sign out": "Sign out",
-      "Check my paintings": "Check my paintings"
+      "Check my graffiti": "Check my graffiti"
     },
     "Notifications": {
       "Painted based on yours": " painted a new one based on yours!",
@@ -74,8 +74,8 @@
     "Retrieving location": "Retrieving your location...",
     "Failed to retrieve": "Failed to retrieve your location. Please change the permission for retrieving GPS data, or move to somewhere outdoor and stay for seconds.",
     "Point camera": "Point your camera to the scene shown in the picture above.",
-    "View paintings": "Check out the paintings!",
-    "Move here and wait": "Move to this place and you will be able to see the paintings in seconds.",
+    "View graffiti": "Check out the graffiti!",
+    "Move here and wait": "Move to this place and you will be able to see the graffiti in seconds.",
     "Please reload": "If nothing changes after moving, please reload the page."
   },
   "NewGraffitiModal": {

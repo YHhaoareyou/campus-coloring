@@ -39,7 +39,7 @@ const locations = {
     nameJA: '51号館',
     descriptionJA: '一階の南側入口の前から、東側の地下に向ける',
     nameEN: 'Bldg. 51',
-    descriptionEN: 'From the front of south entrance (1F), facing downward',
+    descriptionEN: 'From the front of south entrance (1F), facing the basement on the East side',
     range: {
       minLat: 35.70575,
       maxLat: 35.7060,

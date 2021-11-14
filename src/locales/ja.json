@@ -39,7 +39,7 @@
     "User": {
       "Sign in": "ログイン",
       "Sign out": "ログアウト",
-      "Check my paintings": "自分の落書きを見る"
+      "Check my graffiti": "自分の落書きを見る"
     },
     "Notifications": {
       "Painted based on yours": "があなたの作品に基づいて描きました！",
@@ -74,7 +74,7 @@
     "Retrieving location": "位置情報取得中...",
     "Failed to retrieve": "位置情報取得失敗。位置情報の取得を許可し、遮蔽物のない空間に移動して数秒待ってください。",
     "Point camera": "↑の景色にカメラを向けてください",
-    "View paintings": "落書きを観る",
+    "View graffiti": "落書きを観る",
     "Move here and wait": "この場所に移動し、数秒待つと落書きが見えるよ",
     "Please reload": "移動してもダメでしたら、画面を更新してください"
   },

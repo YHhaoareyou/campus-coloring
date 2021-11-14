@@ -91,7 +91,7 @@ function Header() {
                   ? <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={handleLogout}><i className='bi bi-box-arrow-right' /> {t("Header.User.Sign out")}</NavDropdown.Item>
                   : <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={handleLogin}><i className='bi bi-box-arrow-in-right' /> {t("Header.User.Sign in")}</NavDropdown.Item>
               }
-              {loc && <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={navigateToMyGraffitis}><i className='bi bi-images' /> {t("Header.User.Check my paintings")}</NavDropdown.Item>}
+              {loc && <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={navigateToMyGraffitis}><i className='bi bi-images' /> {t("Header.User.Check my graffiti")}</NavDropdown.Item>}
             </NavDropdown>
 
             <NavDropdown

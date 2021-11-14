@@ -130,7 +130,7 @@ function LocationsMenu() {
                   <Alert variant="success">{t("LocationsMenu.Point camera")}</Alert>
                   <Link to={'/' + selectedLoc}>
                     <Button variant="outline-primary">
-                      {t("LocationsMenu.View paintings")}
+                      {t("LocationsMenu.View graffiti")}
                     </Button>
                   </Link>
                 </div>
