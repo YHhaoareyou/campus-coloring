@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from '@reach/router';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Alert from 'react-bootstrap/Alert';
 import styled from 'styled-components';
 import locations from './locations';
 import { useTranslation } from "react-i18next";
@@ -9,8 +10,8 @@ import { useTranslation } from "react-i18next";
 const MapContainer = styled.div`
   position: relative;
   margin: 0px auto;
-  width: 400px;
-  height: 160px;
+  width: 375px;
+  height: 150px;
   background-image: url('/img/map.jpeg');
   background-size: contain;
 `;
@@ -22,42 +23,27 @@ const BasePin = styled.i`
 
 const PinGarden = styled(BasePin)`
 top: 50px;
-left: 250px;
+left: 240px;
 `;
 
 const Pin51 = styled(BasePin)`
   top: -10px;
-  left: 170px;
+  left: 165px;
 `;
-
-// const Pin52 = styled(BasePin)`
-//   top: 60px;
-//   left: 210px;
-// `;
 
 const Pin51_60 = styled(BasePin)`
   top: 70px;
-  left: 135px;
+  left: 125px;
 `;
 
 const Pin60_61 = styled(BasePin)`
   top: 70px;
-  left: 105px;
+  left: 95px;
 `;
-
-// const Pin58 = styled(BasePin)`
-//   top: 20px;
-//   left: 60px;
-// `;
-
-// const Pin62 = styled(BasePin)`
-//   top: 20px;
-//   left: 70px;
-// `;
 
 const Pin55 = styled(BasePin)`
   top: 50px;
-  left: 310px;
+  left: 290px;
 `;
 
 const locationComponentPairs = process.env.NODE_ENV === "development" ? [
@@ -108,10 +94,10 @@ function LocationsMenu() {
     <div style={{ paddingTop: '70px' }}>
       <h3>{t("LocationsMenu.Choose location")}</h3>
       {
-        !currentCoor && <p><i className="bi bi-arrow-clockwise"></i> {t("LocationsMenu.Retrieving location")}</p>
+        !currentCoor && <Alert variant="warning" style={{ margin: "1em" }}><i className="bi bi-arrow-clockwise"></i> {t("LocationsMenu.Retrieving location")}</Alert>
       }
       {
-        retrieveCoorFailed && <p style={{ color: 'red' }}>{t("LocationsMenu.Failed to retrieve")}</p>
+        retrieveCoorFailed && <Alert variant="danger" style={{ margin: "1em" }}>{t("LocationsMenu.Failed to retrieve")}</Alert>
       }
 
       <MapContainer>
@@ -126,7 +112,7 @@ function LocationsMenu() {
         <strong>説明</strong>
         <ul>
           <li>ピンをタッチすると、そこの景色が映った画像が表示されます</li>
-          <li>ピンされた場所の近くに移動すると、ピンが黄色になり、タッチすると絵が見えます</li>
+          <li>ピンされた場所の近くに移動すると、ピンが黄色になり、タッチすると落書きが見えます</li>
           <li>5秒ごとに位置情報を取得します</li>
         </ul>
 

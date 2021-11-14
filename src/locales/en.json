@@ -8,15 +8,46 @@
     "Based works": "Based works",
     "Paint yours": "New!"
   },
-  "EditPaintingModal": {
+  "Canvas": {
+    "Clear confirm": "Are you sure to clear your current progress?",
+    "Select before duplicate": "Please select a part of your graffiti before duplicating it",
+    "Select before delete": "Please select a part of your graffiti before deleting it",
+    "Please fix tilt": "Please fix the tilt of your smartphone to display your graffiti the best, and then click OK!",
+    "Tilt retrieved": "Tilt retrieved! Now you can move on with any posture.",
+    "Error": "Error occured! Please press 'Done' again.",
+    "Title label": "Title: ",
+    "Details label ": "Details about this graffiti: ",
+    "Uploaded": "Uploaded successfully!",
+    "Confirm close canvas": "Are you sure to leave the canvas? Your current progress will be abandoned.",
+    "Done": "Done",
+    "Cancel": "Cancel"
+  },
+  "EditGraffitiModal": {
     "Title label": "Title: ",
     "Details label": "Details: ",
     "Updated": "Updated successfully!",
     "Deleted": "Deleted successfully!",
     "Edit/Delete": "Edit/Delete",
-    "Edit painting": "Edit painting",
+    "Edit graffiti": "Edit graffiti",
     "Edit title and details": "Edit title and details only",
     "Delete": "Delete"
+  },
+  "Graffitis": {
+    "Paint first graffiti": "Paint the first graffiti for this place!"
+  },
+  "Header": {
+    "User": {
+      "Sign in": "Sign in",
+      "Sign out": "Sign out",
+      "Check my paintings": "Check my paintings"
+    },
+    "Notifications": {
+      "Painted based on yours": " painted a new one based on yours!",
+      "Liked your graffiti": " liked your graffiti!",
+      "Click to check": "Click to check it out",
+      "Check in AR": "Move to this place and enter AR mode",
+      "Clear": "Clear"
+    }
   },
   "LocationsMenu": {
     "Choose location": "Choose location",
@@ -27,18 +58,9 @@
     "Move here and wait": "Move to this place and you will be able to see the paintings in seconds.",
     "Please reload": "If nothing changes after moving, please reload the page."
   },
-  "Header": {
-    "User": {
-      "Sign in": "Sign in",
-      "Sign out": "Sign out",
-      "Check my paintings": "Check my paintings"
-    },
-    "Notifications": {
-      "Painted based on yours": " painted a new one based on yours!",
-      "Liked your painting": " liked your painting!",
-      "Click to check": "Click to check it out",
-      "Check in AR": "Move to this place and enter AR mode",
-      "Clear": "Clear"
-    }
+  "NewGraffitiModal": {
+    "Which graffiti": "Which kind of graffiti?",
+    "New graffiti": "New graffiti",
+    "graffiti based on this one": "graffiti based on this one"
   }
 }

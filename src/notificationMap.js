@@ -1,6 +1,6 @@
 const notificationMap = [
   "Painted based on yours",
-  "Liked your painting"
+  "Liked your graffiti"
 ];
 
 export default notificationMap;

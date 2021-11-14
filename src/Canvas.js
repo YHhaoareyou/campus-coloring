@@ -6,6 +6,7 @@ import { currentLocState, currentImgIdState, currentImgSrcState } from './atoms.
 import styled from 'styled-components';
 import { Container, Row, Col, Button, ButtonGroup, OverlayTrigger, Popover } from 'react-bootstrap';
 import { useUser } from './auth'
+import { useTranslation } from "react-i18next";
 
 import { CompactPicker } from 'react-color';
 import { SketchField, Tools } from 'react-sketch';
@@ -94,6 +95,7 @@ function insertImageToCanvas(url, fabricCanvas) {
 }
 
 const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
+  const { t } = useTranslation();
   const user = useUser();
   const currentLoc = useRecoilValue(currentLocState);
   const currentImgId = useRecoilValue(currentImgIdState);
@@ -109,7 +111,7 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
   const [ angle, setAngle ] = useState(0);
   const [ isMenuOpen, setIsMenuOpen ] = useState(true);
 
-  // load base painting on canvas
+  // load base graffiti on canvas
   useEffect(() => {
     setWindowDimensions(getWindowDimensions());
     if (mode !== 'new') {
@@ -137,7 +139,7 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
   };
 
   const clear = () => {
-    if(!window.confirm("最初からやり直しますか？")) return;
+    if(!window.confirm(t("Canvas.Clear confirm"))) return;
     cv.current.clear();
     setCanUndo(cv.current.canUndo());
     setCanRedo(cv.current.canRedo());
@@ -151,7 +153,7 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
       cv.current.copy();
       cv.current.paste();
     } catch (error) {
-      alert("まずコピペしたいパーツを選択してください")
+      alert(t("Canvas.Select before duplicate"))
     }
   }
 
@@ -159,7 +161,7 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
     try {
       cv.current.removeSelected();
     } catch (error) {
-      alert("まず削除したいパーツを選択してください")
+      alert(t("Canvas.Select before delete"))
     }
   }
 
@@ -172,12 +174,12 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
   };
 
   const saveCanvas = () => {
-    if(!window.confirm("あなたの作品を最も適切に表示するように、スマホの前後傾きを固定してからOKを押してください！")) return;
+    if(!window.confirm(t("Canvas.Please fix tilt"))) return;
     const lastAngle = angle;
     if (lastAngle) {
-      alert("傾きを取得しました。今からタイピングに適した姿勢に変えていただいても大丈夫です。");
+      alert(t("Canvas.Tilt retrieved"));
     } else {
-      alert("エラーが発生しました。もう一度「できた」ボタンを押してみてください。");
+      alert(t("Canvas.Error"));
       return;
     }
 
@@ -185,8 +187,8 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
     const storage = getStorage();
     const db = getDatabase();
 
-    title = prompt("タイトル：", mode === 'edit' ? imgInfo.title : '');
-    detail = prompt("この作品についての説明：", mode === 'edit' ? imgInfo.detail : '');
+    title = prompt(t("Canvas.Title label"), mode === 'edit' ? imgInfo.title : '');
+    detail = prompt(t("Canvas.Details label"), mode === 'edit' ? imgInfo.detail : '');
     
     id = mode === 'edit' ? currentImgId : Date.now();
     if (title === "") title = id;
@@ -225,7 +227,7 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
                 .then(snap => {
 
                   // upload success & reload
-                  alert("アップロードしました！");
+                  alert(t("Canvas.Uploaded"));
                   closeCanvas();
                   window.location.href = "/" + currentLoc + "?pid=" + id
 
@@ -236,7 +238,7 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
   }
 
   const confirmCloseCanvas = () => {
-    window.confirm("作成中の絵をやめますか？") && closeCanvas();
+    window.confirm(t("Canvas.Confirm close canvas")) && closeCanvas();
   }
 
   const colorSelector = (props) => (
@@ -316,8 +318,8 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
           <ActionButton disabled={!canUndo} variant='light' onClick={undo}><i className='bi bi-arrow-90deg-left' /></ActionButton>
           <ActionButton disabled={!canRedo} variant='light' onClick={redo}><i className='bi bi-arrow-90deg-right' /></ActionButton>
           <ActionButton variant='light' onClick={clear}><i className='bi bi-arrow-counterclockwise' /></ActionButton>
-          <ActionButton variant='light' onClick={saveCanvas}><i className='bi bi-check-lg' /> できた</ActionButton>
-          <ActionButton variant='light' onClick={confirmCloseCanvas}><i className='bi bi-x-lg' /> やめる</ActionButton>
+          <ActionButton variant='light' onClick={saveCanvas}><i className='bi bi-check-lg' /> {t("Canvas.Done")}</ActionButton>
+          <ActionButton variant='light' onClick={confirmCloseCanvas}><i className='bi bi-x-lg' /> {t("Canvas.Cancel")}</ActionButton>
         </ButtonGroup>
       </PainterMenuWrapper>
     </div>

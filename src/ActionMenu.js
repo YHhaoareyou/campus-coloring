@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Container, Row, ButtonGroup, Button, Card, Modal } from 'react-bootstrap';
 import { useUser } from './auth';
-import NewPaintingModal from './NewPaintingModal';
-import EditPaintingModal from './EditPaintingModal';
+import NewGraffitiModal from './NewGraffitiModal';
+import EditGraffitiModal from './EditGraffitiModal';
 import { useTranslation } from "react-i18next";
 
 const MenuWrapper = styled(Container)`
@@ -59,8 +59,8 @@ const OpenMenuButton = styled(Button)`
 
 function ActionMenu({ imgInfo, openCanvas, likeTrigger }) {
   const user = useUser();
-  const [showNewPaintingModal, setShowNewPaintingModal] = useState(false);
-  const [showEditPaintingModal, setShowEditPaintingModal] = useState(false);
+  const [showNewGraffitiModal, setShowNewGraffitiModal] = useState(false);
+  const [showEditGraffitiModal, setShowEditGraffitiModal] = useState(false);
   const [likes, setLikes] = useState(imgInfo.likes ? Object.keys(imgInfo.likes).length : 0)
   const [liked, setLiked] = useState(imgInfo.likes && Object.keys(imgInfo.likes).includes(user.uid))
   const [isMenuDisplayed, setIsMenuDisplayed] = useState(true)
@@ -72,11 +72,11 @@ function ActionMenu({ imgInfo, openCanvas, likeTrigger }) {
     setLiked(!liked);
   }
 
-  const navigateToBasePaintings = () => {
+  const navigateToBaseGraffitis = () => {
     window.location.href = window.location.origin + window.location.pathname + '?mode=base&bid=' + imgInfo.id;
   }
 
-  const navigateToUserPaintings = () => {
+  const navigateToUserGraffitis = () => {
     window.location.href = window.location.origin + window.location.pathname + '?mode=user&uid=' + imgInfo.creator_id;
   }
 
@@ -99,12 +99,12 @@ function ActionMenu({ imgInfo, openCanvas, likeTrigger }) {
           <ButtonGroup style={{ width: '100%', margin: 0, height: '30px' }}>
             {
               imgInfo.creator_id === user.uid ? (
-                <ActionButton variant='light' size='sm' onClick={() => setShowEditPaintingModal(true)} style={{ borderLeft: 'none', borderTopLeftRadius: 0 }}>
+                <ActionButton variant='light' size='sm' onClick={() => setShowEditGraffitiModal(true)} style={{ borderLeft: 'none', borderTopLeftRadius: 0 }}>
                   <i className="bi bi-gear"></i>
                   {' '}{t("ActionMenu.Edit/Delete")}
                 </ActionButton>
               ) : (
-                <ActionButton variant='light' size='sm' onClick={navigateToUserPaintings} style={{ borderLeft: 'none', borderTopLeftRadius: 0 }}>
+                <ActionButton variant='light' size='sm' onClick={navigateToUserGraffitis} style={{ borderLeft: 'none', borderTopLeftRadius: 0 }}>
                   <i className="bi bi-person"></i>
                   {' '}{t("ActionMenu.User")}
                 </ActionButton>
@@ -112,7 +112,7 @@ function ActionMenu({ imgInfo, openCanvas, likeTrigger }) {
             }
             {
               imgInfo?.prev_img_ids && (
-                <ActionButton variant='light' size='sm' onClick={navigateToBasePaintings} style={{ marginBottom: 0 }}>
+                <ActionButton variant='light' size='sm' onClick={navigateToBaseGraffitis} style={{ marginBottom: 0 }}>
                   <i className="bi bi-collection"></i>
                   {' '}{t("ActionMenu.Based works")}
                 </ActionButton>
@@ -122,7 +122,7 @@ function ActionMenu({ imgInfo, openCanvas, likeTrigger }) {
               <i className={liked ? "bi bi-heart-fill" : "bi bi-heart"}></i>
               {' '}{likes}
             </ActionButton>
-            <ActionButton variant='light' size='sm' onClick={() => setShowNewPaintingModal(true)} style={{ borderRight: 'none', borderTopRightRadius: 0 }}>
+            <ActionButton variant='light' size='sm' onClick={() => setShowNewGraffitiModal(true)} style={{ borderRight: 'none', borderTopRightRadius: 0 }}>
               <i className="bi bi-pencil"></i>
               {' '}{t("ActionMenu.Paint yours")}
             </ActionButton>
@@ -130,8 +130,8 @@ function ActionMenu({ imgInfo, openCanvas, likeTrigger }) {
         </Card.Body>
       </IntroCard>
 
-      <NewPaintingModal isOpen={showNewPaintingModal} closeModal={() => setShowNewPaintingModal(false)} openCanvas={openCanvas} />
-      <EditPaintingModal isOpen={showEditPaintingModal} closeModal={() => setShowEditPaintingModal(false)} openCanvas={openCanvas} imgInfo={imgInfo} />
+      <NewGraffitiModal isOpen={showNewGraffitiModal} closeModal={() => setShowNewGraffitiModal(false)} openCanvas={openCanvas} />
+      <EditGraffitiModal isOpen={showEditGraffitiModal} closeModal={() => setShowEditGraffitiModal(false)} openCanvas={openCanvas} imgInfo={imgInfo} />
 
     </MenuWrapper>
   )

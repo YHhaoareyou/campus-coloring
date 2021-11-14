@@ -8,8 +8,10 @@ import { getDatabase, ref, get, set } from "firebase/database";
 import { useUser } from './auth'
 import queryString from 'query-string';
 import Button from 'react-bootstrap/Button';
+import { useTranslation } from "react-i18next";
 
-function Paintings({ loc, location }) {
+function Graffitis({ loc, location }) {
+  const { t } = useTranslation();
   const [currentLoc, setCurrentLoc] = useRecoilState(currentLocState);
   const [currentImgId, setCurrentImgId] = useRecoilState(currentImgIdState);
   const setCurrentImgSrc = useSetRecoilState(currentImgSrcState);
@@ -18,7 +20,7 @@ function Paintings({ loc, location }) {
   const setCurrentImgSize = useSetRecoilState(currentImgSizeState);
   const [canvasVisibility, setCanvasVisibility] = useState(false);
   const [imgInfos, setImgInfos] = useState([]);
-  const [paintingMode, setPaintingMode] = useState('new');
+  const [paintingMode, setGraffitiMode] = useState('new');
   const user = useUser();
 
   const switchToPrevImg = () => {
@@ -125,10 +127,10 @@ function Paintings({ loc, location }) {
           });
           initImgInfos(idsObj);
         } else if (qs.mode && qs.mode === 'user') {
-          get(ref(db, 'users/' + qs.uid + '/img_ids/' + loc)).then(userPaintingIdsSnap => {
+          get(ref(db, 'users/' + qs.uid + '/img_ids/' + loc)).then(userGraffitiIdsSnap => {
             var idsObj = {};
-            if (userPaintingIdsSnap.val()) {
-              Object.keys(userPaintingIdsSnap.val()).forEach(id => {
+            if (userGraffitiIdsSnap.val()) {
+              Object.keys(userGraffitiIdsSnap.val()).forEach(id => {
                 idsObj[id] = snap.val()[id]
               });
               initImgInfos(idsObj);
@@ -157,19 +159,19 @@ function Paintings({ loc, location }) {
             ) : (
               <ActionMenu
                 imgInfo={imgInfos[currentImgIdIndex]}
-                openCanvas={({ mode }) => {setCanvasVisibility(true); setPaintingMode(mode);}}
+                openCanvas={({ mode }) => {setCanvasVisibility(true); setGraffitiMode(mode);}}
                 likeTrigger={likeTrigger}
               />
             )
           : (
             <Button
               style={{ position: 'absolute', bottom: 0, left: 0, width: '100vw' }}
-              onClick={() => {setCanvasVisibility(true); setPaintingMode('new');}}
-            >この場所で初の作品を描こう！</Button>
+              onClick={() => {setCanvasVisibility(true); setGraffitiMode('new');}}
+            >{t("Graffitis.Paint first graffiti")}</Button>
           )
       }
     </div>
   );
 }
 
-export default Paintings;
+export default Graffitis;

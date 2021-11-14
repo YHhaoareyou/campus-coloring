@@ -3,7 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import Home from './Home';
-import Paintings from "./Paintings";
+import Graffitis from "./Graffitis";
 import { useAuth, useUser, login } from './auth';
 import Header from './Header';
 import { Button } from 'react-bootstrap';
@@ -47,7 +47,7 @@ function App() {
                   <Header />
                   <Router>
                     <Home path="/" />
-                    <Paintings path="/:loc" />
+                    <Graffitis path="/:loc" />
                   </Router>
                 </div>
               )

@@ -4,34 +4,34 @@ import { Button, Modal } from 'react-bootstrap';
 import { getDatabase, ref, set } from "firebase/database";
 import { useTranslation } from "react-i18next";
 
-const EditPaintingModal = ({ isOpen, closeModal, openCanvas, imgInfo }) => {
+const EditGraffitiModal = ({ isOpen, closeModal, openCanvas, imgInfo }) => {
   const currentLoc = useRecoilValue(currentLocState);
   const { t } = useTranslation();
 
-  const openEditPaintingCanvas = () => {
+  const openEditGraffitiCanvas = () => {
     openCanvas({ mode: 'edit' });
     closeModal();
   }
 
-  const editPaintingInfo = () => {
+  const editGraffitiInfo = () => {
     const db = getDatabase();
-    const title = prompt(t("EditPaintingModal.Title label"), imgInfo.title);
-    const detail = prompt(t("EditPaintingModal.Details label"), imgInfo.detail);
+    const title = prompt(t("EditGraffitiModal.Title label"), imgInfo.title);
+    const detail = prompt(t("EditGraffitiModal.Details label"), imgInfo.detail);
 
     set(ref(db, 'img_info/' + currentLoc + '/' + imgInfo.id + '/title'), title).then(snap => {
       set(ref(db, 'img_info/' + currentLoc + '/' + imgInfo.id + '/detail'), detail).then(sp => {
-        alert(t("EditPaintingModal.Updated"));
+        alert(t("EditGraffitiModal.Updated"));
         window.location.href = "/" + currentLoc + "?pid=" + imgInfo.id;
       }).catch(e => alert(e));
     }).catch(e => alert(e));
   }
 
-  const deletePainting = () => {
+  const deleteGraffiti = () => {
     const db = getDatabase();
     set(ref(db, 'img_urls/' + currentLoc + '/' + imgInfo.id), null).then(snap => {
       set(ref(db, 'img_info/' + currentLoc + '/' + imgInfo.id), null).then(sp => {
         set(ref(db, 'users/' + imgInfo.creator_id + '/img_ids/' + currentLoc + '/' + imgInfo.id), null).then(s => {
-          alert(t("EditPaintingModal.Deleted"));
+          alert(t("EditGraffitiModal.Deleted"));
           window.location.href = "/" + currentLoc;
         }).catch(e => alert(e));
       }).catch(e => alert(e));
@@ -41,23 +41,23 @@ const EditPaintingModal = ({ isOpen, closeModal, openCanvas, imgInfo }) => {
   return (
     <Modal centered show={isOpen} onHide={closeModal}>
       <Modal.Header closeButton>
-        <Modal.Title>{t("EditPaintingModal.Edit/Delete")}</Modal.Title>
+        <Modal.Title>{t("EditGraffitiModal.Edit/Delete")}</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ textAlign: 'center' }}>
-        <Button variant="outline-primary" onClick={openEditPaintingCanvas}>
-          <i className='bi bi-pencil-square' /> {t("EditPaintingModal.Edit painting")}
+        <Button variant="outline-primary" onClick={openEditGraffitiCanvas}>
+          <i className='bi bi-pencil-square' /> {t("EditGraffitiModal.Edit graffiti")}
         </Button>
         <br /><br />
-        <Button variant="outline-primary" onClick={editPaintingInfo}>
-          <i className='bi bi-brush' /> {t("EditPaintingModal.Edit title and details")}
+        <Button variant="outline-primary" onClick={editGraffitiInfo}>
+          <i className='bi bi-brush' /> {t("EditGraffitiModal.Edit title and details")}
         </Button>
         <br /><br />
-        <Button variant="outline-danger" onClick={deletePainting}>
-          <i className='bi bi-trash' /> {t("EditPaintingModal.Delete")}
+        <Button variant="outline-danger" onClick={deleteGraffiti}>
+          <i className='bi bi-trash' /> {t("EditGraffitiModal.Delete")}
         </Button>
       </Modal.Body>
     </Modal>
   )
 }
 
-export default EditPaintingModal;
+export default EditGraffitiModal;

@@ -24,11 +24,11 @@ function Header() {
     logout().catch((error) => console.error(error));
   };
 
-  const navigateToMyPaintings = () => {
+  const navigateToMyGraffitis = () => {
     window.location.href = window.location.origin + window.location.pathname + '?mode=user&uid=' + user.uid;
   }
 
-  const navigateToPaintingFromNotification = (location, nid) => {
+  const navigateToGraffitiFromNotification = (location, nid) => {
     set(ref(getDatabase(), 'users/' + user.uid + '/notifications/' + nid), null)
       .then(snap => window.location.href = window.location.origin + '/' + location + '?pid=' + nid)
       .catch(err => alert(err));
@@ -91,7 +91,7 @@ function Header() {
                   ? <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={handleLogout}><i className='bi bi-box-arrow-right' /> {t("Header.User.Sign out")}</NavDropdown.Item>
                   : <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={handleLogin}><i className='bi bi-box-arrow-in-right' /> {t("Header.User.Sign in")}</NavDropdown.Item>
               }
-              {loc && <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={navigateToMyPaintings}><i className='bi bi-images' /> {t("Header.User.Check my paintings")}</NavDropdown.Item>}
+              {loc && <NavDropdown.Item style={{ borderTop: '1px solid #ccc' }} onClick={navigateToMyGraffitis}><i className='bi bi-images' /> {t("Header.User.Check my paintings")}</NavDropdown.Item>}
             </NavDropdown>
 
             <NavDropdown
@@ -108,7 +108,7 @@ function Header() {
                     style={{ width: '300px', padding: 0, borderTop: '1px solid #ccc' }}
                     key={nid}
                     disabled={!loc || loc !== notifications[nid].loc}
-                    onClick={() => navigateToPaintingFromNotification(loc, nid)}
+                    onClick={() => navigateToGraffitiFromNotification(loc, nid)}
                   >
                     <Row style={{ width: '100%', margin: 0, padding: '5px 0px' }}>
                       <Col xs={1}>
@@ -119,7 +119,15 @@ function Header() {
                       </Col>
                       <Col xs={11}>
                         <small style={{ margin: 0, whiteSpace: 'normal' }}>
-                          {' '}{notifications[nid].username + t("Header.Notifications." + notificationMap[notifications[nid].type])}
+                          {' '}
+                          {
+                            notifications[nid].username && (
+                              i18n.language === "ja"
+                                ? notifications[nid].username
+                                : notifications[nid].username?.replace("と他の", " and other ")?.split("")?.reverse()?.join("")?.replace("人", "sresu ")?.split("")?.reverse()?.join("")
+                            )
+                              + t("Header.Notifications." + notificationMap[notifications[nid].type])
+                          }
                         </small>
                         <br />
                         <small style={{ color: '#aaa' }}>{loc && loc === notifications[nid].loc ? t("Header.Notifications.Click to check") : t("Header.Notifications.Check in AR")}</small>

@@ -8,37 +8,59 @@
     "Based works": "前作へ",
     "Paint yours": "新規作成"
   },
-  "EditPaintingModal": {
+  "Canvas": {
+    "Clear confirm": "最初からやり直しますか？",
+    "Select before duplicate": "まずコピペしたいパーツを選択してください",
+    "Select before delete": "まず削除したいパーツを選択してください",
+    "Please fix tilt": "作品を最も適切に表示するように、スマホの前後傾きを固定してからOKを押してください！",
+    "Tilt retrieved": "傾きを取得しました。今からタイピングに適した姿勢に変えていただいても大丈夫です。",
+    "Error": "エラーが発生しました。もう一度「できた」ボタンを押してみてください。",
+    "Title label": "タイトル：",
+    "Details label ": "この作品についての説明：",
+    "Uploaded": "アップロードしました！",
+    "Confirm close canvas": "作成中の落書きをやめますか？",
+    "Done": "できた",
+    "Cancel": "やめる"
+  },
+  "EditGraffitiModal": {
     "Title label": "タイトル：",
     "Details label": "説明：",
     "Updated": "更新しました！",
     "Deleted": "削除しました！",
     "Edit/Delete": "編集・削除",
-    "Edit painting": "絵を編集",
+    "Edit graffiti": "落書きを編集",
     "Edit title and details": "タイトルと説明のみを編集",
     "Delete": "削除"
+  },
+  "Graffitis": {
+    "Paint first graffiti": "この場所で初の作品を描こう！"
+  },
+  "Header": {
+    "User": {
+      "Sign in": "ログイン",
+      "Sign out": "ログアウト",
+      "Check my paintings": "自分の落書きを見る"
+    },
+    "Notifications": {
+      "Painted based on yours": "があなたの作品に基づいて描きました！",
+      "Liked your graffiti": "があなたの作品に「いいね」！",
+      "Click to check": "クリックして見にいく",
+      "Check in AR": "この場所のARモードに入ったら見れるよ",
+      "Clear": "クリア"
+    }
   },
   "LocationsMenu": {
     "Choose location": "場所を選択",
     "Retrieving location": "位置情報取得中...",
     "Failed to retrieve": "位置情報取得失敗。位置情報の取得を許可し、遮蔽物のない空間に移動して数秒待ってください。",
     "Point camera": "↑の景色にカメラを向けてください",
-    "View paintings": "絵を観る",
-    "Move here and wait": "この場所に移動し、数秒待つと絵が見えるよ",
+    "View paintings": "落書きを観る",
+    "Move here and wait": "この場所に移動し、数秒待つと落書きが見えるよ",
     "Please reload": "移動してもダメでしたら、画面を更新してください"
   },
-  "Header": {
-    "User": {
-      "Sign in": "ログイン",
-      "Sign out": "ログアウト",
-      "Check my paintings": "自分の絵を見る"
-    },
-    "Notifications": {
-      "Painted based on yours": "があなたの作品に基づいて描きました！",
-      "Liked your painting": "があなたの作品に「いいね」！",
-      "Click to check": "クリックして見にいく",
-      "Check in AR": "この場所のARモードに入ったら見れるよ",
-      "Clear": "クリア"
-    }
+  "NewGraffitiModal": {
+    "Which graffiti": "どんな落書きを描きたい？",
+    "New graffiti": "新しく描こう",
+    "graffiti based on this one": "これをベースにして描こう"
   }
 }
