@@ -1,7 +1,9 @@
 const locations = {
   garden: {
-    name: '中庭',
-    description: 'テスト用',
+    nameJA: '中庭',
+    descriptionJA: 'テスト用',
+    nameEN: 'Courtyard',
+    descriptionEN: 'Test',
     range: {
       minLat: 35.0,
       maxLat: 36.0,
@@ -9,29 +11,47 @@ const locations = {
       maxLong: 140.0
     }
   },
-  '51': {
-    name: '51号館',
-    description: '北門寄りの空中通路からの視点',
-    range: {
-      minLat: 35.7061,
-      maxLat: 35.7066,
-      minLong: 139.7065,
-      maxLong: 139.7070
-    }
-  },
   '55': {
-    name: '55号館外',
-    description: '外の廊下から、中庭向き；雨天OK',
+    nameJA: '55号館外',
+    descriptionJA: '外の廊下から、中庭向き',
+    nameEN: 'Bldg. 55',
+    descriptionEN: 'From the corridor outside, facing the courtyard',
     range: {
-      minLat: 35.7056,
-      maxLat: 35.7062,
-      minLong: 139.7078,
+      minLat: 35.7058,
+      maxLat: 35.7061,
+      minLong: 139.7080,
       maxLong: 139.7083
     }
   },
+  '54_55': {
+    nameJA: '54、55号館の間',
+    descriptionJA: '55号館の入口前から、54-55号館連絡通路向き',
+    nameEN: 'Bldg. 54-55',
+    descriptionEN: "From the front of Bldg. 55's entrance, facing skywalks between Bldg. 54 & 55",
+    range: {
+      minLat: 35.70565,
+      maxLat: 35.7059,
+      minLong: 139.70795,
+      maxLong: 139.7082
+    }
+  },
+  '51': {
+    nameJA: '51号館',
+    descriptionJA: '一階の南側入口の前から、東側の地下に向ける',
+    nameEN: 'Bldg. 51',
+    descriptionEN: 'From the front of south entrance (1F), facing downward',
+    range: {
+      minLat: 35.70575,
+      maxLat: 35.7060,
+      minLong: 139.7066,
+      maxLong: 139.7069
+    }
+  },
   '51_60_top': {
-    name: '51、60号館の間',
-    description: '59号館側の空中通路からの視点',
+    nameJA: '51、60号館の間',
+    descriptionJA: '南側の空中通路から',
+    nameEN: 'Bldg. 51-60',
+    descriptionEN: 'From the south passageway (1F)',
     range: {
       minLat: 35.7056,
       maxLat: 35.7060,
@@ -40,8 +60,10 @@ const locations = {
     }
   },
   '60_61': {
-    name: '60、61号館の間',
-    description: '59号館側の地面通路からの視点；雨天OK',
+    nameJA: '60、61号館の間',
+    descriptionJA: '南側の地面通路から',
+    nameEN: 'Bldg. 60-61',
+    descriptionEN: 'From the south skywalk (2F)',
     range: {
       minLat: 35.7056,
       maxLat: 35.7060,
@@ -50,24 +72,5 @@ const locations = {
     }
   }
 };
-
-  // '52': {
-  //   name: '52号館正面',
-  //   range: {
-  //     minLat: 35.7059,
-  //     maxLat: 35.7061,
-  //     minLong: 139.70695,
-  //     maxLong: 139.70725
-  //   }
-  // },
-  // '62': {
-  //   name: '62号館壁',
-  //   range: {
-  //     minLat: 35.70625,
-  //     maxLat: 35.70645,
-  //     minLong: 139.7054,
-  //     maxLong: 139.7057
-  //   }
-  // },
 
 export default locations;

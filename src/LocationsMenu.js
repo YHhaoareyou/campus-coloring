@@ -27,7 +27,7 @@ left: 240px;
 `;
 
 const Pin51 = styled(BasePin)`
-  top: -10px;
+  top: 75px;
   left: 165px;
 `;
 
@@ -46,21 +46,28 @@ const Pin55 = styled(BasePin)`
   left: 290px;
 `;
 
+const Pin54_55 = styled(BasePin)`
+  top: 75px;
+  left: 280px;
+`;
+
 const locationComponentPairs = process.env.NODE_ENV === "development" ? [
   {loc: '51', Pin: Pin51},
   {loc: '51_60_top', Pin: Pin51_60},
   {loc: '60_61', Pin: Pin60_61},
   {loc: '55', Pin: Pin55},
+  {loc: '54_55', Pin: Pin54_55},
   {loc: 'garden', Pin: PinGarden}
 ] : [
   {loc: '51', Pin: Pin51},
   {loc: '51_60_top', Pin: Pin51_60},
   {loc: '60_61', Pin: Pin60_61},
   {loc: '55', Pin: Pin55},
+  {loc: '54_55', Pin: Pin54_55},
 ]
 
 function LocationsMenu() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [currentCoor, setCurrentCoor] = useState(null);
   const [selectedLoc, setSelectedLoc] = useState('');
   const [retrieveCoorFailed, setRetrieveCoorFailed] = useState(false);
@@ -91,7 +98,7 @@ function LocationsMenu() {
       && (currentCoor.longitude <= LocCoorRange.maxLong);
 
   return (
-    <div style={{ paddingTop: '70px' }}>
+    <div style={{ paddingTop: '20px' }}>
       <h3>{t("LocationsMenu.Choose location")}</h3>
       {
         !currentCoor && <Alert variant="warning" style={{ margin: "1em" }}><i className="bi bi-arrow-clockwise"></i> {t("LocationsMenu.Retrieving location")}</Alert>
@@ -108,36 +115,19 @@ function LocationsMenu() {
         }
       </MapContainer>
 
-      <div style={{ textAlign: 'left', padding: '20px', fontSize: '14px' }}>
-        <strong>説明</strong>
-        <ul>
-          <li>ピンをタッチすると、そこの景色が映った画像が表示されます</li>
-          <li>ピンされた場所の近くに移動すると、ピンが黄色になり、タッチすると落書きが見えます</li>
-          <li>5秒ごとに位置情報を取得します</li>
-        </ul>
-
-        <strong>場所一覧</strong>
-        <ul>
-          <li><b>51号館</b>：北門寄りの空中通路からの視点（雨天×）</li>
-          <li><b>55号館外</b>：外の廊下から、中庭向き</li>
-          <li><b>51、60号館の間</b>：59号館側の地面通路からの視点（雨天×）</li>
-          <li><b>60、61号館の間</b>：59号館側の空中通路からの視点</li>
-        </ul>
-      </div>
-
-
       <Modal centered show={selectedLoc !== ''} onHide={() => setSelectedLoc('')}>
         <Modal.Header closeButton>
-          <Modal.Title>{selectedLoc && locations[selectedLoc].name}</Modal.Title>
+          <Modal.Title>{selectedLoc && (i18n.language === "ja" ? locations[selectedLoc].nameJA : locations[selectedLoc].nameEN)}</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ textAlign: 'center' }}>
-          <p>{selectedLoc && locations[selectedLoc].description}</p>
+          <p>{selectedLoc && (i18n.language === "ja" ? locations[selectedLoc].descriptionJA : locations[selectedLoc].descriptionEN)}</p>
           <img src={`/img/loc/${selectedLoc}.jpeg`} width='80%' alt="View of the location" />
+
           {
             selectedLoc && (isCoorInRange(locations[selectedLoc].range) || selectedLoc === 'garden')
               ? (
-                <div>
-                  <p>{t("LocationsMenu.Point camera")}</p>
+                <div style={{ marginTop: '1em' }}>
+                  <Alert variant="success">{t("LocationsMenu.Point camera")}</Alert>
                   <Link to={'/' + selectedLoc}>
                     <Button variant="outline-primary">
                       {t("LocationsMenu.View paintings")}
@@ -146,9 +136,12 @@ function LocationsMenu() {
                 </div>
               )
               : (
-                <div>
-                  <p>{t("LocationsMenu.Move here and wait")}</p>
-                  <p>{t("LocationsMenu.Please reload")}</p>
+                <div style={{ marginTop: '1em' }}>
+                  <Alert variant="warning">
+                    {t("LocationsMenu.Move here and wait")}
+                    <br />
+                    {t("LocationsMenu.Please reload")}
+                  </Alert>
                 </div>
               )
           }
