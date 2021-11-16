@@ -11,6 +11,7 @@ import { RecoilRoot } from "recoil";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { useUser } from './auth';
 import en from './locales/en.json';
 import ja from './locales/ja.json';
 
@@ -48,9 +49,11 @@ i18n
 
 const Root = () => {
   const currentLoc = useRecoilValue(currentLocState);
+  const user = useUser();
+
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {currentLoc && <Scene />}
+      {user && currentLoc && <Scene />}
       <App />
     </div>
   );
