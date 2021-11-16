@@ -8,7 +8,7 @@ function Home() {
   const { t } = useTranslation();
 
   return (
-    <div style={{ height: "calc(100vh - 56px)", overflowY: "auto", marginTop: "56px" }}>
+    <div style={{ height: "calc(100vh - 56px)", overflowY: "auto", marginTop: "56px", fontSize: '14px' }}>
       <LocationsMenu />
 
       <Accordion>

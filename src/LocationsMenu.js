@@ -22,13 +22,13 @@ const BasePin = styled.i`
 `;
 
 const PinGarden = styled(BasePin)`
-top: 50px;
-left: 240px;
+  top: 50px;
+  left: 240px;
 `;
 
 const Pin51 = styled(BasePin)`
   top: 75px;
-  left: 165px;
+  left: 162px;
 `;
 
 const Pin51_60 = styled(BasePin)`
@@ -51,19 +51,54 @@ const Pin54_55 = styled(BasePin)`
   left: 280px;
 `;
 
+const BaseDirection = styled.i`
+  position: absolute;
+  font-size: 18px;
+`;
+
+const DirGarden = styled(BaseDirection)`
+  top: 55px;
+  left: 230px;
+`;
+
+const Dir51 = styled(BaseDirection)`
+  top: 80px;
+  left: 150px;
+`;
+
+const Dir51_60 = styled(BaseDirection)`
+  top: 55px;
+  left: 128px;
+`;
+
+const Dir60_61 = styled(BaseDirection)`
+  top: 55px;
+  left: 98px;
+`;
+
+const Dir55 = styled(BaseDirection)`
+  top: 55px;
+  left: 280px;
+`;
+
+const Dir54_55 = styled(BaseDirection)`
+  top: 98px;
+  left: 283px;
+`;
+
 const locationComponentPairs = process.env.NODE_ENV === "development" ? [
-  {loc: '51', Pin: Pin51},
-  {loc: '51_60_top', Pin: Pin51_60},
-  {loc: '60_61', Pin: Pin60_61},
-  {loc: '55', Pin: Pin55},
-  {loc: '54_55', Pin: Pin54_55},
-  {loc: 'garden', Pin: PinGarden}
+  {loc: '51', Pin: Pin51, Dir: Dir51, direction: 'left'},
+  {loc: '51_60_top', Pin: Pin51_60, Dir: Dir51_60, direction: 'up'},
+  {loc: '60_61', Pin: Pin60_61, Dir: Dir60_61, direction: 'up'},
+  {loc: '55', Pin: Pin55, Dir: Dir55, direction: 'left'},
+  {loc: '54_55', Pin: Pin54_55, Dir: Dir54_55, direction: 'down'},
+  {loc: 'garden', Pin: PinGarden, Dir: DirGarden, direction: 'left'}
 ] : [
-  {loc: '51', Pin: Pin51},
-  {loc: '51_60_top', Pin: Pin51_60},
-  {loc: '60_61', Pin: Pin60_61},
-  {loc: '55', Pin: Pin55},
-  {loc: '54_55', Pin: Pin54_55},
+  {loc: '51', Pin: Pin51, Dir: Dir51, direction: 'left'},
+  {loc: '51_60_top', Pin: Pin51_60, Dir: Dir51_60, direction: 'up'},
+  {loc: '60_61', Pin: Pin60_61, Dir: Dir60_61, direction: 'up'},
+  {loc: '55', Pin: Pin55, Dir: Dir55, direction: 'left'},
+  {loc: '54_55', Pin: Pin54_55, Dir: Dir54_55, direction: 'down'},
 ]
 
 function LocationsMenu() {
@@ -109,9 +144,12 @@ function LocationsMenu() {
 
       <MapContainer>
         {
-          locationComponentPairs.map(({loc, Pin}) => 
-            <Pin key={loc} onClick={() => setSelectedLoc(loc)} className='bi bi-geo-alt-fill' style={{ color: isCoorInRange(locations[loc].range) ? 'orange' : 'black' }} />
-          )
+          locationComponentPairs.map(({loc, Pin, Dir, direction}) => (
+            <span>
+              <Pin key={"pin" + loc} onClick={() => setSelectedLoc(loc)} className='bi bi-geo-alt-fill' style={{ color: isCoorInRange(locations[loc].range) ? 'orange' : '#a52a2a' }} />
+              <Dir key={"dir" + loc} onClick={() => setSelectedLoc(loc)} className={'bi bi-caret-' + direction + '-fill'} style={{ color: isCoorInRange(locations[loc].range) ? 'orange' : '#a52a2a' }} />
+            </span>
+          ))
         }
       </MapContainer>
 
@@ -119,9 +157,9 @@ function LocationsMenu() {
         <Modal.Header closeButton>
           <Modal.Title>{selectedLoc && (i18n.language === "ja" ? locations[selectedLoc].nameJA : locations[selectedLoc].nameEN)}</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ textAlign: 'center' }}>
+        <Modal.Body style={{ textAlign: 'center', fontSize: '14px' }}>
           <p>{selectedLoc && (i18n.language === "ja" ? locations[selectedLoc].descriptionJA : locations[selectedLoc].descriptionEN)}</p>
-          <img src={`/img/loc/${selectedLoc}.jpeg`} width='80%' alt="View of the location" />
+          <img src={`/img/loc/${selectedLoc}.jpeg`} width='70%' alt="View of the location" />
 
           {
             selectedLoc && (isCoorInRange(locations[selectedLoc].range) || selectedLoc === 'garden')
@@ -137,7 +175,7 @@ function LocationsMenu() {
               )
               : (
                 <div style={{ marginTop: '1em' }}>
-                  <Alert variant="warning">
+                  <Alert variant="warning" style={{ padding: '5px' }}>
                     {t("LocationsMenu.Move here and wait")}
                     <br />
                     {t("LocationsMenu.Please reload")}
