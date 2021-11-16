@@ -30,7 +30,7 @@ const locations = {
     descriptionEN: "From the front of Bldg. 55's entrance, facing skywalks between Bldg. 54 & 55",
     range: {
       minLat: 35.70565,
-      maxLat: 35.7059,
+      maxLat: 35.7062,//35.7059,
       minLong: 139.70795,
       maxLong: 139.7082
     }

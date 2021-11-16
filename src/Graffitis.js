@@ -20,7 +20,7 @@ function Graffitis({ loc, location }) {
   const setCurrentImgSize = useSetRecoilState(currentImgSizeState);
   const [canvasVisibility, setCanvasVisibility] = useState(false);
   const [imgInfos, setImgInfos] = useState([]);
-  const [paintingMode, setGraffitiMode] = useState('new');
+  const [graffitiMode, setGraffitiMode] = useState('new');
   const user = useUser();
 
   const switchToPrevImg = () => {
@@ -147,28 +147,33 @@ function Graffitis({ loc, location }) {
     <div>
       <ImageSwitch switchPrev={switchToPrevImg} switchNext={switchToNextImg} />
       {
-        imgInfos.length > 0
-          ? canvasVisibility ? (
-              <Canvas
-                mode={paintingMode}
-                basePrevIds={imgInfos[currentImgIdIndex]?.prev_img_ids || {}}
-                closeCanvas={() => setCanvasVisibility(false)}
-                imgInfos={imgInfos}
-                imgInfo={imgInfos[currentImgIdIndex]}
-              />
-            ) : (
+        canvasVisibility && (
+          <Canvas
+            mode={graffitiMode}
+            basePrevIds={imgInfos[currentImgIdIndex]?.prev_img_ids || {}}
+            closeCanvas={() => setCanvasVisibility(false)}
+            imgInfos={imgInfos}
+            imgInfo={imgInfos[currentImgIdIndex]}
+          />
+        )
+      }
+      {
+        !canvasVisibility && (
+          imgInfos.length > 0
+            ? (
               <ActionMenu
                 imgInfo={imgInfos[currentImgIdIndex]}
                 openCanvas={({ mode }) => {setCanvasVisibility(true); setGraffitiMode(mode);}}
                 likeTrigger={likeTrigger}
               />
             )
-          : (
-            <Button
-              style={{ position: 'absolute', bottom: 0, left: 0, width: '100vw' }}
-              onClick={() => {setCanvasVisibility(true); setGraffitiMode('new');}}
-            >{t("Graffitis.Paint first graffiti")}</Button>
-          )
+            : (
+              <Button
+                style={{ position: 'absolute', bottom: 0, left: 0, width: '100vw' }}
+                onClick={() => {setCanvasVisibility(true); setGraffitiMode('new');}}
+              >{t("Graffitis.Paint first graffiti")}</Button>
+            )
+        )
       }
     </div>
   );
