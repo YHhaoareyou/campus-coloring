@@ -19,7 +19,7 @@ const locations = {
     range: {
       minLat: 35.7058,
       maxLat: 35.7061,
-      minLong: 139.7080,
+      minLong: 139.7078,
       maxLong: 139.7083
     }
   },
@@ -30,8 +30,8 @@ const locations = {
     descriptionEN: "From the front of Bldg. 55's entrance, facing skywalks between Bldg. 54 & 55",
     range: {
       minLat: 35.70565,
-      maxLat: 35.7062,//35.7059,
-      minLong: 139.70795,
+      maxLat: 35.7059,
+      minLong: 139.70775,
       maxLong: 139.7082
     }
   },
