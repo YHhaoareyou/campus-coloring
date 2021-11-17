@@ -51,7 +51,7 @@ const locations = {
     nameJA: '51、60号館の間',
     descriptionJA: '南側の空中通路から',
     nameEN: 'Bldg. 51-60',
-    descriptionEN: 'From the south passageway (1F)',
+    descriptionEN: 'From the south skywalk (2F)',
     range: {
       minLat: 35.7056,
       maxLat: 35.7060,
@@ -63,7 +63,7 @@ const locations = {
     nameJA: '60、61号館の間',
     descriptionJA: '南側の地面通路から',
     nameEN: 'Bldg. 60-61',
-    descriptionEN: 'From the south skywalk (2F)',
+    descriptionEN: 'From the south passageway (1F)',
     range: {
       minLat: 35.7056,
       maxLat: 35.7060,
