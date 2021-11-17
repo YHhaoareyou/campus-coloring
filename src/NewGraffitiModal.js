@@ -17,7 +17,7 @@ const NewGraffitiModal = ({ isOpen, closeModal, openCanvas }) => {
   return (
     <Modal centered show={isOpen} onHide={closeModal}>
       <Modal.Header closeButton>
-        <Modal.Title>{t("NewGraffitiModal.Which kind of graffiti?")}</Modal.Title>
+        <Modal.Title>{t("NewGraffitiModal.Which graffiti")}</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ textAlign: 'center' }}>
         <Button variant="outline-primary" onClick={openNewGraffitiCanvas}>
@@ -25,7 +25,7 @@ const NewGraffitiModal = ({ isOpen, closeModal, openCanvas }) => {
         </Button>
         <br /><br />
         <Button variant="outline-primary" onClick={openOverwriteGraffitiCanvas}>
-          {t("NewGraffitiModal.graffiti based on this one")}
+          {t("NewGraffitiModal.Graffiti based on this one")}
         </Button>
       </Modal.Body>
     </Modal>
