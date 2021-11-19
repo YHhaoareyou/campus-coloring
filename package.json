@@ -16,6 +16,8 @@
     "firebase": "^9.0.2",
     "firebaseui": "^5.0.0",
     "i18next": "^21.4.2",
+    "i18next-browser-languagedetector": "^6.1.2",
+    "i18next-localstorage-cache": "^1.1.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.0-beta.6",
     "react-bootstrap-range-slider": "^3.0.2",

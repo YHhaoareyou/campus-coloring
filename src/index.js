@@ -8,10 +8,12 @@ import Scene from './Scene';
 import { useRecoilValue } from 'recoil';
 import { currentLocState } from './atoms.js';
 import { RecoilRoot } from "recoil";
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useUser } from './auth';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import Cache from 'i18next-localstorage-cache';
+import detector from "i18next-browser-languagedetector";
 import en from './locales/en.json';
 import ja from './locales/ja.json';
 
@@ -27,7 +29,9 @@ initializeApp({
 });
 
 i18n
+  .use(detector)
   .use(initReactI18next) // passes i18n down to react-i18next
+  .use(Cache)
   .init({
     // the translations
     // (tip move them in a JSON file and import them,
@@ -40,8 +44,7 @@ i18n
         translation: ja
       }
     },
-    lng: "en", // if you're using a language detector, do not define the lng option
-    fallbackLng: "en",
+    fallbackLng: "ja",
     interpolation: {
       escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
     }

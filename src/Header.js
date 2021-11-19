@@ -95,7 +95,11 @@ function Header() {
             </NavDropdown>
 
             <NavDropdown
-              title={<span style={{ color: '#fff' }}><i className="bi bi-bell"></i>{notifications && Object.keys(notifications).length}</span>}
+              title={
+                <span style={{ color: notifications && Object.keys(notifications).length ? 'yellow' : '#fff', fontWeight: notifications && Object.keys(notifications).length ? 'bold' : 'normal' }}>
+                  <i className="bi bi-bell"></i>{notifications && Object.keys(notifications).length}
+                </span>
+              }
               drop={'start'}
             >
               <div style={{ padding: '0px 10px' }}>
