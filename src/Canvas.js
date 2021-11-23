@@ -33,6 +33,11 @@ const DrawButton = styled(Button)`
   border: 0.5px solid #fff;
   background-color: rgba(0, 0, 0, 0.4);
   color: #fff;
+  @media (max-width: 374px) {
+    margin: 0px 1px;
+    width: 35px;
+    height: 35px;
+  }
 `;
 
 const ActionButton = styled(Button)`
@@ -295,7 +300,7 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
           </Col>
           <Col xs={4} style={{ paddingRight: '5px', padding: 0 }}>
             <div>
-              <i className="bi bi-border-width" />{" "}
+              <span style={{ fontSize: '12px' }}><i className="bi bi-border-width" /></span>{" "}
               <div style={{ display: 'inline-block', verticalAlign: 'middle' }}>
                 <RangeSlider
                   min={1}
