@@ -14,13 +14,14 @@ function Graffitis({ loc, location }) {
   const { t } = useTranslation();
   const [currentLoc, setCurrentLoc] = useRecoilState(currentLocState);
   const [currentImgId, setCurrentImgId] = useRecoilState(currentImgIdState);
-  const setCurrentImgSrc = useSetRecoilState(currentImgSrcState);
+  const [currentImgSrc, setCurrentImgSrc] = useRecoilState(currentImgSrcState);
   const [currentImgIdIndex, setCurrentImgIdIndex] = useState(0);
   const setCurrentImgAngle = useSetRecoilState(currentImgAngleState);
   const setCurrentImgSize = useSetRecoilState(currentImgSizeState);
   const [canvasVisibility, setCanvasVisibility] = useState(false);
   const [imgInfos, setImgInfos] = useState([]);
   const [graffitiMode, setGraffitiMode] = useState('new');
+  const [stashedImgSrc, setStashedImgSrc] = useState(currentImgSrc);
   const user = useUser();
 
   const switchToPrevImg = () => {
@@ -112,6 +113,15 @@ function Graffitis({ loc, location }) {
     }
   }
 
+  const stashImgSrc = () => {
+    setStashedImgSrc(currentImgSrc);
+    setCurrentImgSrc('');
+  }
+
+  const popImgSrc = () => {
+    setCurrentImgSrc(stashedImgSrc);
+  }
+
   useEffect(() => {
     setCurrentLoc(loc);
 
@@ -151,7 +161,7 @@ function Graffitis({ loc, location }) {
           <Canvas
             mode={graffitiMode}
             basePrevIds={imgInfos[currentImgIdIndex]?.prev_img_ids || {}}
-            closeCanvas={() => setCanvasVisibility(false)}
+            closeCanvas={() => { setCanvasVisibility(false); popImgSrc(); }}
             imgInfos={imgInfos}
             imgInfo={imgInfos[currentImgIdIndex]}
           />
@@ -163,14 +173,14 @@ function Graffitis({ loc, location }) {
             ? (
               <ActionMenu
                 imgInfo={imgInfos[currentImgIdIndex]}
-                openCanvas={({ mode }) => {setCanvasVisibility(true); setGraffitiMode(mode);}}
+                openCanvas={({ mode }) => {setCanvasVisibility(true); setGraffitiMode(mode); stashImgSrc();}}
                 likeTrigger={likeTrigger}
               />
             )
             : (
               <Button
                 style={{ position: 'absolute', bottom: 0, left: 0, width: '100vw' }}
-                onClick={() => {setCanvasVisibility(true); setGraffitiMode('new');}}
+                onClick={() => {setCanvasVisibility(true); setGraffitiMode('new'); stashImgSrc();}}
               >{t("Graffitis.Paint first graffiti")}</Button>
             )
         )
