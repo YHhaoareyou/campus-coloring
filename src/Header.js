@@ -1,7 +1,7 @@
 import { Navbar, Nav, NavDropdown, Container, Button, Row, Col } from 'react-bootstrap';
 import { login, logout, useUser } from './auth';
 import locations from './locations';
-import { currentLocState } from './atoms';
+import { isRemoteState, currentLocState } from './atoms';
 import { useRecoilValue } from 'recoil';
 import queryString from 'query-string';
 import { useEffect, useState } from 'react';
@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 
 function Header() {
   const user = useUser();
+  const isRemote = useRecoilValue(isRemoteState);
   const loc = useRecoilValue(currentLocState);
   const [title, setTitle] = useState('Campus as Canvas');
   const [notifications, setNotifications] = useState({});
@@ -29,13 +30,13 @@ function Header() {
   }
 
   const navigateToGraffitiFromNotification = (location, nid) => {
-    set(ref(getDatabase(), 'users/' + user.uid + '/notifications/' + nid), null)
+    set(ref(getDatabase(), (isRemote ? "remote/" : "") + 'users/' + user.uid + '/notifications/' + nid), null)
       .then(snap => window.location.href = window.location.origin + '/' + location + '?pid=' + nid)
       .catch(err => alert(err));
   }
 
   const clearNotifications = () => {
-    set(ref(getDatabase(), 'users/' + user.uid + '/notifications/'), null);
+    set(ref(getDatabase(), (isRemote ? "remote/" : "") + 'users/' + user.uid + '/notifications/'), null);
     setNotifications({});
   }
 
@@ -43,18 +44,18 @@ function Header() {
     const db = getDatabase();
     const qs = queryString.parse(window.location.search);
     if (qs.mode && qs.mode === 'base') {
-      get(ref(db, 'img_info/' + loc + '/' + qs.bid + '/title')).then(snap => {
+      get(ref(db, (isRemote ? "remote/" : "") + 'img_info/' + loc + '/' + qs.bid + '/title')).then(snap => {
         setTitle('「' + snap.val() + '」のベース作品');
       })
     } else if (qs.mode && qs.mode === 'user') {
-      get(ref(db, 'users/' + qs.uid + '/name')).then(snap => {
+      get(ref(db, (isRemote ? "remote/" : "") + 'users/' + qs.uid + '/name')).then(snap => {
         setTitle(snap.val() + 'の作品');
       })
     } else {
       if (loc) setTitle(locations[loc].name)
     }
 
-    user && get(ref(db, 'users/' + user.uid + '/notifications')).then(snap => {
+    user && get(ref(db, (isRemote ? "remote/" : "") + 'users/' + user.uid + '/notifications')).then(snap => {
       setNotifications(snap.val());
     })
   }, [loc])
