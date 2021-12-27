@@ -28,8 +28,9 @@ function Home() {
           <Accordion.Body>
             <ListGroup variant="flush" style={{ textAlign: 'left' }}>
               <ListGroup.Item>{t("Home.Explanation 1")}</ListGroup.Item>
-              <ListGroup.Item>{t("Home.Explanation 2")}</ListGroup.Item>
-              <ListGroup.Item>{t("Home.Explanation 3")}</ListGroup.Item>
+              {!isRemote && <ListGroup.Item>{t("Home.Explanation 2")}</ListGroup.Item>}
+              {!isRemote && <ListGroup.Item>{t("Home.Explanation 3")}</ListGroup.Item>}
+              {isRemote && <ListGroup.Item>{t("Home.Explanation 4")}</ListGroup.Item>}
             </ListGroup>
           </Accordion.Body>
         </Accordion.Item>
@@ -39,14 +40,14 @@ function Home() {
           <Accordion.Body>
             <Table striped bordered>
               <thead>
-                <tr><th>{t("Home.Location")}</th><th>{t("Home.Viewpoint")}</th><th>{t("Home.Rain")}</th></tr>
+                <tr><th>{t("Home.Location")}</th><th>{t("Home.Viewpoint")}</th>{!isRemote && <th>{t("Home.Rain")}</th>}</tr>
               </thead>
               <tbody>
-                <tr><td>{t("Home.55")}</td><td>{t("Home.55 viewpoint")}</td><td>◯</td></tr>
-                <tr><td>{t("Home.54-55")}</td><td>{t("Home.54-55 viewpoint")}</td><td>×</td></tr>
-                <tr><td>{t("Home.51")}</td><td>{t("Home.51 viewpoint")}</td><td>◯</td></tr>
-                <tr><td>{t("Home.51-60")}</td><td>{t("Home.51-60 viewpoint")}</td><td>◯</td></tr>
-                <tr><td>{t("Home.60-61")}</td><td>{t("Home.60-61 viewpoint")}</td><td>×</td></tr>
+                <tr><td>{t("Home.55")}</td><td>{t("Home.55 viewpoint")}</td>{!isRemote && <td>◯</td>}</tr>
+                <tr><td>{t("Home.54-55")}</td><td>{t("Home.54-55 viewpoint")}</td>{!isRemote && <td>×</td>}</tr>
+                <tr><td>{t("Home.51")}</td><td>{t("Home.51 viewpoint")}</td>{!isRemote && <td>◯</td>}</tr>
+                <tr><td>{t("Home.51-60")}</td><td>{t("Home.51-60 viewpoint")}</td>{!isRemote && <td>◯</td>}</tr>
+                <tr><td>{t("Home.60-61")}</td><td>{t("Home.60-61 viewpoint")}</td>{!isRemote && <td>×</td>}</tr>
               </tbody>
             </Table>
           </Accordion.Body>

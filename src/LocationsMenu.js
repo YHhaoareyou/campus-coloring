@@ -123,10 +123,12 @@ function LocationsMenu() {
   }
 
   useEffect(() => {
-    handleRetrievingCoor();
-    var retrieveCoorTimer = setInterval(handleRetrievingCoor, 5000);
-    return () => clearInterval(retrieveCoorTimer);
-  }, [])
+    if (!isRemote) {
+      handleRetrievingCoor();
+      var retrieveCoorTimer = setInterval(handleRetrievingCoor, 5000);
+      return () => clearInterval(retrieveCoorTimer);
+    }
+  }, [isRemote])
 
   const isCoorInRange = (LocCoorRange) =>
     currentCoor && LocCoorRange
@@ -139,10 +141,10 @@ function LocationsMenu() {
     <div style={{ paddingTop: '20px' }}>
       <h3>{t("LocationsMenu.Choose location")}</h3>
       {
-        !currentCoor && <Alert variant="warning" style={{ margin: "1em" }}><i className="bi bi-arrow-clockwise"></i> {t("LocationsMenu.Retrieving location")}</Alert>
+        !isRemote && !currentCoor && <Alert variant="warning" style={{ margin: "1em" }}><i className="bi bi-arrow-clockwise"></i> {t("LocationsMenu.Retrieving location")}</Alert>
       }
       {
-        retrieveCoorFailed && <Alert variant="danger" style={{ margin: "1em" }}>{t("LocationsMenu.Failed to retrieve")}</Alert>
+        !isRemote && retrieveCoorFailed && <Alert variant="danger" style={{ margin: "1em" }}>{t("LocationsMenu.Failed to retrieve")}</Alert>
       }
 
       <MapContainer>
@@ -168,7 +170,7 @@ function LocationsMenu() {
             selectedLoc && (isCoorInRange(locations[selectedLoc].range) || selectedLoc === 'garden' || isRemote)
               ? (
                 <div style={{ marginTop: '1em' }}>
-                  <Alert variant="success">{t("LocationsMenu.Point camera")}</Alert>
+                  {!isRemote && <Alert variant="success">{t("LocationsMenu.Point camera")}</Alert>}
                   <Link to={'/' + selectedLoc}>
                     <Button variant="outline-primary">
                       {t("LocationsMenu.View graffiti")}
