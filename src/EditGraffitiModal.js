@@ -1,10 +1,11 @@
 import { useRecoilValue } from 'recoil';
-import { currentLocState } from './atoms.js';
+import { isRemoteState, currentLocState } from './atoms.js';
 import { Button, Modal } from 'react-bootstrap';
 import { getDatabase, ref, set } from "firebase/database";
 import { useTranslation } from "react-i18next";
 
 const EditGraffitiModal = ({ isOpen, closeModal, openCanvas, imgInfo }) => {
+  const isRemote = useRecoilValue(isRemoteState);
   const currentLoc = useRecoilValue(currentLocState);
   const { t } = useTranslation();
 
@@ -18,8 +19,8 @@ const EditGraffitiModal = ({ isOpen, closeModal, openCanvas, imgInfo }) => {
     const title = prompt(t("EditGraffitiModal.Title label"), imgInfo.title);
     const detail = prompt(t("EditGraffitiModal.Details label"), imgInfo.detail);
 
-    set(ref(db, 'img_info/' + currentLoc + '/' + imgInfo.id + '/title'), title).then(snap => {
-      set(ref(db, 'img_info/' + currentLoc + '/' + imgInfo.id + '/detail'), detail).then(sp => {
+    set(ref(db, (isRemote ? "remote/" : "") + 'img_info/' + currentLoc + '/' + imgInfo.id + '/title'), title).then(snap => {
+      set(ref(db, (isRemote ? "remote/" : "") + 'img_info/' + currentLoc + '/' + imgInfo.id + '/detail'), detail).then(sp => {
         alert(t("EditGraffitiModal.Updated"));
         window.location.href = "/" + currentLoc + "?pid=" + imgInfo.id;
       }).catch(e => alert(e));
@@ -28,9 +29,9 @@ const EditGraffitiModal = ({ isOpen, closeModal, openCanvas, imgInfo }) => {
 
   const deleteGraffiti = () => {
     const db = getDatabase();
-    set(ref(db, 'img_urls/' + currentLoc + '/' + imgInfo.id), null).then(snap => {
-      set(ref(db, 'img_info/' + currentLoc + '/' + imgInfo.id), null).then(sp => {
-        set(ref(db, 'users/' + imgInfo.creator_id + '/img_ids/' + currentLoc + '/' + imgInfo.id), null).then(s => {
+    set(ref(db, (isRemote ? "remote/" : "") + 'img_urls/' + currentLoc + '/' + imgInfo.id), null).then(snap => {
+      set(ref(db, (isRemote ? "remote/" : "") + 'img_info/' + currentLoc + '/' + imgInfo.id), null).then(sp => {
+        set(ref(db, (isRemote ? "remote/" : "") + 'users/' + imgInfo.creator_id + '/img_ids/' + currentLoc + '/' + imgInfo.id), null).then(s => {
           alert(t("EditGraffitiModal.Deleted"));
           window.location.href = "/" + currentLoc;
         }).catch(e => alert(e));

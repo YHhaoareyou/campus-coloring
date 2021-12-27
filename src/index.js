@@ -5,8 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { initializeApp } from 'firebase/app';
 import Scene from './Scene';
+import RemoteScene from './RemoteScene';
 import { useRecoilValue } from 'recoil';
-import { currentLocState } from './atoms.js';
+import { isRemoteState, currentLocState } from './atoms.js';
 import { RecoilRoot } from "recoil";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useUser } from './auth';
@@ -52,11 +53,12 @@ i18n
 
 const Root = () => {
   const currentLoc = useRecoilValue(currentLocState);
+  const isRemote = useRecoilValue(isRemoteState);
   const user = useUser();
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {user && currentLoc && <Scene />}
+      {user && currentLoc && (isRemote ? <RemoteScene /> : <Scene />)}
       <App />
     </div>
   );

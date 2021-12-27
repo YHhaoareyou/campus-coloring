@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import ImageSwitch from './ImageSwitch';
 import ActionMenu from './ActionMenu';
 import Canvas from './Canvas';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { currentImgIdState, currentImgSrcState, currentImgAngleState, currentImgSizeState, currentLocState } from './atoms.js';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { isRemoteState, currentImgIdState, currentImgSrcState, currentImgAngleState, currentImgSizeState, currentLocState } from './atoms.js';
 import { getDatabase, ref, get, set } from "firebase/database";
 import { useUser } from './auth'
 import queryString from 'query-string';
@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 
 function Graffitis({ loc, location }) {
   const { t } = useTranslation();
+  const isRemote = useRecoilValue(isRemoteState);
   const [currentLoc, setCurrentLoc] = useRecoilState(currentLocState);
   const [currentImgId, setCurrentImgId] = useRecoilState(currentImgIdState);
   const [currentImgSrc, setCurrentImgSrc] = useRecoilState(currentImgSrcState);
@@ -77,7 +78,7 @@ function Graffitis({ loc, location }) {
 
   const switchImgSrc = (imgId) => {
     const db = getDatabase();
-    get(ref(db, 'img_urls/' + loc + '/' + imgId)).then(snap => {
+    get(ref(db, (isRemote ? "remote/" : "") + 'img_urls/' + loc + '/' + imgId)).then(snap => {
       if(snap.exists()){
         setCurrentImgSrc(snap.val())
       }
@@ -100,11 +101,11 @@ function Graffitis({ loc, location }) {
   const likeTrigger = () => {
     const db = getDatabase();
     if (imgInfos[currentImgIdIndex].likes && imgInfos[currentImgIdIndex].likes[user.uid]) {
-      set(ref(db, 'img_info/' + loc + '/' + currentImgId + '/likes/' + user.uid), null).then(snap => updateLikes(-1)).catch(err => alert(err));
+      set(ref(db, (isRemote ? "remote/" : "") + 'img_info/' + loc + '/' + currentImgId + '/likes/' + user.uid), null).then(snap => updateLikes(-1)).catch(err => alert(err));
     } else {
-      set(ref(db, 'img_info/' + loc + '/' + currentImgId + '/likes/' + user.uid), true).then(snap => {
+      set(ref(db, (isRemote ? "remote/" : "") + 'img_info/' + loc + '/' + currentImgId + '/likes/' + user.uid), true).then(snap => {
         updateLikes(1);
-        set(ref(db, 'users/' + imgInfos[currentImgIdIndex].creator_id + '/notifications/' + currentImgId), {
+        set(ref(db, (isRemote ? "remote/" : "") + 'users/' + imgInfos[currentImgIdIndex].creator_id + '/notifications/' + currentImgId), {
           type: 1,
           loc: currentLoc,
           username: imgInfos[currentImgIdIndex].likes && Object.keys(imgInfos[currentImgIdIndex].likes).length > 1 ? user.displayName + "と他の" + (Object.keys(imgInfos[currentImgIdIndex].likes).length - 1) + "人" : user.displayName
@@ -127,7 +128,7 @@ function Graffitis({ loc, location }) {
 
     const qs = queryString.parse(location.search)
     const db = getDatabase();
-    get(ref(db, 'img_info/' + loc)).then(snap => {
+    get(ref(db, (isRemote ? "remote/" : "") + 'img_info/' + loc)).then(snap => {
       if(snap.exists()){
         if (qs.mode && qs.mode === 'base') {
           const baseIds = Object.keys(snap.val()[qs.bid].prev_img_ids);
@@ -137,7 +138,7 @@ function Graffitis({ loc, location }) {
           });
           initImgInfos(idsObj);
         } else if (qs.mode && qs.mode === 'user') {
-          get(ref(db, 'users/' + qs.uid + '/img_ids/' + loc)).then(userGraffitiIdsSnap => {
+          get(ref(db, (isRemote ? "remote/" : "") + 'users/' + qs.uid + '/img_ids/' + loc)).then(userGraffitiIdsSnap => {
             var idsObj = {};
             if (userGraffitiIdsSnap.val()) {
               Object.keys(userGraffitiIdsSnap.val()).forEach(id => {

@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { getDatabase, ref as dbRef, set as dbSet } from "firebase/database";
 import { getStorage, ref as storageRef, uploadString, getDownloadURL } from "firebase/storage";
 import { useRecoilValue } from 'recoil';
-import { currentLocState, currentImgIdState, currentImgSrcState } from './atoms.js';
+import { isRemoteState, currentLocState, currentImgIdState, currentImgSrcState } from './atoms.js';
 import styled from 'styled-components';
 import { Container, Row, Col, Button, ButtonGroup, OverlayTrigger, Popover } from 'react-bootstrap';
 import { useUser } from './auth'
@@ -102,6 +102,7 @@ function insertImageToCanvas(url, fabricCanvas) {
 const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
   const { t } = useTranslation();
   const user = useUser();
+  const isRemote = useRecoilValue(isRemoteState);
   const currentLoc = useRecoilValue(currentLocState);
   const currentImgId = useRecoilValue(currentImgIdState);
   const currentImgSrc = useRecoilValue(currentImgSrcState);
@@ -179,13 +180,18 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
   };
 
   const saveCanvas = () => {
-    if(!window.confirm(t("Canvas.Please fix tilt"))) return;
-    const lastAngle = angle;
-    if (lastAngle) {
-      alert(t("Canvas.Tilt retrieved"));
-    } else {
-      alert(t("Canvas.Error"));
-      return;
+    var lastAngle;
+
+    if (!isRemote) {
+      if(!window.confirm(t("Canvas.Please fix tilt"))) return;
+      
+      lastAngle = angle;
+      if (lastAngle) {
+        alert(t("Canvas.Tilt retrieved"));
+      } else {
+        alert(t("Canvas.Error"));
+        return;
+      }
     }
 
     var title, detail, id;
@@ -205,11 +211,11 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
       .then(url => {
 
         Promise.all([
-          dbSet(dbRef(db, 'img_urls/' + currentLoc + '/' + id), url), // save url
-          dbSet(dbRef(db, 'img_info/' + currentLoc + '/' + id), {
+          dbSet(dbRef(db, (isRemote ? "remote/" : "") + 'img_urls/' + currentLoc + '/' + id), url), // save url
+          dbSet(dbRef(db, (isRemote ? "remote/" : "") + 'img_info/' + currentLoc + '/' + id), {
             title,
             detail,
-            angle: lastAngle,
+            angle: isRemote ? null : lastAngle,
             size: {
               width: windowDimensions.width,
               height: windowDimensions.height - 120,
@@ -217,18 +223,18 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
             creator_id: user.uid,
             prev_img_ids: mode === 'overwrite' && { [currentImgId]: true, ...basePrevIds }
           }), // save info
-          dbSet(dbRef(db, 'users/' + user.uid + '/img_ids/' + currentLoc + '/' + id), true) // add img id to user
+          dbSet(dbRef(db, (isRemote ? "remote/" : "") + 'users/' + user.uid + '/img_ids/' + currentLoc + '/' + id), true) // add img id to user
         ]).then(snap => {
 
           // send notifications
           const prev_user_ids = imgInfos.map(img => img.creator_id);
-          Promise.all(prev_user_ids.map(uid => dbSet(dbRef(db, 'users/' + uid + '/notifications/' + id), {
+          Promise.all(prev_user_ids.map(uid => dbSet(dbRef(db, (isRemote ? "remote/" : "") + 'users/' + uid + '/notifications/' + id), {
             type: 0,
             loc: currentLoc,
             username: user.displayName
           })))
             .then(s => {
-              dbSet(dbRef(db, 'users/' + user.uid + '/name'), user.displayName)
+              dbSet(dbRef(db, (isRemote ? "remote/" : "") + 'users/' + user.uid + '/name'), user.displayName)
                 .then(snap => {
 
                   // upload success & reload
