@@ -199,8 +199,10 @@ const Canvas = ({ closeCanvas, basePrevIds, mode, imgInfos, imgInfo }) => {
     const db = getDatabase();
 
     title = prompt(t("Canvas.Title label"), mode === 'edit' ? imgInfo.title : '');
+    if (title === null) return;
     detail = prompt(t("Canvas.Details label"), mode === 'edit' ? imgInfo.detail : '');
-    
+    if (detail === null) return;
+
     id = mode === 'edit' ? currentImgId : Date.now();
     if (title === "") title = id;
 
