@@ -6,7 +6,7 @@ A location-based AR web app to draw and share virtual graffiti with other users 
 # How to use
 
 1. 早稲田大学西早稲田キャンパスに行く
-2. https://nishiwaseda-coloring.net/　を開く
+2. ブラウザを開く：https://nishiwaseda-coloring.net/
 3. 画面の指示に従いキャンパスで落書きを楽しむ
 
 1. Go to Waseda University Nishi-Waseda campus
